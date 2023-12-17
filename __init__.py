@@ -3,7 +3,7 @@ import subprocess
 try:
     from photoshop import PhotoshopConnection
 except ImportError:
-    subprocess.run(["./python_embeded/python.exe", "-m", "pip", "install", "photoshop-connection"])
+    subprocess.run(["python.exe", "-m", "pip", "install", "photoshop-connection"])
 
 node_list = [ 
     "photoshop"
