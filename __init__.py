@@ -1,8 +1,21 @@
 import importlib
 import subprocess
+# import os
+
+# directory_path = r".\ComfyUI\custom_nodes\comfyui-popup_preview"
+
+# if not os.path.exists(directory_path):
+#     print("comfyui-popup_preview installing")
+#     subprocess.run(["git", "clone", "https://github.com/NimaNzrii/comfyui-popup_preview.git", directory_path], shell=True)
+#     print("comfyui-popup_preview cloned successfully!")
+# else:
+#     print("Directory already exists!")
+
 try:
     from photoshop import PhotoshopConnection
 except ImportError:
+    subprocess.run(["python.exe", "-m", "pip", "uninstall", "photoshop"])
+    subprocess.run(["python.exe", "-m", "pip", "uninstall", "photoshop-connection"])
     subprocess.run(["python.exe", "-m", "pip", "install", "photoshop-connection"])
 
 node_list = [ 
