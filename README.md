@@ -1,6 +1,6 @@
 # Photoshop Enters a New Universe 🚀
 
- **ComfyUI for Photoshop** plugin🎨 masterfully integrates with an AI-powered image generation system, supercharging your Photoshop experience with next-level features.
+Welcome to **ComfyUI for Photoshop** plugin repository!🎨 This masterfully integrates with an AI-powered image generation system, supercharging your Photoshop experience with next-level features.
 
 ![alt text](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbr7szq0BmtrEk-3SkNKdFaRYlcEFC4_Law4r7KEruYU5T6Sa6bJQeUQkE54QON8OLVBdfWODosSJSIeV-quonfS-9UbnvPSw=w1920-h990-rw-v1)
 
