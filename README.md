@@ -1,6 +1,6 @@
 # Photoshop Enters a New Universe 🚀
 
-Welcome to **ComfyUI for Photoshop** plugin repository!🎨 This masterfully integrates with an AI-powered image generation system, supercharging your Photoshop experience with next-level features.
+Welcome to **ComfyUI for Photoshop** plugin repository!🎨 This plugin integrates with an AI-powered image generation system to enhance your Photoshop experience with advanced features.
 
 ![alt text](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbr7szq0BmtrEk-3SkNKdFaRYlcEFC4_Law4r7KEruYU5T6Sa6bJQeUQkE54QON8OLVBdfWODosSJSIeV-quonfS-9UbnvPSw=w1920-h990-rw-v1)
 
@@ -12,8 +12,8 @@ Welcome to **ComfyUI for Photoshop** plugin repository!🎨 This masterfully int
 
 
 ## 🖥️ System Requirements
-- **Graphics Memory:** 6GB (may decrease soon!)
-- **RAM:** 12GB
+- **Graphics Memory:** Minimum 6GB (may decrease soon!)
+- **RAM:** Minimum 12GB
 
 ## 🛠️ Installation Steps:
 
@@ -55,6 +55,3 @@ Don't have ComfyUI & ComfyUI Manager? No worries! Follow THIS (tutorial)[yt_link
 
 ## 🤝 Support and Contributions
 Run into a snag or have a brilliant idea? 🤔 Open an issue on GitHub and let's make ComfyUI even better together! Your contributions are highly appreciated.
-
-Write it better in mark down format
-dont remove the links
