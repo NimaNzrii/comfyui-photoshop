@@ -19,7 +19,7 @@ Welcome to **ComfyUI for Photoshop** plugin repository!🎨 This plugin integrat
 
 1. **Install Photoshop Plugin:**
    - Install the plugin from [🔗THIS LINK](https://adobe.com/go/cc_plugins_discover_plugin?pluginId=3e6d64e0&workflow=share).
-   - Alternatively, install it locally using [📄This CRX](download_link) file, then set it up with [ZXP UXP Installer](https://aescripts.com/learn/zxp-installer/).
+   - Alternatively, install it locally using [📄This CRX](https://drive.google.com/file/d/19VosX43Y2JyccLapXkmVWNZFks4G0REl/view?usp=sharing) file, then set it up with [ZXP UXP Installer](https://aescripts.com/learn/zxp-installer/).
 
 2. **Set Up ComfyUI Workflow:**
    - Grab [📄THIS Workflow](https://openart.ai/workflows/lreWarJbqiYPcDXnD8hh) and drop it onto your ComfyUI.
