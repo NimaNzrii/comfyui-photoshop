@@ -12,8 +12,8 @@ Welcome to **ComfyUI for Photoshop** plugin repository!🎨 This masterfully int
 
 
 ## 🖥️ System Requirements
-- **Graphics Memory:** 6GB 🎞️ (may decrease soon!)
-- **RAM:** 12GB 🧠
+- **Graphics Memory:** 6GB (may decrease soon!)
+- **RAM:** 12GB
 
 ## 🛠️ Installation Steps:
 
