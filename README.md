@@ -31,7 +31,7 @@ Don't have ComfyUI & ComfyUI Manager? No worries! Follow THIS (tutorial)[yt_link
 [⬇️ Download The Workflow](https://openart.ai/workflows/lreWarJbqiYPcDXnD8hh)
 ![alt text](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpiha-JQSvBtjWVm2B1Dhki05hQOS6A_fB4sjzU95PXtilYByyNA7XzIvjdiKP-HZe473Ageu5kLcfmF4npOnS5NuOYkAFSI9EWX8=w1920-h990-rw-v1)
 
-## 🗃️ Requiered Files
+## 🗃️ Required Files
 
 1. **Check points:** *(Place in ComfyUi/Models/Checkpoints/ folder)*
    - **Default:** [EpicRealism Natural Sin RC1 VAE ⬇️](https://civitai.com/api/download/models/143906?type=Model&format=SafeTensor&size=pruned&fp=fp16).
