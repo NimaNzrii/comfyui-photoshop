@@ -4,27 +4,22 @@ import os
 import folder_paths
 import sys
 
-default_directory = os.getcwd()
 node_path = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
-os.chdir(node_path)
 
-venv_path = "venv"
+venv_path = os.path.join(node_path, "venv")
 
 if not os.path.exists(venv_path):
     print("Installing venv...")
-    subprocess.run([sys.executable, '-m', 'virtualenv', venv_path], shell=True) 
+    subprocess.run([sys.executable, '-m', 'virtualenv', venv_path], shell=True)
     print("Installing requirements...")
-    subprocess.run([os.path.join(venv_path, 'Scripts', 'python.exe'), '-m', 'pip', 'install', '-r', 'requirements.txt'], shell=True)
+    requirements_path = os.path.join(node_path, 'requirements.txt')
+    subprocess.run([os.path.join(venv_path, 'Scripts', 'python.exe'), '-m', 'pip', 'install', '-r', requirements_path], shell=True)
     print("Installed successfully")
 
+popup_window_path = os.path.join(node_path, 'Backend.py')
+python_path = os.path.join(venv_path, 'Scripts', 'python.exe')
 
-
-popup_window_path = os.path.join(node_path,'Backend.py')
-python_path = os.path.join(node_path,'venv', 'Scripts', 'python.exe')
-Python_patch = os.path.abspath(python_path)
-subprocess.Popen([Python_patch, popup_window_path])
-
-os.chdir(default_directory)
+subprocess.Popen([python_path, popup_window_path])
 
 
 
