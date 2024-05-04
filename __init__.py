@@ -17,7 +17,9 @@ if not os.path.exists(node_path):
     print(f"✨ Node path does not exist: {node_path}")
 
 if not os.path.exists(venv_path):
+
     print("✨ Installing venv...")
+    subprocess.run([sys.executable, '-m', 'pip', 'install', 'virtualenv'], check=True)
     if sys.platform.startswith('win'):
         subprocess.run([sys.executable, '-m', 'virtualenv', venv_path], shell=True, check=True)
     else:
