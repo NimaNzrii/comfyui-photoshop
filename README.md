@@ -36,7 +36,7 @@ Don't have ComfyUI & ComfyUI Manager? No worries! Follow THIS (tutorial)[yt_link
 1. **Check points:** *(Place in ComfyUi/Models/Checkpoints/ folder)*
    - **Default:** [EpicRealism Natural Sin RC1 VAE ⬇️](https://civitai.com/api/download/models/143906?type=Model&format=SafeTensor&size=pruned&fp=fp16).
    - **In-Painting:** [EpicRealism pure Evolution V5-inpainting ⬇️](https://civitai.com/api/download/models/134361?type=Model&format=SafeTensor&size=pruned&fp=fp16)
-   - **Optional:** For Anime style, use [DreamShaper8](https://civitai.com/api/download/models/128713?type=Model&format=SafeTensor&size=pruned&fp=fp16) .
+
 
 2. **Loras** *(Place in ComfyUi/Models/Loras/ folder)*
    - **Detailer Lora:** [Doownload ⬇️](https://civitai.com/api/download/models/62833?type=Model&format=SafeTensors)
