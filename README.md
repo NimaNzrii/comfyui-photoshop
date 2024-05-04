@@ -39,19 +39,17 @@ Don't have ComfyUI & ComfyUI Manager? No worries! Follow THIS (tutorial)[yt_link
    - **Optional:** For Anime style, use [DreamShaper8](https://civitai.com/api/download/models/128713?type=Model&format=SafeTensor&size=pruned&fp=fp16) .
 
 2. **Loras** *(Place in ComfyUi/Models/Loras/ folder)*
-   - **LCM Lora:** Install via ComfyUI manager 🛠️
-   - **Detailer Lora:** [Doownload ⬇️](https://civitai.com/api/download/models/62833?type=Model&format=SafeTensor)
-  
-3. **Controlnets:** *(Install via ComfyUI manager > install Models > search)*
-   - Line Art fp16
-   - Scribble fp16
-   - Inpaint fp16
-   - open pose fp16
-   - depth fp16
+   - **Detailer Lora:** [Doownload ⬇️](https://civitai.com/api/download/models/62833?type=Model&format=SafeTensors)
 
-4. **Upscaler Model:** *(install via ComfyUI manager > install Models > search)*
-   - 4x-UltraSharp.pth
-   
+
+3. **Install via ComfyUI manager > install Models > search**
+   •  LCM LoRA SD1.5
+   •  ControlNet-v1-1 (lineart; fp16)
+   •  ControlNet-v1-1 (scribble; fp16)
+   •  ControlNet-v1-1 (inpaint; fp16)
+   •  4x-UltraSharp
+
+
 
 ## 🤝 Support and Contributions
 Run into a snag or have a brilliant idea? 🤔 Open an issue on GitHub and let's make ComfyUI even better together! Your contributions are highly appreciated.
