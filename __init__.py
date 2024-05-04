@@ -4,51 +4,49 @@ import os
 import folder_paths
 import sys
 
+def get_python_executable(venv_path):
+    if sys.platform.startswith('win'):
+        return os.path.join(venv_path, 'Scripts', 'python.exe')
+    else:
+        return os.path.join(venv_path, 'bin', 'python')
+
 node_path = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
-if not os.path.exists(node_path):
-    print("✨ Node path does not exist!")
-    
 venv_path = os.path.join(node_path, "venv")
+
+if not os.path.exists(node_path):
+    print(f"✨ Node path does not exist: {node_path}")
 
 if not os.path.exists(venv_path):
     print("✨ Installing venv...")
-    subprocess.run([sys.executable, '-m', 'virtualenv', venv_path], shell=True)
+    if sys.platform.startswith('win'):
+        subprocess.run([sys.executable, '-m', 'virtualenv', venv_path], shell=True, check=True)
+    else:
+        subprocess.run([sys.executable, '-m', 'venv', venv_path], check=True)
     print("✨ Installing requirements...")
     requirements_path = os.path.join(node_path, 'requirements.txt')
-    subprocess.run([os.path.join(venv_path, 'Scripts', 'python.exe'), '-m', 'pip', 'install', '-r', requirements_path], shell=True)
+    python_executable = get_python_executable(venv_path)
+    subprocess.run([python_executable, '-m', 'pip', 'install', '-r', requirements_path], check=True)
     print("✨ Installed successfully")
 
 backend_path = os.path.join(node_path, 'Backend.py')
-python_path = os.path.join(venv_path, 'Scripts', 'python.exe')
+python_path = get_python_executable(venv_path)
 
-
-if not os.path.exists(venv_path):
-    print("✨ venv_path does not exist!")
-
-if not os.path.exists(python_path):
-    print("✨ Python path does not exist!")
-    
 if not os.path.exists(backend_path):
-    print("✨ Backend.py path does not exist!")
-
-subprocess.Popen([python_path, backend_path])
-
+    print(f"✨ Backend.py path does not exist: {backend_path}")
 
 try:
     from photoshop import PhotoshopConnection
 except ImportError:
-    subprocess.run(["python.exe", "-m", "pip", "uninstall", "photoshop"])
-    subprocess.run(["python.exe", "-m", "pip", "uninstall", "photoshop-connection"])
-    subprocess.run(["python.exe", "-m", "pip", "install", "photoshop-connection"])
+    subprocess.run([python_executable, "-m", "pip", "uninstall", "photoshop"], check=True)
+    subprocess.run([python_executable, "-m", "pip", "uninstall", "photoshop-connection"], check=True)
+    subprocess.run([python_executable, "-m", "pip", "install", "photoshop-connection"], check=True)
 
 node_list = ["node-Photoshop", "node-Photoshop-noplugin"]
-
 NODE_CLASS_MAPPINGS = {}
 NODE_DISPLAY_NAME_MAPPINGS = {}
 
 for module_name in node_list:
     imported_module = importlib.import_module(".{}".format(module_name), __name__)
-
     NODE_CLASS_MAPPINGS = {**NODE_CLASS_MAPPINGS, **imported_module.NODE_CLASS_MAPPINGS}
     NODE_DISPLAY_NAME_MAPPINGS = {
         **NODE_DISPLAY_NAME_MAPPINGS,
@@ -56,5 +54,4 @@ for module_name in node_list:
     }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
-
 WEB_DIRECTORY = "js"
