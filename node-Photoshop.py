@@ -60,7 +60,7 @@ class PhotoshopToComfyUI:
             if retry_count < 4:  # 5 attempts in total
                 self.LoadDir(retry_count + 1)
             else:
-                raise Exception("Failed to load directory after 5 attempts.")
+                raise Exception("Failed to load directory after 5 attempts. \n 🔴 Make sure you have installed and started the Photoshop Plugin Succesfully. \n 🔴 otherwise you can restart your photosop and your plugin to Fix this problem")
 
 
     def loadConfig(self, retry_count=0):
@@ -72,7 +72,7 @@ class PhotoshopToComfyUI:
             if retry_count < 4:  # 5 attempts in total
                 self.loadConfig(retry_count + 1)
             else:
-                raise Exception("Failed to load configuration after 5 attempts.")
+                raise Exception("Failed to load directory after 5 attempts. \n 🔴 Make sure you have installed and started the Photoshop Plugin Succesfully. \n 🔴 otherwise you can restart your photosop and your plugin to Fix this problem")
 
             
         self.psPrompt = self.ConfigData["postive"]
