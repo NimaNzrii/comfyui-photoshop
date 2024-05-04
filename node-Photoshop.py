@@ -119,7 +119,6 @@ class PhotoshopToComfyUI:
             PluginData_path = data.get("dataDir", None)
             canvasDir = os.path.join(PluginData_path, "canvas")
             maskImgDir = os.path.join(PluginData_path, "mask")
-            print("🐬 maskImgDir", maskImgDir)
             configJson = os.path.join(PluginData_path, "config.json")
 
             if os.path.exists(canvasDir):
