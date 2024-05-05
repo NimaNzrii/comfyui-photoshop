@@ -33,15 +33,13 @@ if not os.path.exists(venv_path):
 backend_path = os.path.join(node_path, 'Backend.py')
 python_path = get_python_executable(venv_path)
 
-if not os.path.exists(backend_path):
-    print(f"✨ Backend.py path does not exist: {backend_path}")
+if not os.path.exists(python_path):
+    print(f"✨ python_path path does not exist")
 
-try:
-    from photoshop import PhotoshopConnection
-except ImportError:
-    subprocess.run([python_executable, "-m", "pip", "uninstall", "photoshop"], check=True)
-    subprocess.run([python_executable, "-m", "pip", "uninstall", "photoshop-connection"], check=True)
-    subprocess.run([python_executable, "-m", "pip", "install", "photoshop-connection"], check=True)
+if not os.path.exists(backend_path):
+    print(f"✨ Backend.py path does not exist")
+
+subprocess.Popen([python_path, backend_path])
 
 node_list = ["node-Photoshop", "node-Photoshop-noplugin"]
 NODE_CLASS_MAPPINGS = {}
