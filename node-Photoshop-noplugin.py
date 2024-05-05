@@ -2,10 +2,15 @@ from PIL import Image, ImageOps
 import numpy as np
 import torch
 import tempfile 
-from photoshop import PhotoshopConnection
 import os
 import base64
-
+import subprocess
+try:
+    from photoshop import PhotoshopConnection
+except:
+    subprocess.run(["python", "-m", "pip", "uninstall", "photoshop"], check=True)
+    subprocess.run(["python", "-m", "pip", "uninstall", "photoshop-connection"], check=True)
+    subprocess.run(["python", "-m", "pip", "install", "photoshop-connection"], check=True)
 
 class PhotoshopConnections:
     @classmethod
