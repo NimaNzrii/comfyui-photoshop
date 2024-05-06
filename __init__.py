@@ -39,7 +39,16 @@ if not os.path.exists(python_path):
 if not os.path.exists(backend_path):
     print(f"✨ Backend.py path does not exist")
 
+
+
+
+default_directory = os.getcwd()
+node_path = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
+os.chdir(node_path)
 subprocess.Popen([python_path, backend_path])
+os.chdir(default_directory)
+
+
 
 node_list = ["node-Photoshop", "node-Photoshop-noplugin"]
 NODE_CLASS_MAPPINGS = {}
