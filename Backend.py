@@ -1,343 +1,131 @@
-import asyncio
-import websockets
-import json
-import base64
-from PIL import Image
-import subprocess, os, platform
-import os
-import shutil 
-
-
-
-# پیدا کردن مسیر فوتوشاپ بصورت خودکار
-with open("data.json", "r") as file:
-    data = json.load(file)
-    
-if not os.path.exists(data.get("dataDir")):
-    roaming_path = None
-    external_found = False  
-
-    plugin_path=None
-
-    def check_path_existence(path):
-        if not os.path.exists(path):
-            print("🔷 No, the path does not exist.", path)
-
-    adobe_path = os.path.expanduser('~\\AppData\\Roaming\\Adobe\\UXP\\PluginsStorage')
-    check_path_existence(adobe_path)
-
-    def check_forplugin(path):
-        global external_found 
-        global plugin_path
-        
-        for root, dirs, files in os.walk(path, topdown=True):
-            dirs.sort(reverse=True) 
-            for directory in dirs:
-                if directory.isdigit():
-                    external_folder_path = os.path.join(root, directory, "External","3e6d64e0", "PluginData")
-                    if os.path.exists(external_folder_path):
-                        external_found = True
-                        # print(f"Photoshop plugin is installed in this directory: {external_folder_path}.")
-                        plugin_path = external_folder_path
-                        break
-            if external_found:
-                break
-
-        if not external_found:
-            print("🔷 Photoshop plugin didn't install! Please install it first.")
-
-    for root, dirs, files in os.walk(adobe_path):
-        for directory in dirs:
-            if directory == "PHSPBETA":
-                roaming_path = os.path.join(adobe_path, "PHSPBETA")
-                check_forplugin(roaming_path)
-            elif directory == "PHSP":
-                roaming_path = os.path.join(adobe_path, "PHSP")
-                check_forplugin(roaming_path)
-
-    with open(os.path.join("data.json"), "w") as file:
-        file.write(json.dumps({"dataDir": str(plugin_path)}))
-# پیدا کردن مسیر فوتوشاپ بصورت خودکار
-
-
-
-
-clients={}
-class WebSocketServer:
-    def __init__(self):
-        self.mainDir = os.getcwd() 
-        for _ in range(2):
-            self.mainDir = os.path.dirname(self.mainDir)
-        self.tempDir= os.path.join(self.mainDir , "temp")
-        self.inputDir= os.path.join(self.mainDir , "input")
-        
-        self.comfyUi = None
-        self.photoshop = None
-        
-        self.positive=None
-        self.negative=None
-        self.seed=None
-        self.slider=None
-        self.image=None
-        self.mask=None
-        self.dataDir=None
-        self.renderDir=None
-        
-        self.progress =None
-        self.openWithPS = None
-        self.QuickEdit = None
-        self.render_status = None
-        self.render=None
-        self.quickSave=None
-        self.i=0
-        self.workspace=None
-
-        
-    async def handle_connection(self, websocket, path):
-        try:
-            clients[websocket.remote_address] = {'websocket': websocket}
-
-            while True:
-                message = await websocket.recv()
-                
-                if message == "imComfyui":
-                    self.comfyUi = websocket.remote_address
-                    print("🔷 Photoshop node added" + str(self.comfyUi))
-                    await self.sendPhotoshop("comfyuiConnected",True)
-                    
-                    # برای اینکه هرکی بدونه کیا کانکتن           
-                    if self.sendPhotoshop: 
-                        await self.sendComfyUi("photoshopConnected",True)
-                                        
-                elif message == "imPhotoshop":
-                    self.photoshop = websocket.remote_address
-                    print("🔷 Photoshop launched" + str(self.photoshop))
-                    await self.sendComfyUi("photoshopConnected",True)
-                    
-                    if self.comfyUi: 
-                        await self.sendPhotoshop("comfyuiConnected",True)
-                    
-                    
-                elif message == "done":
-                    self.sendComfyUi("render_status","genrated")
-                          
-                else: 
-                    if websocket.remote_address == self.comfyUi:
-                        await self.fromComfyui(message)
-                    elif websocket.remote_address == self.photoshop:
-                        await self.fromPhotoshop(message)
-        except Exception as e:
-                print(f"🔷 error handle_connection: {e}")
-                await self.remove_connection(websocket)
-        finally:
-            await websocket.close()
-
-
-    async def remove_connection(self, websocket):
-        try:
-            del clients[websocket.remote_address]
-            if websocket.remote_address == self.comfyUi:
-                print(f"🔷 ComfyUi Tab closed {websocket.remote_address} ")
-                self.comfyUi = None
-                await websocket.close()
-            elif websocket.remote_address == self.photoshop:
-                print(f"🔷 Photoshop closed {websocket.remote_address} ")
-                self.photoshop = None
-                await websocket.close()
-            else:
-                print(f"🔷 {websocket.remote_address} disconnected")
-                await websocket.close()
-        except ValueError:
-            pass
-        
-    ############################# GET ################################
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    ############## from Photoshop##############
-    ##########################################
-    async def fromPhotoshop(self, message):      
-        try:
-            data = json.loads(message)            
-
-            if data.get("quickSave"): 
-                await self.sendComfyUi("quickSave",True)
-                                
-            if data.get("workspace"): 
-                await self.sendComfyUi("workspace",data.get("workspace"))
-
-            if data.get("dataDir"): 
-                self.dataDir = data.get("dataDir")
-                self.renderDir = os.path.join(self.dataDir,"render.png")
-                with open(os.path.join("data.json"), "w") as file:
-                    file.write(json.dumps({"dataDir": str(self.dataDir)}))
-            if not data.get("dataDir") and not data.get("workspace") and not data.get("quickSave"):
-                await self.sendComfyUi("", message)
-
-                
-        except Exception as e:
-            print(f"🔷 error fromPhotoshop: {e}")
-            await self.restart_websocket_server()
-
-
-
-
-    ############## from Comfyui ##############
-    ##########################################
-    async def fromComfyui(self, message):      
-        try:  
-            # print("🔷 message", message)
-            data = json.loads(message)
-
-                
-            if data.get("PreviewImage"): 
-                imageName = data.get("PreviewImage")
-
-                file_path = os.path.join(self.tempDir,imageName)
-                destination_path = os.path.join(self.inputDir, imageName)
-                if os.path.exists(file_path):
-                
-                    shutil.copyfile(file_path, destination_path)
-                    await self.sendComfyUi("tempToInput", imageName)
-                
-            # elif data.get('render_status')=="genrated":
-            #     await self.sendPhotoshop("", message)
-            #     width, height = Image.open(self.renderDir).size
-            #     await self.sendPhotoshop("width",width)
-            #     await self.sendPhotoshop("height",height)
-
-
-            elif data.get('QuickEdit'):
-                dir=os.path.join(self.mainDir, "input", data.get('QuickEdit').replace("/", "\\")) 
-                if not os.path.exists(dir):
-                    print("🔷 not available", dir)
-                else:
-                    width, height = Image.open(dir).size
-                    print("🔷 dir", dir)
-                    await self.sendPhotoshop("QuickEdit", dir)
-                    await self.sendPhotoshop("width",width)
-                    await self.sendPhotoshop("height",height)
-                
-            elif data.get('openWithPS'):
-                    openimageBase64 = base64.b64decode(self.openWithPS)
-                    # save as psd
-                    self.i+=1
-                    filename= "Dolpin_Ai_openWithPS"+ str(self.i)+ ".psd"
-                    print("🔷 filename", filename)
-                    file_path = os.path.join(self.tempDir,filename)
-                    print("🔷 file_path", file_path)
-                    
-                    with open(file_path, "wb") as file:
-                        file.write(openimageBase64)
-                    # open psd file
-                    print("🔷 psd")
-                    if platform.system() == 'Darwin':
-                        subprocess.call(('open', file_path))
-                    elif platform.system() == 'Windows':
-                        os.startfile(file_path)
-                    else:                
-                        subprocess.call(('xdg-open', file_path))
-            
-            
-            else:
-                await self.sendPhotoshop("", message)
-                    
-                                        
-            # if render:
-            #     print("🔷 render", render)
-            #     image_binary = base64.b64decode(render)      
-            #     file_path = f"{self.dataDir}/render.png"
-            #     print("🔷 self.dataDir", self.dataDir)
-            #     with open(file_path, "wb") as file:
-            #         file.write(image_binary)
-            #     # send width and height
-            #     width, height = Image.open(file_path).size
-            #     await self.sendPhotoshop(json.dumps({"width": str(width),"height": str(height)}))
-            #     render=None
-            
-        except Exception as e:
-            print(f"🔷 error fromComfyui: {e}")
-            await self.restart_websocket_server()
-
-        
-                
-            
-            
-        if message.startswith("rndr"):
-            image_binary = base64.b64decode(message[4:])      
-            file_path = f"{self.dataDir}/render.png"
-            with open(file_path, "wb") as file:
-                file.write(image_binary)
-            # send width and height
-            width, height = Image.open(file_path).size
-            await self.sendPhotoshop("width", width)
-            await self.sendPhotoshop("height", height)
-
-            
-                
-
-            
-    ############################# Send #############################
-    
-    async def sendComfyUi(self, name, message):
-        try:
-            if self.comfyUi in clients:
-                if name =="":
-                    await clients[self.comfyUi]['websocket'].send(str(message))
-                else:
-                    data=json.dumps({name: str(message)})
-                    await clients[self.comfyUi]['websocket'].send(str(data))
-            else:
-                print("🔷 comfyUi Not Connected")
-        except Exception as e:
-            print(f"🔷 error sendComfyUi: {e}")
-    
-    async def sendPhotoshop(self, name, message):
-        # print("🔷 name", name)
-        # print("🔷 message", message)
-        try:
-            if self.photoshop in clients:
-                if name =="":
-                    await clients[self.photoshop]['websocket'].send(str(message))
-                else:
-                    data=json.dumps({name: str(message)})
-                    await clients[self.photoshop]['websocket'].send((str(data)))
-            else: print("🔷 Photoshop Not Connected")
-        except Exception as e:
-            print(f"🔷 error sendComfyUi: {e}")
-            
-            
-       
-    async def restart_websocket_server(self):
-        try:
-            server = WebSocketServer()
-            async with websockets.serve(server.handle_connection, "localhost", 8765):
-                print("🔷 WebSocket server restarted and waiting for messages")
-        except Exception as e:
-            # print(f"🔷 An error occurred during WebSocket server restart: {e}")
-            print("🔷 Restarting the server in 5 seconds...")
-            asyncio.sleep(5)
-     
-            
-            
-
-
-async def main():
-    try:
-        server = WebSocketServer()
-        async with websockets.serve(server.handle_connection, "localhost", 8765):
-            # print("🔷 Server is running and waiting for messages")
-            await asyncio.Future()  # run forever
-    except Exception as e:
-        # print(f"🔷 An error occurred: {e}")
-        print("🔷 Restarting the server in 5 seconds...")
-        asyncio.sleep(5)
-
-asyncio.run(main())
-
+e='.'
+d='localhost'
+c='input'
+b='PHSP'
+a='PHSPBETA'
+R='data.json'
+K='websocket'
+J=open
+I='dataDir'
+H=Exception
+E=True
+D=str
+C=None
+A=print
+import asyncio as L,websockets as S,json as G,base64 as T
+from PIL import Image as U
+import subprocess as V,os as B,platform as W,os as B,shutil as f
+with J(R,'r')as P:g=G.load(P)
+if not B.path.exists(g.get(I)):
+	M=C;N=False;Q=C
+	def h(path):
+		if not B.path.exists(path):A('🔷 No, the path does not exist.',path)
+	O=B.path.expanduser('~\\AppData\\Roaming\\Adobe\\UXP\\PluginsStorage');h(O)
+	def X(path):
+		global N;global Q
+		for(G,C,H)in B.walk(path,topdown=E):
+			C.sort(reverse=E)
+			for D in C:
+				if D.isdigit():
+					F=B.path.join(G,D,'External','3e6d64e0','PluginData')
+					if B.path.exists(F):N=E;Q=F;break
+			if N:break
+		if not N:A("🔷 Photoshop plugin didn't install! Please install it first.")
+	for(k,i,l)in B.walk(O):
+		for Y in i:
+			if Y==a:M=B.path.join(O,a);X(M)
+			elif Y==b:M=B.path.join(O,b);X(M)
+	with J(B.path.join(R),'w')as P:P.write(G.dumps({I:D(Q)}))
+F={}
+class Z:
+	def __init__(A):
+		A.mainDir=B.getcwd()
+		for D in range(2):A.mainDir=B.path.dirname(A.mainDir)
+		A.tempDir=B.path.join(A.mainDir,'temp');A.inputDir=B.path.join(A.mainDir,c);A.comfyUi=C;A.photoshop=C;A.positive=C;A.negative=C;A.seed=C;A.slider=C;A.image=C;A.mask=C;A.dataDir=C;A.renderDir=C;A.progress=C;A.openWithPS=C;A.QuickEdit=C;A.render_status=C;A.render=C;A.quickSave=C;A.i=0;A.workspace=C
+	async def handle_connection(B,websocket,path):
+		J='photoshopConnected';I='comfyuiConnected';C=websocket
+		try:
+			F[C.remote_address]={K:C}
+			while E:
+				G=await C.recv()
+				if G=='imComfyui':
+					B.comfyUi=C.remote_address;A('🔷 Photoshop node added'+D(B.comfyUi));await B.sendPhotoshop(I,E)
+					if B.sendPhotoshop:await B.sendComfyUi(J,E)
+				elif G=='imPhotoshop':
+					B.photoshop=C.remote_address;A('🔷 Photoshop launched'+D(B.photoshop));await B.sendComfyUi(J,E)
+					if B.comfyUi:await B.sendPhotoshop(I,E)
+				elif G=='done':B.sendComfyUi('render_status','genrated')
+				elif C.remote_address==B.comfyUi:await B.fromComfyui(G)
+				elif C.remote_address==B.photoshop:await B.fromPhotoshop(G)
+		except H as L:A(f"🔷 error handle_connection: {L}");await B.remove_connection(C)
+		finally:await C.close()
+	async def remove_connection(D,websocket):
+		B=websocket
+		try:
+			del F[B.remote_address]
+			if B.remote_address==D.comfyUi:A(f"🔷 ComfyUi Tab closed {B.remote_address} ");D.comfyUi=C;await B.close()
+			elif B.remote_address==D.photoshop:A(f"🔷 Photoshop closed {B.remote_address} ");D.photoshop=C;await B.close()
+			else:A(f"🔷 {B.remote_address} disconnected");await B.close()
+		except ValueError:pass
+	async def fromPhotoshop(C,message):
+		M=message;L='quickSave';K='workspace'
+		try:
+			F=G.loads(M)
+			if F.get(L):await C.sendComfyUi(L,E)
+			if F.get(K):await C.sendComfyUi(K,F.get(K))
+			if F.get(I):
+				C.dataDir=F.get(I);C.renderDir=B.path.join(C.dataDir,'render.png')
+				with J(B.path.join(R),'w')as N:N.write(G.dumps({I:D(C.dataDir)}))
+			if not F.get(I)and not F.get(K)and not F.get(L):await C.sendComfyUi('',M)
+		except H as O:A(f"🔷 error fromPhotoshop: {O}");await C.restart_websocket_server()
+	async def fromComfyui(C,message):
+		S='height';R='width';Q='PreviewImage';O='QuickEdit';I=message
+		try:
+			F=G.loads(I)
+			if F.get(Q):
+				K=F.get(Q);E=B.path.join(C.tempDir,K);X=B.path.join(C.inputDir,K)
+				if B.path.exists(E):f.copyfile(E,X);await C.sendComfyUi('tempToInput',K)
+			elif F.get(O):
+				dir=B.path.join(C.mainDir,c,F.get(O).replace('/','\\'))
+				if not B.path.exists(dir):A('🔷 not available',dir)
+				else:L,M=U.open(dir).size;A('🔷 dir',dir);await C.sendPhotoshop(O,dir);await C.sendPhotoshop(R,L);await C.sendPhotoshop(S,M)
+			elif F.get('openWithPS'):
+				Y=T.b64decode(C.openWithPS);C.i+=1;P='Dolpin_Ai_openWithPS'+D(C.i)+'.psd';A('🔷 filename',P);E=B.path.join(C.tempDir,P);A('🔷 file_path',E)
+				with J(E,'wb')as N:N.write(Y)
+				A('🔷 psd')
+				if W.system()=='Darwin':V.call(('open',E))
+				elif W.system()=='Windows':B.startfile(E)
+				else:V.call(('xdg-open',E))
+			else:await C.sendPhotoshop('',I)
+		except H as Z:A(f"🔷 error fromComfyui: {Z}");await C.restart_websocket_server()
+		if I.startswith('rndr'):
+			a=T.b64decode(I[4:]);E=f"{C.dataDir}/render.png"
+			with J(E,'wb')as N:N.write(a)
+			L,M=U.open(E).size;await C.sendPhotoshop(R,L);await C.sendPhotoshop(S,M)
+	async def sendComfyUi(B,name,message):
+		C=message
+		try:
+			if B.comfyUi in F:
+				if name=='':await F[B.comfyUi][K].send(D(C))
+				else:E=G.dumps({name:D(C)});await F[B.comfyUi][K].send(D(E))
+			else:A('🔷 comfyUi Not Connected')
+		except H as I:A(f"🔷 error sendComfyUi: {I}")
+	async def sendPhotoshop(B,name,message):
+		C=message
+		try:
+			if B.photoshop in F:
+				if name=='':await F[B.photoshop][K].send(D(C))
+				else:E=G.dumps({name:D(C)});await F[B.photoshop][K].send(D(E))
+			else:A('🔷 Photoshop Not Connected')
+		except H as I:A(f"🔷 error sendComfyUi: {I}")
+	async def restart_websocket_server(C):
+		try:
+			B=Z()
+			async with S.serve(B.handle_connection,d,8765):A('🔷 WebSocket server restarted and waiting for messages')
+		except H as D:A(e);L.sleep(5)
+async def j():
+	try:
+		B=Z()
+		async with S.serve(B.handle_connection,d,8765):await L.Future()
+	except H as C:A(e);L.sleep(5)
+L.run(j())
