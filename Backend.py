@@ -12,6 +12,9 @@ E=True
 D=str
 C=None
 A=print
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
+
 import asyncio as L,websockets as S,json as G,base64 as T
 from PIL import Image as U
 import subprocess as V,os as B,platform as W,os as B,shutil as f

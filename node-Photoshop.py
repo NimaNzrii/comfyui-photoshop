@@ -10,7 +10,9 @@ import json
 import os
 import folder_paths
 import hashlib
- 
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
+
 class PhotoshopToComfyUI:
     @classmethod
     def INPUT_TYPES(cls):
