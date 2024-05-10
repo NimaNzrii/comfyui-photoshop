@@ -3,14 +3,38 @@ import subprocess
 import os
 import folder_paths
 import sys
+import pkg_resources
+import shutil
 
 sys.stdout.reconfigure(encoding='utf-8')
+
+def installvenv():
+    print("_PS_ Installing venv...")
+    subprocess.run([sys.executable, '-m', 'pip', 'install', 'virtualenv'], check=True)
+    if sys.platform.startswith('win'):
+        subprocess.run([sys.executable, '-m', 'virtualenv', venv_path], shell=True, check=True)
+    else:
+        subprocess.run([sys.executable, '-m', 'venv', venv_path], check=True)
+
+    python_executable = get_python_executable(venv_path)
+    if not os.path.exists(python_executable):
+        raise FileNotFoundError(f"_PS_ Python executable path does not exist: {python_executable}")
+    else: 
+        print(f"_PS_ Python executable installed successfully at {python_executable}")
+
+    print("_PS_ Installing requirements...")
+    subprocess.run([python_executable, '-m', 'pip', 'cache', 'purge'], check=True)
+    subprocess.run([python_executable, '-m', 'pip', 'install', '--upgrade', 'pip'], check=True)
+    requirements_path = os.path.join(node_path, 'requirements.txt')
+    subprocess.run([python_executable, '-m', 'pip', 'install', '-r', requirements_path], check=True)
+    print("_PS_ Requirements installed successfully")
 
 def get_python_executable(venv_path):
     if sys.platform.startswith('win'):
         return os.path.join(venv_path, 'Scripts', 'python.exe')
     else:
         return os.path.join(venv_path, 'bin', 'python')
+
 
 try:
     node_path = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
@@ -19,26 +43,31 @@ try:
     if not os.path.exists(node_path):
         raise FileNotFoundError(f"_PS_ Node path does not exist: {node_path}")
 
-    if not os.path.exists(venv_path):
-        print("_PS_ Installing venv...")
-        subprocess.run([sys.executable, '-m', 'pip', 'install', 'virtualenv'], check=True)
-        if sys.platform.startswith('win'):
-            subprocess.run([sys.executable, '-m', 'virtualenv', venv_path], shell=True, check=True)
-        else:
-            subprocess.run([sys.executable, '-m', 'venv', venv_path], check=True)
 
+    if os.path.exists(venv_path):
         python_executable = get_python_executable(venv_path)
-        if not os.path.exists(python_executable):
-            raise FileNotFoundError(f"_PS_ python_path path does not exist")
-        else: 
-            print(f"_PS_ python_path Installed Successfully")
-
-        print("_PS_ Installing requirements...")
         requirements_path = os.path.join(node_path, 'requirements.txt')
-        subprocess.run([python_executable, '-m', 'pip', 'install', 'Pillow'], check=True)
-        subprocess.run([python_executable, '-m', 'pip', 'install', 'asyncio'], check=True)
-        subprocess.run([python_executable, '-m', 'pip', 'install', 'websockets'], check=True)
-        print("_PS_ Installed successfully")
+
+        with open(requirements_path, 'r') as file:
+            requirements = file.readlines()
+            requirements = [line.strip() for line in requirements]
+
+        installed_packages_list = subprocess.check_output([python_executable, '-m', 'pip', 'list']).decode()
+        installed_packages = {line.split()[0].lower() for line in installed_packages_list.split('\n')[2:] if line}
+
+        missing_packages = [pkg for pkg in requirements if pkg.lower() not in installed_packages]
+        
+        if missing_packages:
+            print("_PS_ The following packages are missing:")
+            print("\n".join(missing_packages))
+
+            shutil.rmtree(venv_path)
+            print(f"_PS_ Virtual environment at {venv_path} has been removed.")
+            installvenv()
+        else:
+            print("All packages are installed.")
+    else:
+        installvenv()
 
     backend_path = os.path.join(node_path, 'Backend.py')
     python_path = get_python_executable(venv_path)
