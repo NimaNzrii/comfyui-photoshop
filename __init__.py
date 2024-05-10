@@ -25,6 +25,7 @@ def installvenv():
     print("_PS_ Installing requirements...")
     subprocess.run([python_executable, '-m', 'pip', 'cache', 'purge'], check=True)
     subprocess.run([python_executable, '-m', 'pip', 'install', '--upgrade', 'pip'], check=True)
+    subprocess.run([python_executable, '-m', 'pip', 'install', '--upgrade', 'pip','setuptools'], check=True)
     requirements_path = os.path.join(node_path, 'requirements.txt')
     subprocess.run([python_executable, '-m', 'pip', 'install', '-r', requirements_path], check=True)
     print("_PS_ Requirements installed successfully")
@@ -52,7 +53,13 @@ try:
             requirements = file.readlines()
             requirements = [line.strip() for line in requirements]
 
-        installed_packages_list = subprocess.check_output([python_executable, '-m', 'pip', 'list']).decode()
+        try:
+            installed_packages_list = subprocess.check_output([python_executable, '-m', 'pip', 'list']).decode()    
+        except:
+            subprocess.run([python_executable, '-m', 'pip', 'install', '--upgrade', 'pip'], check=True)
+            subprocess.run([python_executable, '-m', 'pip', 'install', '--upgrade', 'pip','setuptools'], check=True)
+            installed_packages_list = subprocess.check_output([python_executable, '-m', 'pip', 'list']).decode()
+            
         installed_packages = {line.split()[0].lower() for line in installed_packages_list.split('\n')[2:] if line}
 
         missing_packages = [pkg for pkg in requirements if pkg.lower() not in installed_packages]
