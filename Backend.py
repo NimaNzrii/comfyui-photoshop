@@ -12,8 +12,7 @@ E=True
 D=str
 C=None
 A=print
-import sys
-sys.stdout.reconfigure(encoding='utf-8')
+A("_PS_ Backend Started")
 
 import asyncio as L,websockets as S,json as G,base64 as T
 from PIL import Image as U
@@ -22,7 +21,7 @@ with J(R,'r')as P:g=G.load(P)
 if not B.path.exists(g.get(I)):
 	M=C;N=False;Q=C
 	def h(path):
-		if not B.path.exists(path):A('🔷 No, the path does not exist.',path)
+		if not B.path.exists(path):A('_PS_ No, the path does not exist.',path)
 	O=B.path.expanduser('~\\AppData\\Roaming\\Adobe\\UXP\\PluginsStorage');h(O)
 	def X(path):
 		global N;global Q
@@ -33,7 +32,7 @@ if not B.path.exists(g.get(I)):
 					F=B.path.join(G,D,'External','3e6d64e0','PluginData')
 					if B.path.exists(F):N=E;Q=F;break
 			if N:break
-		if not N:A("🔷 Photoshop plugin didn't install! Please install it first.")
+		if not N:A("_PS_ Photoshop plugin didn't install! Please install it first.")
 	for(k,i,l)in B.walk(O):
 		for Y in i:
 			if Y==a:M=B.path.join(O,a);X(M)
@@ -52,23 +51,23 @@ class Z:
 			while E:
 				G=await C.recv()
 				if G=='imComfyui':
-					B.comfyUi=C.remote_address;A('🔷 Photoshop node added'+D(B.comfyUi));await B.sendPhotoshop(I,E)
+					B.comfyUi=C.remote_address;A('_PS_ Photoshop node added'+D(B.comfyUi));await B.sendPhotoshop(I,E)
 					if B.sendPhotoshop:await B.sendComfyUi(J,E)
 				elif G=='imPhotoshop':
-					B.photoshop=C.remote_address;A('🔷 Photoshop launched'+D(B.photoshop));await B.sendComfyUi(J,E)
+					B.photoshop=C.remote_address;A('_PS_ Photoshop launched'+D(B.photoshop));await B.sendComfyUi(J,E)
 					if B.comfyUi:await B.sendPhotoshop(I,E)
 				elif G=='done':B.sendComfyUi('render_status','genrated')
 				elif C.remote_address==B.comfyUi:await B.fromComfyui(G)
 				elif C.remote_address==B.photoshop:await B.fromPhotoshop(G)
-		except H as L:A(f"🔷 error handle_connection: {L}");await B.remove_connection(C)
+		except H as L:A(f"_PS_ error handle_connection: {L}");await B.remove_connection(C)
 		finally:await C.close()
 	async def remove_connection(D,websocket):
 		B=websocket
 		try:
 			del F[B.remote_address]
-			if B.remote_address==D.comfyUi:A(f"🔷 ComfyUi Tab closed {B.remote_address} ");D.comfyUi=C;await B.close()
-			elif B.remote_address==D.photoshop:A(f"🔷 Photoshop closed {B.remote_address} ");D.photoshop=C;await B.close()
-			else:A(f"🔷 {B.remote_address} disconnected");await B.close()
+			if B.remote_address==D.comfyUi:A(f"_PS_ ComfyUi Tab closed {B.remote_address} ");D.comfyUi=C;await B.close()
+			elif B.remote_address==D.photoshop:A(f"_PS_ Photoshop closed {B.remote_address} ");D.photoshop=C;await B.close()
+			else:A(f"_PS_ {B.remote_address} disconnected");await B.close()
 		except ValueError:pass
 	async def fromPhotoshop(C,message):
 		M=message;L='quickSave';K='workspace'
@@ -80,7 +79,7 @@ class Z:
 				C.dataDir=F.get(I);C.renderDir=B.path.join(C.dataDir,'render.png')
 				with J(B.path.join(R),'w')as N:N.write(G.dumps({I:D(C.dataDir)}))
 			if not F.get(I)and not F.get(K)and not F.get(L):await C.sendComfyUi('',M)
-		except H as O:A(f"🔷 error fromPhotoshop: {O}");await C.restart_websocket_server()
+		except H as O:A(f"_PS_ error fromPhotoshop: {O}");await C.restart_websocket_server()
 	async def fromComfyui(C,message):
 		S='height';R='width';Q='PreviewImage';O='QuickEdit';I=message
 		try:
@@ -90,17 +89,17 @@ class Z:
 				if B.path.exists(E):f.copyfile(E,X);await C.sendComfyUi('tempToInput',K)
 			elif F.get(O):
 				dir=B.path.join(C.mainDir,c,F.get(O).replace('/','\\'))
-				if not B.path.exists(dir):A('🔷 not available',dir)
-				else:L,M=U.open(dir).size;A('🔷 dir',dir);await C.sendPhotoshop(O,dir);await C.sendPhotoshop(R,L);await C.sendPhotoshop(S,M)
+				if not B.path.exists(dir):A('_PS_ not available',dir)
+				else:L,M=U.open(dir).size;A('_PS_ dir',dir);await C.sendPhotoshop(O,dir);await C.sendPhotoshop(R,L);await C.sendPhotoshop(S,M)
 			elif F.get('openWithPS'):
-				Y=T.b64decode(C.openWithPS);C.i+=1;P='Dolpin_Ai_openWithPS'+D(C.i)+'.psd';A('🔷 filename',P);E=B.path.join(C.tempDir,P);A('🔷 file_path',E)
+				Y=T.b64decode(C.openWithPS);C.i+=1;P='Dolpin_Ai_openWithPS'+D(C.i)+'.psd';A('_PS_ filename',P);E=B.path.join(C.tempDir,P);A('_PS_ file_path',E)
 				with J(E,'wb')as N:N.write(Y)
-				A('🔷 psd')
+				A('_PS_ psd')
 				if W.system()=='Darwin':V.call(('open',E))
 				elif W.system()=='Windows':B.startfile(E)
 				else:V.call(('xdg-open',E))
 			else:await C.sendPhotoshop('',I)
-		except H as Z:A(f"🔷 error fromComfyui: {Z}");await C.restart_websocket_server()
+		except H as Z:A(f"_PS_ error fromComfyui: {Z}");await C.restart_websocket_server()
 		if I.startswith('rndr'):
 			a=T.b64decode(I[4:]);E=f"{C.dataDir}/render.png"
 			with J(E,'wb')as N:N.write(a)
@@ -111,20 +110,20 @@ class Z:
 			if B.comfyUi in F:
 				if name=='':await F[B.comfyUi][K].send(D(C))
 				else:E=G.dumps({name:D(C)});await F[B.comfyUi][K].send(D(E))
-			else:A('🔷 comfyUi Not Connected')
-		except H as I:A(f"🔷 error sendComfyUi: {I}")
+			else:A('_PS_ comfyUi Not Connected')
+		except H as I:A(f"_PS_ error sendComfyUi: {I}")
 	async def sendPhotoshop(B,name,message):
 		C=message
 		try:
 			if B.photoshop in F:
 				if name=='':await F[B.photoshop][K].send(D(C))
 				else:E=G.dumps({name:D(C)});await F[B.photoshop][K].send(D(E))
-			else:A('🔷 Photoshop Not Connected')
-		except H as I:A(f"🔷 error sendComfyUi: {I}")
+			else:A('_PS_ Photoshop Not Connected')
+		except H as I:A(f"_PS_ error sendComfyUi: {I}")
 	async def restart_websocket_server(C):
 		try:
 			B=Z()
-			async with S.serve(B.handle_connection,d,8765):A('🔷 WebSocket server restarted and waiting for messages')
+			async with S.serve(B.handle_connection,d,8765):A('_PS_ WebSocket server restarted and waiting for messages')
 		except H as D:A(e);L.sleep(5)
 async def j():
 	try:
