@@ -3,6 +3,7 @@ import subprocess
 import os
 import folder_paths
 import sys
+import platform
 
 python_executable= sys.executable
 node_path = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
@@ -52,7 +53,11 @@ default_directory = os.getcwd()
 node_path = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
 
 os.chdir(node_path)
-subprocess.Popen([python_executable, backend_path],shell=True)
+if platform.system() == "Linux":
+    subprocess.Popen([python_executable, backend_path])
+else:
+    subprocess.Popen([python_executable, backend_path],shell=True)
+
 os.chdir(default_directory)
 
 node_list = ["node-Photoshop", "node-Photoshop-noplugin"]
