@@ -16,7 +16,6 @@ if os.path.exists(venv_path):
     import shutil
     shutil.rmtree(venv_path)
 
-
 def verifyReq():
     with open(requirements_path, 'r') as file:
         requirements = file.readlines()
@@ -35,7 +34,7 @@ def verifyReq():
     if missing_packages:
         print("_PS_ The following packages are missing:")
         print("\n".join(missing_packages))
-        installReq()        
+        installReq()
     else:
         print("_PS_ All packages are installed.")
 
@@ -44,6 +43,8 @@ def installReq():
     subprocess.run([python_executable, '-m', 'pip', 'install', '--upgrade', 'pip'], check=True)
     subprocess.run([python_executable, '-m', 'pip', 'install', '--upgrade', 'pip','setuptools'], check=True)
     subprocess.run([python_executable, '-m', 'pip', 'install', '-r', requirements_path], check=True)
+
+verifyReq()
 
 print("_PS_ backend_path", backend_path)
 
