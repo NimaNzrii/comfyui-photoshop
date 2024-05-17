@@ -1,6 +1,7 @@
 
 [![alt text](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbG2dR-tUj_B0WPuYVVKeZrtStsc3Jg3yv1VZ_1ciKFprJa3o_t58RWUYHilaDjyskBA8XIWHcdHFIjzgSuYcOKowz9m09Xvdw=w1910-h982-rw-v1)](https://www.youtube.com/watch?v=JwLbnO4px-E)
 
+
 .
 
 
@@ -9,6 +10,9 @@
 Welcome to **ComfyUI for Photoshop** plugin repository!🎨 This plugin integrates with an AI-powered image generation system to enhance your Photoshop experience with advanced features.
 
 ![alt text](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbr7szq0BmtrEk-3SkNKdFaRYlcEFC4_Law4r7KEruYU5T6Sa6bJQeUQkE54QON8OLVBdfWODosSJSIeV-quonfS-9UbnvPSw=w1920-h990-rw-v1)
+
+![SocialLink](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbXPjItVdjxYc1RyplIF7m266zw6ONiirEMWus-RmRhzLtXsFujKeJWeMNzJzluGtLKJyIXh_TTbKilzaXWYPUdDL2L9ncohcA=w1910-h982)
+![SocialLink](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihb7DP1vt3i2M2gwNgkF93Dg_WZtectAA0-pgUMh4XCMdiRyJqJpkiDQ1bID09HHpMytVV35cPNkNp7TScVf5XBwsCeOudkQoPQ=w1910-h982)
 
 ## 🌟 Features
 - **Unlimited Generative Fill:** Create AI-infused content in selected image areas.
