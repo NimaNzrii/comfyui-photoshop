@@ -1,6 +1,6 @@
 
-[![SocialLink](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbXPjItVdjxYc1RyplIF7m266zw6ONiirEMWus-RmRhzLtXsFujKeJWeMNzJzluGtLKJyIXh_TTbKilzaXWYPUdDL2L9ncohcA=w1910-h982)
-![SocialLink](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihb7DP1vt3i2M2gwNgkF93Dg_WZtectAA0-pgUMh4XCMdiRyJqJpkiDQ1bID09HHpMytVV35cPNkNp7TScVf5XBwsCeOudkQoPQ=w1910-h982)](https://www.linkedin.com/in/nima-nazari-2904a2211/)
+![SocialLink](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbXPjItVdjxYc1RyplIF7m266zw6ONiirEMWus-RmRhzLtXsFujKeJWeMNzJzluGtLKJyIXh_TTbKilzaXWYPUdDL2L9ncohcA=w1910-h982)
+[![SocialLink](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihb7DP1vt3i2M2gwNgkF93Dg_WZtectAA0-pgUMh4XCMdiRyJqJpkiDQ1bID09HHpMytVV35cPNkNp7TScVf5XBwsCeOudkQoPQ=w1910-h982)](https://www.linkedin.com/in/nima-nazari-2904a2211/)
 [![SocialLink](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihaVpic9ctYWsfJVJrNaN7y9rBw0kmaElKqmQE3DTT1I0u9FVx0vIi_qNgZTF6LlbNoAc7kcQM1AJ5vnwHOAgf6La-qViy1JHg=w1910-h983)](mailto:nimanzriart@gmail.com)
 [![SocialLink](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbKM1qV9olASZ5AIxi9exb0ntRPiv6o883Bdx4jDUGLiecwR32jjx_oSO3ryWvVLsGeVH_Er42KkrOz5vo9mTTLYZzej3MADF4=w1910-h982)](https://studio.buymeacoffee.com/dashboard)
 
