@@ -1,0 +1,15 @@
+[project]
+name = "comfyui-photoshop"
+description = "Photoshop node inside of ComfyUi, send and get data from Photoshop"
+version = "1.0.0"
+license = "LICENSE"
+dependencies = ["pillow", "asyncio", "websockets"]
+
+[project.urls]
+Repository = "https://github.com/NimaNzrii/comfyui-photoshop"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "comfyui-photoshop"
+Icon = ""
