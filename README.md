@@ -19,7 +19,7 @@
 
 Welcome to **ComfyUI for Photoshop** plugin repository!🎨 This plugin integrates with an AI-powered image generation system to enhance your Photoshop experience with advanced features.
 
-![alt text](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbr7szq0BmtrEk-3SkNKdFaRYlcEFC4_Law4r7KEruYU5T6Sa6bJQeUQkE54QON8OLVBdfWODosSJSIeV-quonfS-9UbnvPSw=w1920-h990-rw-v1)
+![alt text](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihaZsHJ9LPg6CM_5Fz3iK4y8cl9H9Lrf3dxe5gAV8yKE3ooHAQqHgbtyS_Ixal8VDefjrNS_M86NzbXa4935ZLnn-OrMAHSVqQ=w1910-h982-rw-v1)
 
 
 ## 🌟 Features
@@ -47,7 +47,7 @@ Don't have ComfyUI & ComfyUI Manager? No worries! Follow THIS (tutorial)[yt_link
 
 ---
 [⬇️ Download The Workflow](https://openart.ai/workflows/lreWarJbqiYPcDXnD8hh)
-![alt text](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpiha-JQSvBtjWVm2B1Dhki05hQOS6A_fB4sjzU95PXtilYByyNA7XzIvjdiKP-HZe473Ageu5kLcfmF4npOnS5NuOYkAFSI9EWX8=w1920-h990-rw-v1)
+![alt text](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbtTYV_hKQ9_kKgufnKj8uSIuCpIZ0Uf5486N4P8MLR3gEl8nsax4PwdKsP0AUBdUZYIqGZgJEtUehTIdNWrvSI8mhLNebzJEI=w1910-h982-rw-v1)
 
 ## 🗃️ Required Files
 
