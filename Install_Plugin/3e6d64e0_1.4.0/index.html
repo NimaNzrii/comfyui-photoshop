@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="icon-style.css" />
+  </head>
+
+  <body>
+    <uxp-panel panelid="mainpanel" id="mainpanel">
+      <div id="body">
+        <div class="startPage">
+          <div class="hoverContainer settinglist" style="height: min-content; top: 50%; transform: translate(-50%, -50%)">
+            <a href="https://openart.ai">
+              <div style="border-radius: 8px" class="header">
+                <span class="discrip">Sponsored by</span>
+                <img src="/icons/OpenArt.png" style="height: 18px; width: auto" />
+              </div>
+            </a>
+            <div class="classnew">
+              <hr />
+              <hr />
+              <hr />
+              <span class="h1">PHOTOSHOP<br />to COMFYUI</span>
+              <a href="https://github.com/NimaNzrii/comfyui-photoshop">
+                <span class="discrip">V1.4 - By NimaNzrii</span>
+                <hr />
+                <hr />
+              </a>
+            </div>
+            <hr />
+            <span id="startButton" class="size-Button style-input"> Get Started </span>
+          </div>
+        </div>
+
+        <div class="progressBar"></div>
+        <div class="progressBarBack hidden"></div>
+
+        <div id="allbtns">
+          <!-- <div class="style-containerBG toast-bg">
+            <div class="frame-626304">
+              <div class="toast-gre">
+                <img class="tick-square" src="tick-square0.svg" />
+              </div>
+              <div class="frame-6263032">
+                <div class="oh-no">Oh no!</div>
+                <div id="toasttext" class="toasttext">first notif</div>
+              </div>
+            </div>
+            <div class="frame-626349">
+              <div class="hicon-bold-close">
+                <img class="close" src="close0.svg" />
+              </div>
+            </div>
+          </div> -->
+
+          <span id="addToLayersBtn">Send to Layers</span>
+          <div class="buttonlist">
+            <div class="buttonSeg">
+              <div id="settingPanelButton" class="style-containerBG">
+                <img class="icon-setting" />
+              </div>
+              <div id="ComfuiPanelButton" class="style-containerBG">
+                <img class="icon-comfyui" />
+              </div>
+            </div>
+            <div id="previewsizebtn" class="style-containerBG">
+              <img id="iconpreviewsize" class="icon-previewsize" />
+            </div>
+          </div>
+
+          <div class="sliderContainer style-containerBG">
+            <div id="sliderBackground">
+              <div id="sliderForground">
+                <div class="slidercircle"></div>
+              </div>
+            </div>
+            <div id="sliderTxt">45</div>
+            <div class="sliderCaption">creative</div>
+          </div>
+
+          <div class="controlContainer_Background">
+            <div id="tooltip" class="discrip hidden" style="margin-bottom: 2px">Right click to "Randomize"</div>
+
+            <div id="promptContainer" class="settinglist hoverContainer hidden">
+              <div class="header">
+                <span class="header_title"> <img class="icon-preset" />Preset </span>
+                <a href="https://github.com/NimaNzrii/comfyui-photoshop">
+                  <span class="discrip">Need Help?</span>
+                </a>
+              </div>
+              <div class="hoverSeg">
+                <sp-picker id="workFlowDropDown" placeholder="Couldn't Load">
+                  <sp-menu id="workFlowOptions" slot="options"> </sp-menu>
+                </sp-picker>
+              </div>
+              <div class="hoverSeg">
+                <sp-picker id="rndrModeDropDown" style="width: 100%" placeholder="Couldn't Load">
+                  <sp-menu id="rndrModeOptions" slot="options"> </sp-menu>
+                </sp-picker>
+                <sp-checkbox id="realtime_mode" size="s" class="size-Button" style="height: 24px; justify-content: flex-start"> Render On Changes </sp-checkbox>
+              </div>
+            </div>
+
+            <div id="presetContainer" class="settinglist hoverContainer hidden">
+              <div class="header">
+                <span class="header_title"> <img class="icon-prompt" />Prompt </span>
+                <a href="https://github.com/NimaNzrii/comfyui-photoshop">
+                  <span class="discrip">Need Help?</span>
+                </a>
+              </div>
+              <div class="hoverSeg" id="promptsection">
+                <sp-textarea id="positiveInput" class="prompt" placeholder="Positive Prompt"></sp-textarea>
+              </div>
+              <div class="hoverSeg">
+                <div class="row-item">
+                  <span id="seedRandomBtn" style="width: 100%; margin-right: 8px; justify-content: center; margin-bottom: 0px" class="size-Button style-input"> Randomize </span>
+                  <sp-textfield id="seedInput"></sp-textfield>
+                </div>
+              </div>
+            </div>
+
+            <div class="controller_holder">
+              <div class="controlContainer style-containerBG">
+                <span id="presetbtn" class="secbtn size-Button">
+                  <img id="iconpreset" class="icon-preset" />
+                </span>
+                <span id="promptbtn" class="secbtn size-Button">
+                  <img id="iconprompt" class="icon-prompt" />
+                </span>
+                <span id="renderbutton" style="min-width: 40px; width: 90px" class="renderbutton size-Button style-input secbtn">
+                  Render
+                  <img class="icon-play-active" style="font-size: 13px; margin-left: 2px; margin-right: -3px; width: 20px; height: 20px" />
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </uxp-panel>
+
+    <uxp-panel panelid="settingpanel" id="settingpanel" style="overflow-y: auto">
+      <div class="settingpanelseg" style="display: flex; flex-direction: column">
+        <div class="style-containerBG settinglist">
+          <div class="header">
+            <span class="header_title">ComfyUI IP Address</span>
+            <span id="ipStatus" class="discrip">Plugin didn't start</span>
+          </div>
+          <div class="hoverSeg">
+            <div class="row-item">
+              <span class="discrip" style="width: 120px">IP Address</span>
+              <sp-textfield id="ipField" value=""></sp-textfield>
+            </div>
+            <div class="row-item">
+              <span id="ipResetButton" style="width: 100%; margin-right: 8px; justify-content: center; margin-bottom: 0px" class="size-Button style-input"> Reset </span>
+              <span id="ipApplyButton" style="width: 100%; justify-content: center; margin-bottom: 0px" class="size-Button style-input"> Apply </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="style-containerBG settinglist">
+          <div class="header">
+            <span class="header_title">User InterFace</span>
+          </div>
+          <div class="hoverSeg">
+            <sp-checkbox id="show_negative_input" size="s" class="size-Button" style="height: 24px; justify-content: flex-start">Add Negative Prompt on UI (Preset Menu)</sp-checkbox>
+            <sp-checkbox id="never_hide_slider" size="s" class="size-Button" style="height: 24px; justify-content: flex-start">Dont Hide Slider when panel is open</sp-checkbox>
+            <sp-checkbox id="disable_all_animations" size="s" class="size-Button" style="height: 24px; justify-content: flex-start">Disable All Animations</sp-checkbox>
+          </div>
+          <div class="hoverSeg">
+            <div class="discrip">Right-Click on Render Button to Render With Random Seed !</div>
+          </div>
+        </div>
+        <div class="style-containerBG settinglist">
+          <div class="header">
+            <span class="header_title">Image Proccessing</span>
+          </div>
+          <div class="hoverSeg">
+            <div class="row-item">
+              <span class="discrip" style="width: 300px">DownScale if Bigger:</span>
+              <sp-textfield value="1024" id="maxResField"></sp-textfield>
+            </div>
+            <div class="row-item">
+              <span class="discrip" style="width: 300px">Upscale if smaller:</span>
+              <sp-textfield id="minResField" value="320"></sp-textfield>
+            </div>
+          </div>
+          <div class="hoverSeg">
+            <sp-checkbox id="fixMaskEdge" size="s" checked>Fix Mask Edge (feather mask)</sp-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="settingpanelseg" style="display: flex; flex-direction: column">
+        <!-- <div id="promptContainer" class="style-containerBG settinglist">
+        <div class="header">
+          <span class="header_title"> <img class="icon-preset" />Preset </span>
+          <a href="https://github.com/NimaNzrii/comfyui-photoshop">
+            <span class="discrip">Need Help?</span>
+          </a>
+        </div>
+        <div class="hoverSeg">
+          <sp-picker id="workFlowDropDown" placeholder="Couldn't Load">
+            <sp-menu id="workFlowOptions" slot="options"> </sp-menu>
+          </sp-picker>
+        </div>
+        <div class="hoverSeg">
+          <sp-picker id="rndrModeDropDown" style="width: 100%" placeholder="Couldn't Load">
+            <sp-menu id="rndrModeOptions" slot="options"> </sp-menu>
+          </sp-picker>
+          <sp-checkbox id="realtime_mode" size="s" class="size-Button" style="height: 24px; justify-content: flex-start"> Render On Changes </sp-checkbox>
+        </div>
+      </div> -->
+
+        <div id="presetContainer" class="style-containerBG settinglist">
+          <div class="header">
+            <span class="header_title"> <img class="icon-prompt" />Prompt </span>
+            <a href="https://github.com/NimaNzrii/comfyui-photoshop">
+              <span class="discrip">Need Help?</span>
+            </a>
+          </div>
+          <div class="hoverSeg">
+            <div class="discrip" style="margin-bottom: 4px">Posititve Prompt:</div>
+            <sp-textarea id="positiveInput" class="prompt" placeholder="Positive Prompt"></sp-textarea>
+            <div class="discrip" style="margin-bottom: 4px">Negative Prompt:</div>
+            <sp-textarea id="negativeInput" class="prompt" placeholder="Negative Prompt"></sp-textarea>
+          </div>
+
+          <div class="hoverSeg">
+            <div class="row-item">
+              <span class="discrip" style="width: 300px">Slider Value</span>
+              <sp-textfield id="sliderValInput"></sp-textfield>
+            </div>
+          </div>
+          <div class="hoverSeg">
+            <div class="row-item">
+              <span id="seedRandomBtn" style="width: 100%; margin-right: 8px; justify-content: center; margin-bottom: 0px" class="size-Button style-input"> Randomize </span>
+              <sp-textfield id="seedInput"></sp-textfield>
+            </div>
+          </div>
+        </div>
+        <div class="style-containerBG settinglist">
+          <div class="header">
+            <span class="header_title">Plugin Info</span>
+            <span class="discrip">V1.1</span>
+          </div>
+          <div class="hoverSeg">
+            <span id="reloadButton" style="width: 100%; justify-content: center; margin-bottom: 0px" class="size-Button style-input"> Reload Plugin </span>
+          </div>
+        </div>
+      </div>
+    </uxp-panel>
+
+    <uxp-panel panelid="comfypanel" id="comfypanel">
+      <div style="display: flex; align-items: center; justify-content: center; padding: 8px; background-color: #000000">
+        <sp-textfield id="ipField" value=""></sp-textfield>
+        <span id="ipApplyButton" style="width: 80px; border-radius: 4px; height: 32px; margin: 0px 4px" class="size-Button style-input"> Connect </span>
+        <span id="ipResetButton" style="width: 60px; border-radius: 4px; height: 32px" class="size-Button style-input"> Reset </span>
+      </div>
+      <webview id="webviewComfy" background="black" width="100%" src="http://127.0.0.1:8188" uxpAllowInspector="true"></webview>
+    </uxp-panel>
+
+    <script src="start.js"></script>
+    <script src="gsap.min.js"></script>
+  </body>
+</html>

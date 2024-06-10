@@ -5,12 +5,12 @@ import folder_paths
 import sys
 import platform
 
-python_executable= sys.executable
+python_executable = sys.executable
 node_path = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
 backend_path = os.path.join(node_path, 'Backend.py')
 requirements_path = os.path.join(node_path, 'requirements.txt')
 
-#remove venv method
+# remove venv method
 venv_path = os.path.join(node_path, "venv")
 if os.path.exists(venv_path):
     print("_PS_ removing venv method")
@@ -23,15 +23,15 @@ def verifyReq():
         requirements = [line.strip() for line in requirements]
 
     try:
-        installed_packages_list = subprocess.check_output([python_executable, '-m', 'pip', 'list']).decode()    
+        installed_packages_list = subprocess.check_output([python_executable, '-m', 'pip', 'list']).decode()
     except:
         subprocess.run([python_executable, '-m', 'pip', 'install', '--upgrade', 'pip'], check=True)
-        subprocess.run([python_executable, '-m', 'pip', 'install', '--upgrade', 'pip','setuptools'], check=True)
+        subprocess.run([python_executable, '-m', 'pip', 'install', '--upgrade', 'pip', 'setuptools'], check=True)
         installed_packages_list = subprocess.check_output([python_executable, '-m', 'pip', 'list']).decode()
-        
+
     installed_packages = {line.split()[0].lower() for line in installed_packages_list.split('\n')[2:] if line}
     missing_packages = [pkg for pkg in requirements if pkg.lower() not in installed_packages]
-    
+
     if missing_packages:
         print("_PS_ The following packages are missing:")
         print("\n".join(missing_packages))
@@ -42,7 +42,7 @@ def verifyReq():
 def installReq():
     subprocess.run([python_executable, '-m', 'pip', 'cache', 'purge'], check=True)
     subprocess.run([python_executable, '-m', 'pip', 'install', '--upgrade', 'pip'], check=True)
-    subprocess.run([python_executable, '-m', 'pip', 'install', '--upgrade', 'pip','setuptools'], check=True)
+    subprocess.run([python_executable, '-m', 'pip', 'install', '--upgrade', 'pip', 'setuptools'], check=True)
     subprocess.run([python_executable, '-m', 'pip', 'install', '-r', requirements_path], check=True)
 
 verifyReq()
@@ -56,7 +56,7 @@ os.chdir(node_path)
 if platform.system() == "Linux":
     subprocess.Popen([python_executable, backend_path])
 else:
-    subprocess.Popen([python_executable, backend_path],shell=True)
+    subprocess.Popen([python_executable, backend_path], shell=True)
 
 os.chdir(default_directory)
 
@@ -72,5 +72,8 @@ for module_name in node_list:
         **imported_module.NODE_DISPLAY_NAME_MAPPINGS,
     }
 
+# Importing the workflow routes
+workflow_module = importlib.import_module(".workflow", __name__)
+
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
-WEB_DIRECTORY = "js"
+WEB_DIRECTORY = "data/js"

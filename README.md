@@ -1,16 +1,5 @@
 
-![SocialLink](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbXPjItVdjxYc1RyplIF7m266zw6ONiirEMWus-RmRhzLtXsFujKeJWeMNzJzluGtLKJyIXh_TTbKilzaXWYPUdDL2L9ncohcA=w1910-h982)
-[![SocialLink](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihb7DP1vt3i2M2gwNgkF93Dg_WZtectAA0-pgUMh4XCMdiRyJqJpkiDQ1bID09HHpMytVV35cPNkNp7TScVf5XBwsCeOudkQoPQ=w1910-h982)](https://www.linkedin.com/in/nima-nazari-2904a2211/)
-[![SocialLink](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihaVpic9ctYWsfJVJrNaN7y9rBw0kmaElKqmQE3DTT1I0u9FVx0vIi_qNgZTF6LlbNoAc7kcQM1AJ5vnwHOAgf6La-qViy1JHg=w1910-h983)](mailto:nimanzriart@gmail.com)
-[![SocialLink](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbKM1qV9olASZ5AIxi9exb0ntRPiv6o883Bdx4jDUGLiecwR32jjx_oSO3ryWvVLsGeVH_Er42KkrOz5vo9mTTLYZzej3MADF4=w1910-h982)](https://studio.buymeacoffee.com/dashboard)
-
-
-.
-
-
-
 [![alt text](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbG2dR-tUj_B0WPuYVVKeZrtStsc3Jg3yv1VZ_1ciKFprJa3o_t58RWUYHilaDjyskBA8XIWHcdHFIjzgSuYcOKowz9m09Xvdw=w1910-h982-rw-v1)](https://www.youtube.com/watch?v=JwLbnO4px-E)
-
 
 .
 
@@ -19,8 +8,7 @@
 
 Welcome to **ComfyUI for Photoshop** plugin repository!🎨 This plugin integrates with an AI-powered image generation system to enhance your Photoshop experience with advanced features.
 
-![alt text](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihaZsHJ9LPg6CM_5Fz3iK4y8cl9H9Lrf3dxe5gAV8yKE3ooHAQqHgbtyS_Ixal8VDefjrNS_M86NzbXa4935ZLnn-OrMAHSVqQ=w1910-h982-rw-v1)
-
+![alt text](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbr7szq0BmtrEk-3SkNKdFaRYlcEFC4_Law4r7KEruYU5T6Sa6bJQeUQkE54QON8OLVBdfWODosSJSIeV-quonfS-9UbnvPSw=w1920-h990-rw-v1)
 
 ## 🌟 Features
 - **Unlimited Generative Fill:** Create AI-infused content in selected image areas.
@@ -47,7 +35,7 @@ Don't have ComfyUI & ComfyUI Manager? No worries! Follow THIS (tutorial)[yt_link
 
 ---
 [⬇️ Download The Workflow](https://openart.ai/workflows/lreWarJbqiYPcDXnD8hh)
-![alt text](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbtTYV_hKQ9_kKgufnKj8uSIuCpIZ0Uf5486N4P8MLR3gEl8nsax4PwdKsP0AUBdUZYIqGZgJEtUehTIdNWrvSI8mhLNebzJEI=w1910-h982-rw-v1)
+![alt text](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpiha-JQSvBtjWVm2B1Dhki05hQOS6A_fB4sjzU95PXtilYByyNA7XzIvjdiKP-HZe473Ageu5kLcfmF4npOnS5NuOYkAFSI9EWX8=w1920-h990-rw-v1)
 
 ## 🗃️ Required Files
 
@@ -71,5 +59,3 @@ Don't have ComfyUI & ComfyUI Manager? No worries! Follow THIS (tutorial)[yt_link
 
 ## 🤝 Support and Contributions
 Run into a snag or have a brilliant idea? 🤔 Open an issue on GitHub and let's make ComfyUI even better together! Your contributions are highly appreciated.
-
-

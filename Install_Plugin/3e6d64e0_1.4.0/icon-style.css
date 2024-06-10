@@ -1,0 +1,80 @@
+[class^="icon-"],
+[class*=" icon-"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 35px;
+  height: 35px;
+}
+
+.icon-seed {
+  background-image: url("/icons/seed.svg");
+}
+.icon-seed-active {
+  background-image: url("/icons/seed-Active.svg");
+}
+
+.icon-play {
+  background-image: url("/icons/play.svg");
+}
+.icon-play-active {
+  background-image: url("/icons/play-Active.svg");
+}
+.icon-prompt {
+  background-image: url("/icons/prompt.svg");
+}
+.icon-prompt-active {
+  background-image: url("/icons/prompt-Active.svg");
+}
+.icon-arrow-down {
+  background-image: url("/icons/arrowDown.svg");
+  width: 18px;
+  height: 18px;
+}
+.icon-arrow-up {
+  background-image: url("/icons/arrow-up.svg");
+  width: 16px;
+  height: 16px;
+  margin-left: 4px;
+}
+
+.icon-check {
+  width: 18px;
+  height: 18px;
+  background-image: url("/icons/check.svg");
+}
+
+.icon-setting {
+  background-image: url("/icons/setting.svg");
+}
+.icon-setting:hover {
+  background-image: url("/icons/setting-Active.svg");
+}
+
+.icon-preset {
+  background-image: url("/icons/menu.svg");
+}
+.icon-preset-active {
+  background-image: url("/icons/menu-Active.svg");
+}
+
+.icon-prompt {
+  background-image: url("/icons/preset.svg");
+}
+.icon-prompt-active {
+  background-image: url("/icons/preset-Active.svg");
+}
+.icon-previewsize {
+  background-image: url("/icons/previewsize.svg");
+}
+.icon-previewsize-Active {
+  background-image: url("/icons/previewsize-Active.svg");
+}
+.icon-comfyui {
+  background-image: url("/icons/comfyui.svg");
+}
+.icon-comfyui-Active {
+  background-image: url("/icons/comfyui-Active.svg");
+}

@@ -1,0 +1,222 @@
+{
+  "id": "3e6d64e0",
+  "name": "ComfyUI for adobe Photoshop",
+  "version": "1.4.0",
+  "main": "index.html",
+  "host": {
+    "app": "PS",
+    "minVersion": "22.5.0"
+  },
+  "manifestVersion": 5,
+  "requiredPermissions": {
+    "ipc": {
+      "enablePluginCommunication": true
+    },
+    "webview": {
+      "allow": "yes",
+      "domains": "all",
+      "enableMessageBridge": "localAndRemote"
+    },
+    "network": {
+      "domains": "all"
+    },
+    "launchProcess": {
+      "schemes": [
+        "https"
+      ]
+    },
+    "localFileSystem": "fullAccess"
+  },
+  "entrypoints": [
+    {
+      "type": "panel",
+      "id": "mainpanel",
+      "label": "AI Panel",
+      "minimumSize": {
+        "width": 250,
+        "height": 250
+      },
+      "maximumSize": {
+        "width": 2000,
+        "height": 2000
+      },
+      "preferredDockedSize": {
+        "width": 300,
+        "height": 350
+      },
+      "preferredFloatingSize": {
+        "width": 300,
+        "height": 350
+      },
+      "icons": [
+        {
+          "width": 23,
+          "height": 23,
+          "path": "icons/plugin.png",
+          "scale": [
+            1,
+            2
+          ],
+          "theme": [
+            "darkest",
+            "dark",
+            "medium"
+          ],
+          "species": [
+            "chrome"
+          ]
+        },
+        {
+          "width": 23,
+          "height": 23,
+          "path": "icons/plugin.png",
+          "scale": [
+            1,
+            2
+          ],
+          "theme": [
+            "lightest",
+            "light"
+          ],
+          "species": [
+            "chrome"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "id": "settingpanel",
+      "label": "Settings",
+      "minimumSize": {
+        "width": 250,
+        "height": 250
+      },
+      "maximumSize": {
+        "width": 2000,
+        "height": 2000
+      },
+      "preferredDockedSize": {
+        "width": 635,
+        "height": 350
+      },
+      "preferredFloatingSize": {
+        "width": 635,
+        "height": 350
+      },
+      "icons": [
+        {
+          "width": 23,
+          "height": 23,
+          "path": "icons/plugin.png",
+          "scale": [
+            1,
+            2
+          ],
+          "theme": [
+            "darkest",
+            "dark",
+            "medium"
+          ],
+          "species": [
+            "chrome"
+          ]
+        },
+        {
+          "width": 23,
+          "height": 23,
+          "path": "icons/plugin.png",
+          "scale": [
+            1,
+            2
+          ],
+          "theme": [
+            "lightest",
+            "light"
+          ],
+          "species": [
+            "chrome"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "id": "comfypanel",
+      "label": "ComfyUI WebApp",
+      "minimumSize": {
+        "width": 250,
+        "height": 250
+      },
+      "maximumSize": {
+        "width": 2000,
+        "height": 2000
+      },
+      "preferredDockedSize": {
+        "width": 600,
+        "height": 450
+      },
+      "preferredFloatingSize": {
+        "width": 600,
+        "height": 400
+      },
+      "icons": [
+        {
+          "width": 23,
+          "height": 23,
+          "path": "icons/plugin.png",
+          "scale": [
+            1,
+            2
+          ],
+          "theme": [
+            "darkest",
+            "dark",
+            "medium"
+          ],
+          "species": [
+            "chrome"
+          ]
+        },
+        {
+          "width": 23,
+          "height": 23,
+          "path": "icons/plugin.png",
+          "scale": [
+            1,
+            2
+          ],
+          "theme": [
+            "lightest",
+            "light"
+          ],
+          "species": [
+            "chrome"
+          ]
+        }
+      ]
+    }
+  ],
+  "icons": [
+    {
+      "width": 48,
+      "height": 48,
+      "path": "icons/plugin.png",
+      "scale": [
+        1,
+        2
+      ],
+      "theme": [
+        "dark",
+        "darkest",
+        "medium",
+        "lightest",
+        "light",
+        "all"
+      ],
+      "species": [
+        "pluginList"
+      ]
+    }
+  ]
+}
