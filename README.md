@@ -7,15 +7,11 @@
 
 .
 
-
-
-[![YoutubeLink](https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/PreviewFiles/pr3.webp)](https://www.youtube.com/watch?v=JwLbnO4px-E)
+# V1.4 Just Released ( this Doc Will Update Soon )
 
 
 .
 
-
-# Photoshop Enters a New Universe 🚀
 
 Welcome to **ComfyUI for Photoshop** plugin repository!🎨 This plugin integrates with an AI-powered image generation system to enhance your Photoshop experience with advanced features.
 
