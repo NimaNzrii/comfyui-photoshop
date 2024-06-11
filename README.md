@@ -8,15 +8,34 @@
 [![SocialLink](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbKM1qV9olASZ5AIxi9exb0ntRPiv6o883Bdx4jDUGLiecwR32jjx_oSO3ryWvVLsGeVH_Er42KkrOz5vo9mTTLYZzej3MADF4=w1910-h982)](https://studio.buymeacoffee.com/dashboard)
 
 
-.
+
+## What's New in V1.4 🚀
+
+### General Project 🌐
+- **macOS Support**: Seamless use on Apple devices is now possible.
+
+### Photoshop Plugin 🎨
+- **Embedded ComfyUI**: No more browser hassle! ComfyUI is now fully integrated into Photoshop.
+- **Remote Rendering**: Use Photoshop on your iPad or any device while rendering with your main system in real-time.
+- **Settings Page**: New options include:
+  - Resolution limits for faster rendering
+  - UI tweaks like moving the negative prompt, disabling slider animations, and turning off all animations
+  - IP address configuration for the device running ComfyUI
+  - Manual slider value input
+- **Preview Mode Options**: Choose between "Cover" or "Contain" for your previews.
+
+### ComfyUI Upgrades 🛠️
+- **Photopea Integration**: Edit images directly without Photoshop. Mask, or combine with ease.
+- **Dynamic Previews**: Enhanced for a more interactive experience.
+- **Load Workflow Button**: Easily switch between SDXL and SD1.5.
+
+### Backend Improvements 💡
+- **Simplified Operations**: 80% of backend tasks are now handled by our official node, eliminating over 15 redundant nodes for a quicker and more reliable backend.
+- **Boosted Performance**: Faster, especially at higher resolutions.
 
 
-# V1.4 Just Released ( this Doc Will Update Soon )
+---
 
-.
-
-
-Welcome to **ComfyUI for Photoshop** plugin repository!🎨 This plugin integrates with an AI-powered image generation system to enhance your Photoshop experience with advanced features.
 
 ## 🌟 Features
 - **Unlimited Generative Fill:** Create AI-infused content in selected image areas.
