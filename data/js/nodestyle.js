@@ -10,49 +10,62 @@ let firstload = true;
 let pluginver = null;
 
 // تابع برای تنظیم پس‌زمینه نود
-function setBackgroundImageContain(node, imageUrl) {
-  const img = new Image();
-  img.src = imageUrl;
+function setBackgroundImageContain(node, url) {
+  fetch(url, { method: "HEAD" })
+    .then((response) => {
+      if (response.ok) {
+        const img = new Image();
+        img.src = url;
 
-  const drawImage = () => {
-    if (!disabledrow) {
-      // چک کردن پراپرتی "Disable Preview"
-      if (node.properties && node.properties["Disable Preview"]) {
-        node.onDrawBackground = null; // غیر فعال کردن رسم تصویر
-        node.setDirtyCanvas(true, true); // به روزرسانی بوم
-        return;
-      }
+        const drawImage = () => {
+          if (!disabledrow) {
+            // چک کردن پراپرتی "Disable Preview"
+            if (node.properties && node.properties["Disable Preview"]) {
+              node.onDrawBackground = null; // غیر فعال کردن رسم تصویر
+              node.setDirtyCanvas(true, true); // به روزرسانی بوم
+              return;
+            }
 
-      const aspectRatio = img.width / img.height;
-      const nodeAspectRatio = node.size[0] / node.size[1];
+            const aspectRatio = img.width / img.height;
+            const nodeAspectRatio = node.size[0] / node.size[1];
 
-      let drawWidth, drawHeight, drawX, drawY;
-      if (aspectRatio > nodeAspectRatio) {
-        drawWidth = node.size[0];
-        drawHeight = drawWidth / aspectRatio;
-        drawX = 0;
-        drawY = node.size[1] - drawHeight;
+            let drawWidth, drawHeight, drawX, drawY;
+            if (aspectRatio > nodeAspectRatio) {
+              drawWidth = node.size[0];
+              drawHeight = drawWidth / aspectRatio;
+              drawX = 0;
+              drawY = node.size[1] - drawHeight;
+            } else {
+              drawHeight = node.size[1];
+              drawWidth = drawHeight * aspectRatio;
+              drawX = (node.size[0] - drawWidth) / 2;
+              drawY = 0;
+            }
+
+            node.onDrawBackground = function (ctx) {
+              ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+            };
+            node.setDirtyCanvas(true, true);
+          }
+        };
+
+        img.onload = drawImage;
+
+        img.onerror = () => {
+          console.error("Failed to load image:", url);
+        };
+
+        node.onResize = drawImage;
       } else {
-        drawHeight = node.size[1];
-        drawWidth = drawHeight * aspectRatio;
-        drawX = (node.size[0] - drawWidth) / 2;
-        drawY = 0;
+        node.onDrawBackground = null;
+        node.setDirtyCanvas(true, true);
       }
-
-      node.onDrawBackground = function (ctx) {
-        ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
-      };
-      node.setDirtyCanvas(true, true); // به روزرسانی بوم
-    }
-  };
-
-  img.onload = drawImage;
-
-  img.onerror = () => {
-    console.error("Failed to load image:", imageUrl);
-  };
-
-  node.onResize = drawImage; // برای تغییرات در اندازه نود
+    })
+    .catch((error) => {
+      console.log("🔹 error: ", error);
+      node.onDrawBackground = null;
+      node.setDirtyCanvas(true, true);
+    });
 }
 
 // افزودن listener برای دریافت داده و تنظیم پس‌زمینه نود
