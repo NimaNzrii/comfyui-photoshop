@@ -162,7 +162,7 @@ app.registerExtension({
 api.addEventListener("execution_start", () => previewonthenode());
 
 let versionUrl = "https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/data/PreviewFiles/version.json";
-versionUrl = "https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/PreviewFiles/version.json";
+// versionUrl = "https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/PreviewFiles/version.json";
 
 const checkForNewVersion = async (pluginVersion) => {
   try {
