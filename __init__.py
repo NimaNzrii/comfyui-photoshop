@@ -10,7 +10,6 @@ node_path = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comf
 backend_path = os.path.join(node_path, 'Backend.py')
 requirements_path = os.path.join(node_path, 'requirements.txt')
 
-# remove venv method
 venv_path = os.path.join(node_path, "venv")
 if os.path.exists(venv_path):
     print("_PS_ removing venv method")
@@ -53,9 +52,9 @@ default_directory = os.getcwd()
 node_path = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
 
 os.chdir(node_path)
-if platform.system() == "Linux":
+if platform.system() == "Linux" or platform.system() == "Darwin":  # Added macOS support
     subprocess.Popen([python_executable, backend_path])
-else:
+elif platform.system() == "Windows":
     subprocess.Popen([python_executable, backend_path], shell=True)
 
 os.chdir(default_directory)
@@ -72,7 +71,6 @@ for module_name in node_list:
         **imported_module.NODE_DISPLAY_NAME_MAPPINGS,
     }
 
-# Importing the workflow routes
 workflow_module = importlib.import_module(".workflow", __name__)
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
