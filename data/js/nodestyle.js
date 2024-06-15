@@ -1,6 +1,5 @@
 import { addListener, sendMsg } from "./connection.js";
 import { loadWorkflow } from "./manager.js";
-
 import { app as app } from "../../../scripts/app.js";
 import { api as api } from "../../../scripts/api.js";
 
@@ -50,11 +49,9 @@ function setBackgroundImageContain(node, url) {
         };
 
         img.onload = drawImage;
-
         img.onerror = () => {
           console.error("Failed to load image:", url);
         };
-
         node.onResize = drawImage;
       } else {
         node.onDrawBackground = null;
@@ -62,7 +59,7 @@ function setBackgroundImageContain(node, url) {
       }
     })
     .catch((error) => {
-      console.log("🔹 error: ", error);
+      console.error("🔹 Error:", error);
       node.onDrawBackground = null;
       node.setDirtyCanvas(true, true);
     });
@@ -130,12 +127,16 @@ function addBooleanProperty(node) {
 }
 
 function addRemoveButtons(node, add) {
-  if (add) {
-    addButton(node, "Load SD 1.5", "temp-button", () => loadWorkflow("sd15_workflow"));
-    addButton(node, "Load sdxl (coming Soon...)", "temp-button", () => alert("We will dop it this week!"));
-  } else {
-    node.widgets = node.widgets.filter((widget) => widget.className !== "temp-button");
-    node.setDirtyCanvas(true, true);
+  try {
+    if (add) {
+      addButton(node, "Load SD 1.5", "temp-button", () => loadWorkflow("sd15_workflow"));
+      addButton(node, "Load sdxl (coming Soon...)", "temp-button", () => alert("We will dop it this week!"));
+    } else {
+      node.widgets = node.widgets.filter((widget) => widget.className !== "temp-button");
+      node.setDirtyCanvas(true, true);
+    }
+  } catch (error) {
+    console.error("🔹 Error in addRemoveButtons:", error);
   }
 }
 
@@ -157,25 +158,28 @@ function handleMouseEvents(node) {
 app.registerExtension({
   name: "PhotoshopToComfyUINode2",
   async nodeCreated(node) {
-    if (node?.comfyClass === "🔹Photoshop ComfyUI Plugin") {
-      firstload = true;
-      photoshopNode.push(node);
-      previewonthenode();
-      addBooleanProperty(node);
-      handleMouseEvents(node);
+    try {
+      if (node?.comfyClass === "🔹Photoshop ComfyUI Plugin") {
+        firstload = true;
+        photoshopNode.push(node);
+        previewonthenode();
+        addBooleanProperty(node);
+        handleMouseEvents(node);
 
-      if (node.properties && node.properties["Dont Hide Buttons"]) {
-        addRemoveButtons(node, true);
+        if (node.properties && node.properties["Dont Hide Buttons"]) {
+          addRemoveButtons(node, true);
+        }
+        document.getElementsByClassName("comfy-close-menu-btn")[0].click();
+        document.getElementById("comfy-view-queue-button").click();
       }
-      document.getElementsByClassName("comfy-close-menu-btn")[0].click();
-      document.getElementById("comfy-view-queue-button").click();
+    } catch (error) {
+      console.error("🔹 Error in nodeCreated:", error);
     }
   },
 });
 api.addEventListener("execution_start", () => previewonthenode());
 
 let versionUrl = "https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/data/PreviewFiles/version.json";
-// versionUrl = "https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/PreviewFiles/version.json";
 
 const checkForNewVersion = async (pluginVersion) => {
   try {
@@ -196,7 +200,6 @@ const checkForNewVersion = async (pluginVersion) => {
           if (!existingButton) {
             const originalSize = [...node.size];
             addButton(node, "Click Here To Update🔥", "update-button", () => sendMsg("pullupdate", true));
-
             node.size = originalSize;
 
             const originalDrawForeground = node.onDrawForeground;
@@ -211,22 +214,27 @@ const checkForNewVersion = async (pluginVersion) => {
       }
     }
   } catch (error) {
-    console.error("Error checking for new version:", error);
+    console.error("🔹 Error checking for new version:", error);
   }
 };
 
 function addButton(node, btntxt, class__name, func) {
-  disabledrow = true;
-  const originalSize = [...node.size];
-  const button = node.addWidget("button", btntxt, null, func);
-  button.className = class__name;
-  const afterbtnHeight = node.size[1];
-  if (originalSize[1] < afterbtnHeight) node.size = [originalSize[0], afterbtnHeight];
-  else node.size = originalSize;
-  node.setDirtyCanvas(true, true);
-  disabledrow = false;
-  node.onResize();
+  try {
+    disabledrow = true;
+    const originalSize = [...node.size];
+    const button = node.addWidget("button", btntxt, null, func);
+    button.className = class__name;
+    const afterbtnHeight = node.size[1];
+    if (originalSize[1] < afterbtnHeight) node.size = [originalSize[0], afterbtnHeight];
+    else node.size = originalSize;
+    node.setDirtyCanvas(true, true);
+    disabledrow = false;
+    node.onResize();
+  } catch (error) {
+    console.error("🔹 Error in addButton:", error);
+  }
 }
+
 addListener("pluginver", (data) => {
   pluginver = data;
   checkForNewVersion(pluginver);

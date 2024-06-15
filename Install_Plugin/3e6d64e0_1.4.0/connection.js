@@ -85,7 +85,8 @@ const handleSocketMessage = async (event) => {
   }
 };
 
-const handleSocketClose = (event) => {
+const handleSocketClose = async (event) => {
+  await closeSocket();
   connectState = false;
   console.error(`Socket closed. Disconnected from ${ipField.value}:8765`);
   updateIPStatus("Not Connected");

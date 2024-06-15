@@ -7,54 +7,102 @@ let workflowSwitcher = "";
 let rndrModeSwitcher = "";
 
 addListener("photoshopConnected", () => {
-  if (rndrModeSwitcher) sendMsg("Send_workflow", SwitcherWidgetNames(workflowSwitcher));
-  if (rndrModeSwitcher) sendMsg("Send_rndrMode", SwitcherWidgetNames(rndrModeSwitcher));
+  try {
+    if (rndrModeSwitcher) sendMsg("Send_workflow", SwitcherWidgetNames(workflowSwitcher));
+    if (rndrModeSwitcher) sendMsg("Send_rndrMode", SwitcherWidgetNames(rndrModeSwitcher));
+  } catch (error) {
+    console.error("🔹 Error in photoshopConnected listener:", error);
+  }
 });
 
 addListener("quickSave", () => {
-  RefreshPreviews();
+  try {
+    RefreshPreviews();
+  } catch (error) {
+    console.error("🔹 Error in quickSave listener:", error);
+  }
 });
 
 addListener("workflow", (data) => {
-  workflowSwitcher.widgets[data].callback();
+  try {
+    workflowSwitcher.widgets[data].callback();
+  } catch (error) {
+    console.error("🔹 Error in workflow listener:", error);
+  }
 });
 
 addListener("alert", (data) => {
-  alert(data);
+  try {
+    alert(data);
+  } catch (error) {
+    console.error("🔹 Error in alert listener:", error);
+  }
 });
 
 addListener("queue", (data) => {
-  if (!isProcessing) {
-    if (search4title("🔹Photoshop ComfyUI Plugin")) {
-      isProcessing = true;
-      (function processQueue() {
-        if (genrateStatus == "genrated") {
-          app.queuePrompt();
-          isProcessing = false;
-        } else {
-          setTimeout(processQueue, 100);
-        }
-      })();
-    } else {
-      console.log("🔹Photoshop Node doesn't Exist");
+  try {
+    if (!isProcessing) {
+      if (search4title("🔹Photoshop ComfyUI Plugin")) {
+        isProcessing = true;
+        (function processQueue() {
+          if (genrateStatus == "genrated") {
+            app.queuePrompt();
+            isProcessing = false;
+          } else {
+            setTimeout(processQueue, 100);
+          }
+        })();
+      } else {
+        console.log("🔹 Photoshop Node doesn't Exist");
+      }
     }
+  } catch (error) {
+    console.error("🔹 Error in queue listener:", error);
   }
 });
 
 addListener("rndrMode", (data) => {
-  rndrModeSwitcher.widgets[data].callback();
+  try {
+    rndrModeSwitcher.widgets[data].callback();
+  } catch (error) {
+    console.error("🔹 Error in rndrMode listener:", error);
+  }
 });
 
 function RefreshPreviews() {
-  let nodes = app.graph._nodes.filter((node) => node.imgs !== undefined);
-  for (let node of nodes) {
-    node.imgs[0].src = node.imgs[0].src + "1";
+  try {
+    let nodes = app.graph._nodes.filter((node) => node.imgs !== undefined);
+    for (let node of nodes) {
+      node.imgs[0].src = node.imgs[0].src + "1";
+    }
+  } catch (error) {
+    console.error("🔹 Error in RefreshPreviews:", error);
   }
 }
 
-const search4type = (type) => app.graph._nodes.find((node) => node.type === type);
-const search4title = (title) => app.graph._nodes.find((node) => node.title === title);
-const search4titlestartwith = (title) => app.graph._nodes.find((node) => node.title.startsWith(title));
+const search4type = (type) => {
+  try {
+    return app.graph._nodes.find((node) => node.type === type);
+  } catch (error) {
+    console.error("🔹 Error in search4type:", error);
+  }
+};
+
+const search4title = (title) => {
+  try {
+    return app.graph._nodes.find((node) => node.title === title);
+  } catch (error) {
+    console.error("🔹 Error in search4title:", error);
+  }
+};
+
+const search4titlestartwith = (title) => {
+  try {
+    return app.graph._nodes.find((node) => node.title.startsWith(title));
+  } catch (error) {
+    console.error("🔹 Error in search4titlestartwith:", error);
+  }
+};
 
 const SwitcherWidgetNames = (switcher) => {
   try {
@@ -69,7 +117,7 @@ const SwitcherWidgetNames = (switcher) => {
     });
     return widgetNames;
   } catch (error) {
-    console.error("🔹Error in SwitcherWidgetNames:", error);
+    console.error("🔹 Error in SwitcherWidgetNames:", error);
   }
 };
 
@@ -77,35 +125,47 @@ const SwitcherWidgetNames = (switcher) => {
 app.registerExtension({
   name: "PhotoshopToComfyUINode",
   onProgressUpdate(event) {
-    if (!this.connected) return;
-    let prompt = event.detail.prompt;
-    this.currentPromptExecution = prompt;
-    if (prompt?.errorDetails) {
-      let errorText = `${prompt.errorDetails?.exception_type} ${prompt.errorDetails?.node_id || ""} ${prompt.errorDetails?.node_type || ""}`;
-      this.progressTextEl.innerText = errorText;
-      this.progressNodesEl.classList.add("-error");
-      this.progressStepsEl.classList.add("-error");
-      return;
+    try {
+      if (!this.connected) return;
+      let prompt = event.detail.prompt;
+      this.currentPromptExecution = prompt;
+      if (prompt?.errorDetails) {
+        let errorText = `${prompt.errorDetails?.exception_type} ${prompt.errorDetails?.node_id || ""} ${prompt.errorDetails?.node_type || ""}`;
+        this.progressTextEl.innerText = errorText;
+        this.progressNodesEl.classList.add("-error");
+        this.progressStepsEl.classList.add("-error");
+        return;
+      }
+    } catch (error) {
+      console.error("🔹 Error in onProgressUpdate:", error);
     }
   },
   async nodeCreated(node) {
-    if (!workflowSwitcher) {
-      workflowSwitcher = search4title("📁 WorkFlows");
-    }
-    if (!rndrModeSwitcher) {
-      rndrModeSwitcher = search4title("⚙️ Render Setting");
-    }
-    if (node?.comfyClass === "🔹Photoshop ComfyUI Plugin") {
-      connect();
+    try {
+      if (!workflowSwitcher) {
+        workflowSwitcher = search4title("📁 WorkFlows");
+      }
+      if (!rndrModeSwitcher) {
+        rndrModeSwitcher = search4title("⚙️ Render Setting");
+      }
+      if (node?.comfyClass === "🔹Photoshop ComfyUI Plugin") {
+        connect();
+      }
+    } catch (error) {
+      console.error("🔹 Error in nodeCreated:", error);
     }
   },
 });
 
 async function getWorkflow(name) {
-  console.log("name: ", name);
-  const response = await api.fetchApi(`/PSworkflows/${encodeURIComponent(name)}`, { cache: "no-store" });
-  console.log("response: ", response);
-  return await response.json();
+  try {
+    console.log("name: ", name);
+    const response = await api.fetchApi(`/PSworkflows/${encodeURIComponent(name)}`, { cache: "no-store" });
+    console.log("response: ", response);
+    return await response.json();
+  } catch (error) {
+    console.error("🔹 Error in getWorkflow:", error);
+  }
 }
 
 export async function loadWorkflow(workflowName) {
@@ -122,23 +182,39 @@ let genrateStatus = "genrated";
 let isProcessing = false;
 
 api.addEventListener("execution_start", ({ detail }) => {
-  genrateStatus = "genrating";
-  sendMsg("render_status", "genrating");
+  try {
+    genrateStatus = "genrating";
+    sendMsg("render_status", "genrating");
+  } catch (error) {
+    console.error("🔹 Error in execution_start listener:", error);
+  }
 });
 api.addEventListener("executing", ({ detail }) => {
-  if (!detail) {
-    genrateStatus = "genrated";
-    isProcessing = false;
-    sendMsg("render_status", "genrated");
+  try {
+    if (!detail) {
+      genrateStatus = "genrated";
+      isProcessing = false;
+      sendMsg("render_status", "genrated");
+    }
+  } catch (error) {
+    console.error("🔹 Error in executing listener:", error);
   }
 });
 api.addEventListener("execution_error", ({ detail }) => {
-  genrateStatus = "genrate_error";
-  sendMsg("render_status", "genrate_error");
+  try {
+    genrateStatus = "genrate_error";
+    sendMsg("render_status", "genrate_error");
+  } catch (error) {
+    console.error("🔹 Error in execution_error listener:", error);
+  }
 });
 api.addEventListener("progress", ({ detail: { value, max } }) => {
-  let progress = Math.floor((value / max) * 100);
-  if (!isNaN(progress) && progress >= 0 && progress <= 100) {
-    sendMsg("progress", progress);
+  try {
+    let progress = Math.floor((value / max) * 100);
+    if (!isNaN(progress) && progress >= 0 && progress <= 100) {
+      sendMsg("progress", progress);
+    }
+  } catch (error) {
+    console.error("🔹 Error in progress listener:", error);
   }
 });

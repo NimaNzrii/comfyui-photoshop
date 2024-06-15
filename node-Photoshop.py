@@ -172,7 +172,7 @@ class ComfyUIToPhotoshop:
                 img_no_metadata = Image.open(output)
                 img_no_metadata.save(renderDir, format="PNG")
 
-            return "render done"
+            return "render"
         except Exception as e:
             print(f"_PS_ An error occurred: {e}")
             return "error"
@@ -182,7 +182,7 @@ class ComfyUIToPhotoshop:
             assert isinstance(output, torch.Tensor)
             self.image = output
             self.svimg(self.image)
-            asyncio.run(self.send2backend("render done"))
+            asyncio.run(self.send2backend("render"))
         except Exception as e:
             print(f"_PS_ error on send2Ps: {e}")
         return ()

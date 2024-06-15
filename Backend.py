@@ -27,13 +27,13 @@ def forcePull():
     fetch_result = subprocess.run(['git', 'fetch'], capture_output=True, text=True)
     print(fetch_result.stdout)
     if fetch_result.returncode != 0:
-        print(f"Fetch error: {fetch_result.stderr}")
+        print(f"_PS_ Fetch error: {fetch_result.stderr}")
         return
     
     reset_result = subprocess.run(['git', 'reset', '--hard', 'origin/main'], capture_output=True, text=True)
     print(reset_result.stdout)
     if reset_result.returncode != 0:
-        print(f"Reset error: {reset_result.stderr}")
+        print(f"_PS_ Reset error: {reset_result.stderr}")
         return
 
 # Find the plugin version
@@ -134,7 +134,7 @@ class WebSocketServer:
         
         self.comfyUi_clients = []  # List of ComfyUI clients
         self.photoshop = "photoshop"
-        self.rendernode = None
+        self.rendernode = "rendernode"
         self.first_start = True
         self.restart_attempts = 0
         self.max_restarts = 5
@@ -154,14 +154,16 @@ class WebSocketServer:
                     message = await websocket.recv()
                     await self.route_message(websocket, message)
             except Exception as e:
-                print(f"Error handling connection: {e}")
+                print(f"_PS_ Error handling connection: {e}")
+
 
     async def route_message(self, websocket, message):
-        if message == "render done":
+        if message == "render":
             await self.handle_render_done(websocket)
         elif message == "imComfyui":
             await self.handle_imComfyui(websocket)
         elif message == "imPhotoshop":
+            print("imPhotoshop" )
             await self.handle_imPhotoshop(websocket)
         elif websocket.remote_address in self.comfyUi_clients:
             await self.from_comfyUi(message)
@@ -196,6 +198,9 @@ class WebSocketServer:
         elif websocket.remote_address == self.photoshop:
             print(f"_PS_ Photoshop closed")
             self.photoshop = "photoshop"
+        elif websocket.remote_address == self.rendernode:
+            print(f"_PS_ render done")
+            self.rendernode = None
         await websocket.close()
 
     async def from_photoshop(self, message):
@@ -207,25 +212,36 @@ class WebSocketServer:
             await self.restart_websocket_server()
 
     async def handle_photoshop_data(self, data):
-        if "canvasBase64" in data:
-            await self.save_file(data["canvasBase64"], 'PS_canvas.png')
+        try:
+            if "canvasBase64" in data:
+                print(f"_PS_ Received canvasBase64 data, length: {len(data['canvasBase64'])}")
+                await self.save_file(data["canvasBase64"], 'PS_canvas.png')
+                print("_PS_ Saved canvasBase64 data to PS_canvas.png")
 
-        if "maskBase64" in data:
-            await self.save_file(data["maskBase64"], 'PS_mask.png')
-            mask_save_semaphore.release()
+            if "maskBase64" in data:
+                print(f"_PS_ Received maskBase64 data, length: {len(data['maskBase64'])}")
+                await self.save_file(data["maskBase64"], 'PS_mask.png')
+                print("_PS_ Saved maskBase64 data to PS_mask.png")
+                mask_save_semaphore.release()
 
-        if "configdata" in data:
-            await self.save_config(data["configdata"])
-            print("data[", json.dumps(data["configdata"], ensure_ascii=False))
+            if "configdata" in data:
+                print(f"_PS_ Received configdata: {data['configdata']}")
+                await self.save_config(data["configdata"])
+                print("_PS_ Saved configdata")
 
-        if "quickSave" in data:
-            await self.send_to_comfyUi("quickSave", True)
+            if "quickSave" in data:
+                await self.send_to_comfyUi("quickSave", True)
 
-        if "workspace" in data:
-            await self.send_to_comfyUi("workspace", data["workspace"])
+            if "workspace" in data:
+                await self.send_to_comfyUi("workspace", data["workspace"])
 
-        if not any(key in data for key in ["configdata", "maskBase64", "canvasBase64", "workspace", "quickSave"]):
-            await self.send_to_comfyUi("", json.dumps(data))
+            if not any(key in data for key in ["configdata", "maskBase64", "canvasBase64", "workspace", "quickSave"]):
+                await self.send_to_comfyUi("", json.dumps(data))
+
+        except Exception as e:
+            print(f"_PS_ error handle_photoshop_data: {e}")
+            await self.restart_websocket_server()
+
 
     async def from_comfyUi(self, message):
         try:
@@ -242,7 +258,6 @@ class WebSocketServer:
         elif "pullupdate" in data:
             await self.send_to_comfyUi("alert", "Updating, please Restart comfyui after update")
             forcePull()
-            
             
         else:
             await self.send_to_photoshop("", json.dumps(data))
@@ -292,7 +307,7 @@ class WebSocketServer:
                 encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
             await self.send_to_photoshop(name, encoded_string)
         except Exception as e:
-            print(f"Error reading or sending {filename}: {e}")
+            print(f"_PS_ Error reading or sending {filename}: {e}")
 
     async def restart_websocket_server(self):
         while self.restart_attempts < self.max_restarts:

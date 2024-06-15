@@ -6,20 +6,32 @@ let listeners = {};
 function connect() {
   try {
     socket = new WebSocket("ws://127.0.0.1:8765");
+
     socket.addEventListener("open", () => {
       console.log("🔹 Connected to the server.");
       socket.send("imComfyui");
     });
+
     socket.addEventListener("message", (event) => {
-      let message = JSON.parse(event.data);
-      // console.log(message);
-      handleMessage(message);
+      try {
+        let message = JSON.parse(event.data);
+        handleMessage(message);
+      } catch (error) {
+        console.error("🔹 Error parsing message:", error, event.data);
+      }
     });
-    socket.addEventListener("close", () => {
-      console.error("Trying again");
+
+    socket.addEventListener("close", (event) => {
+      console.warn("🔹 Connection closed. Reconnecting...", event);
       setTimeout(connect, 5000);
     });
-  } catch {
+
+    socket.addEventListener("error", (error) => {
+      console.error("🔹 WebSocket error:", error);
+      socket.close(); // Close the socket and trigger the reconnect logic
+    });
+  } catch (error) {
+    console.error("🔹 Error establishing WebSocket connection:", error);
     setTimeout(connect, 5000);
   }
 }
@@ -27,7 +39,11 @@ function connect() {
 function handleMessage(message) {
   for (let [type, callback] of Object.entries(listeners)) {
     if (message[type] !== undefined) {
-      callback(message[type]);
+      try {
+        callback(message[type]);
+      } catch (error) {
+        console.error(`🔹 Error handling message of type ${type}:`, error);
+      }
     }
   }
 }
@@ -35,10 +51,13 @@ function handleMessage(message) {
 function sendMsg(type, data) {
   if (!data) data = true;
   try {
-    socket.send(JSON.stringify({ [type]: data }));
-    // console.log("sent ", type, data);
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({ [type]: data }));
+    } else {
+      console.warn("🔹 WebSocket is not open. Message not sent:", type, data);
+    }
   } catch (error) {
-    console.error("🔹Error sending message:", error);
+    console.error("🔹 Error sending message:", error);
   }
 }
 
