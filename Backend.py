@@ -19,9 +19,6 @@ comfui_path = os.path.abspath(os.path.join(current_path, '..', '..'))
 input_path = os.path.join(comfui_path, "input")
 os.chdir(current_path)
 
-
-
-
 def forcePull():
     import subprocess
     fetch_result = subprocess.run(['git', 'fetch'], capture_output=True, text=True)
@@ -38,7 +35,7 @@ def forcePull():
 
 # Find the plugin version
 for folder_name in os.listdir("Install_Plugin"):
-    if folder_name.startswith('3e6d64e0_') and not folder_name.startswith('3e6d64e0_PS')  and not folder_name.endswith('.ccx') :
+    if folder_name.startswith('3e6d64e0_') and not folder_name.startswith('3e6d64e0_PS') and not folder_name.endswith('.ccx'):
         local_plugin_folder = folder_name 
 pluginver = local_plugin_folder.replace('3e6d64e0_', '')
 
@@ -132,9 +129,9 @@ class WebSocketServer:
         self.tempDir = os.path.join(self.mainDir, "temp")
         self.inputDir = os.path.join(self.mainDir, "input")
         
-        self.comfyUi_clients = []  # List of ComfyUI clients
+        self.comfyUi_clients = []  
         self.photoshop = "photoshop"
-        self.rendernode = "rendernode"
+        self.rendernode = None 
         self.first_start = True
         self.restart_attempts = 0
         self.max_restarts = 5
@@ -154,8 +151,10 @@ class WebSocketServer:
                     message = await websocket.recv()
                     await self.route_message(websocket, message)
             except Exception as e:
-                print(f"_PS_ Error handling connection: {e}")
-
+                client_address = websocket.remote_address
+                if client_address not in self.comfyUi_clients and client_address != self.photoshop:
+                    print("Render Finished")
+                    # print(f"_PS_ Error handling connection from {client_address}: {e}")
 
     async def route_message(self, websocket, message):
         if message == "render":
@@ -182,7 +181,6 @@ class WebSocketServer:
         await self.send_to_photoshop("comfyuiConnected", True)
         await self.send_to_comfyUi("photoshopConnected", True, websocket.remote_address)
         await self.send_to_comfyUi("pluginver", pluginver)
-        
 
     async def handle_imPhotoshop(self, websocket):
         self.photoshop = websocket.remote_address
