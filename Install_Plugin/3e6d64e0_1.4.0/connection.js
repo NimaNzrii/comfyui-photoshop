@@ -3,6 +3,7 @@ ipField.value = "127.0.0.1";
 let socket;
 let connectState = false;
 let changeip = false;
+let connectionCheckInterval;
 
 const initWebSocket = async () => {
   if (connectState) {
@@ -22,6 +23,12 @@ const initWebSocket = async () => {
     socket.addEventListener("open", handleSocketOpen);
     socket.addEventListener("message", handleSocketMessage);
     socket.addEventListener("close", handleSocketClose);
+
+    // Add a periodic check for connection
+    if (connectionCheckInterval) {
+      clearInterval(connectionCheckInterval);
+    }
+    connectionCheckInterval = setInterval(checkConnectionStatus, 5000);
   } catch (error) {
     updateIPStatus("Not Connected");
     console.error("Exception:", error);
@@ -29,8 +36,20 @@ const initWebSocket = async () => {
   }
 };
 
+const checkConnectionStatus = () => {
+  if (!socket || socket.readyState === WebSocket.CLOSED) {
+    console.error("Socket appears to be disconnected, attempting to reconnect...");
+    connectState = false;
+    updateIPStatus("Not Connected");
+    if (!changeip) {
+      initWebSocket();
+    }
+  }
+};
+
 const handleSocketOpen = (event) => {
   connectState = true;
+  console.log("connectState: ", connectState);
   socket.send("imPhotoshop");
   console.log(`Connected to ${ipField.value}`);
   updateIPStatus("Connected");
@@ -96,6 +115,7 @@ const handleSocketClose = async (event) => {
       initWebSocket();
     }, 5000);
   }
+  changeip = false;
 };
 
 const sendMessage = async (name, message) => {

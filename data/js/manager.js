@@ -1,12 +1,13 @@
 import { app as app } from "../../../scripts/app.js";
 import { api as api } from "../../../scripts/api.js";
-import { connect, sendMsg, addListener, photoshopConnected } from "./connection.js";
+import { connect, sendMsg, addListener } from "./connection.js";
 
 let QuickEdit_LoadImage = "";
 let workflowSwitcher = "";
 let rndrModeSwitcher = "";
 
 addListener("photoshopConnected", () => {
+  console.log("photoshopConnected");
   try {
     if (rndrModeSwitcher) sendMsg("Send_workflow", SwitcherWidgetNames(workflowSwitcher));
     if (rndrModeSwitcher) sendMsg("Send_rndrMode", SwitcherWidgetNames(rndrModeSwitcher));

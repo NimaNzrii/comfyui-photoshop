@@ -1,11 +1,21 @@
+// Verify Values Function
+const verifyValues = () => {
+  if (!sliderValInput.value) sliderValInput.value = "45";
+  sliderForground.style.height = `${sliderValInput.value * 0.92}%`;
+  sliderTxt.innerText = `${sliderValInput.value}`;
+
+  if (!seedInput.value || isNaN(seedInput.value)) seedInput.value = "1379";
+  if (!maxResField.value || isNaN(maxResField.value)) maxResField.value = "1024";
+  if (!minResField.value || isNaN(minResField.value)) minResField.value = "320";
+};
+
+// فراخوانی فانکشن verifyValues در جای مناسب
 (async () => {
   dataFolder = await localFileSystem.getDataFolder();
   await loadConfigFile();
   await loadBackgroundImage();
   await initWebSocket();
 })();
-
-// Load Config File
 const loadConfigFile = async () => {
   const maxAttempts = 5;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -47,39 +57,13 @@ const loadConfigFile = async () => {
     }
   }
   manageAnimation();
-  if (!sliderValInput.value) sliderValInput.value = "45";
-  sliderForground.style.height = `${sliderValInput.value * 0.92}%`;
-  sliderTxt.innerText = `${sliderValInput.value}`;
-  if (!seedInput.value) seedInput.value = "1379";
-  if (!maxResField.value) maxResField.value = "1024";
-  if (!minResField.value) minResField.value = "320";
+  verifyValues(); // فراخوانی در جای مناسب
 };
 
-// // loading Config // //
-
-// BackGround Image Loader //
-let i = 0;
-const loadBackgroundImage = async () => {
-  try {
-    i++;
-    imgFile = await dataFolder.getEntry("render.png");
-    body.style.backgroundImage = "url('" + imgFile.url + "?v=" + i + "')";
-  } catch (err) {
-    body.style.backgroundImage = "url('./icons/defaultImg.jpg')";
-  }
-};
-
-// _____________________________________________________ //
-// ______________Custom Events Back-End________________ //
-// ___________________________________________________ //
-
-// // Save Settings To Json File // //
+// Save Config File
 const saveConfigFile = async () => {
   try {
-    if (!sliderValInput.value) sliderValInput.value = "0.1";
-    if (!seedInput.value) seedInput.value = "1379";
-    if (!maxResField.value) maxResField.value = "1024";
-    if (!minResField.value) minResField.value = "320";
+    verifyValues(); // فراخوانی در جای مناسب
 
     const file = await dataFolder.createFile("config.json", {
       overwrite: true,
@@ -117,27 +101,20 @@ const saveConfigFile = async () => {
     console.error("Error while saving data:", err);
   }
 };
-const openPanelById = async (panelId) => {
+
+// // loading Config // //
+
+// BackGround Image Loader //
+let i = 0;
+const loadBackgroundImage = async () => {
   try {
-    const uxp = require("uxp");
-    const plugins = Array.from(uxp.pluginManager.plugins);
-
-    const currentPlugin = plugins.find((plugin) => plugin.id === uxp.entrypoints._pluginInfo.id);
-    console.log("currentPlugin: ", currentPlugin);
-
-    if (currentPlugin) {
-      await currentPlugin.showPanel(panelId);
-    } else {
-      console.error("No plugin found");
-    }
-  } catch (error) {
-    console.error("Error opening panel:", error);
+    i++;
+    imgFile = await dataFolder.getEntry("render.png");
+    body.style.backgroundImage = "url('" + imgFile.url + "?v=" + i + "')";
+  } catch (err) {
+    body.style.backgroundImage = "url('./icons/defaultImg.jpg')";
   }
 };
-
-////////////////////////////////////
-////////////////////////////////////
-////////////////////////////////////
 
 function base64ToArrayBuffer(base64) {
   var binaryString = window.atob(base64);
