@@ -4,6 +4,7 @@ import os
 import folder_paths
 import sys
 import platform
+import time
 
 python_executable = sys.executable
 node_path = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
@@ -46,6 +47,11 @@ def installReq():
 
 verifyReq()
 
+# Check if backend_path exists before trying to run it
+if not os.path.exists(backend_path):
+    print(f"_PS_ Error: The backend file '{backend_path}' does not exist.")
+    sys.exit(1)
+
 print("_PS_ backend_path", backend_path)
 
 default_directory = os.getcwd()
@@ -53,9 +59,17 @@ node_path = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comf
 
 os.chdir(node_path)
 if platform.system() == "Linux" or platform.system() == "Darwin":  # Added macOS support
-    subprocess.Popen([python_executable, backend_path])
+    process = subprocess.Popen([python_executable, backend_path])
 elif platform.system() == "Windows":
-    subprocess.Popen([python_executable, backend_path], shell=True)
+    process = subprocess.Popen([python_executable, backend_path], shell=True)
+
+# Check if the process is running
+time.sleep(2)  # Give it some time to start
+if process.poll() is None:
+    print("_PS_ Backend is running successfully.")
+else:
+    print("_PS_ Backend failed to start.")
+    sys.exit(1)
 
 os.chdir(default_directory)
 
