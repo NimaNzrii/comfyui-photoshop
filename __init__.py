@@ -4,7 +4,6 @@ import os
 import folder_paths
 import sys
 import platform
-import time
 
 python_executable = sys.executable
 node_path = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
@@ -63,8 +62,6 @@ if platform.system() == "Linux" or platform.system() == "Darwin":  # Added macOS
 elif platform.system() == "Windows":
     process = subprocess.Popen([python_executable, backend_path], shell=True)
 
-# Check if the process is running
-time.sleep(2)  # Give it some time to start
 if process.poll() is None:
     print("_PS_ Backend is running successfully.")
 else:
