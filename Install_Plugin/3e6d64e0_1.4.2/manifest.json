@@ -1,7 +1,7 @@
 {
   "id": "3e6d64e0",
   "name": "ComfyUI for adobe Photoshop",
-  "version": "1.4.0",
+  "version": "1.4.2",
   "main": "index.html",
   "host": {
     "app": "PS",
@@ -21,9 +21,7 @@
       "domains": "all"
     },
     "launchProcess": {
-      "schemes": [
-        "https"
-      ]
+      "schemes": ["https"]
     },
     "localFileSystem": "fullAccess"
   },
@@ -53,34 +51,17 @@
           "width": 23,
           "height": 23,
           "path": "icons/plugin.png",
-          "scale": [
-            1,
-            2
-          ],
-          "theme": [
-            "darkest",
-            "dark",
-            "medium"
-          ],
-          "species": [
-            "chrome"
-          ]
+          "scale": [1, 2],
+          "theme": ["darkest", "dark", "medium"],
+          "species": ["chrome"]
         },
         {
           "width": 23,
           "height": 23,
           "path": "icons/plugin.png",
-          "scale": [
-            1,
-            2
-          ],
-          "theme": [
-            "lightest",
-            "light"
-          ],
-          "species": [
-            "chrome"
-          ]
+          "scale": [1, 2],
+          "theme": ["lightest", "light"],
+          "species": ["chrome"]
         }
       ]
     },
@@ -109,34 +90,17 @@
           "width": 23,
           "height": 23,
           "path": "icons/plugin.png",
-          "scale": [
-            1,
-            2
-          ],
-          "theme": [
-            "darkest",
-            "dark",
-            "medium"
-          ],
-          "species": [
-            "chrome"
-          ]
+          "scale": [1, 2],
+          "theme": ["darkest", "dark", "medium"],
+          "species": ["chrome"]
         },
         {
           "width": 23,
           "height": 23,
           "path": "icons/plugin.png",
-          "scale": [
-            1,
-            2
-          ],
-          "theme": [
-            "lightest",
-            "light"
-          ],
-          "species": [
-            "chrome"
-          ]
+          "scale": [1, 2],
+          "theme": ["lightest", "light"],
+          "species": ["chrome"]
         }
       ]
     },
@@ -165,34 +129,17 @@
           "width": 23,
           "height": 23,
           "path": "icons/plugin.png",
-          "scale": [
-            1,
-            2
-          ],
-          "theme": [
-            "darkest",
-            "dark",
-            "medium"
-          ],
-          "species": [
-            "chrome"
-          ]
+          "scale": [1, 2],
+          "theme": ["darkest", "dark", "medium"],
+          "species": ["chrome"]
         },
         {
           "width": 23,
           "height": 23,
           "path": "icons/plugin.png",
-          "scale": [
-            1,
-            2
-          ],
-          "theme": [
-            "lightest",
-            "light"
-          ],
-          "species": [
-            "chrome"
-          ]
+          "scale": [1, 2],
+          "theme": ["lightest", "light"],
+          "species": ["chrome"]
         }
       ]
     }
@@ -202,21 +149,9 @@
       "width": 48,
       "height": 48,
       "path": "icons/plugin.png",
-      "scale": [
-        1,
-        2
-      ],
-      "theme": [
-        "dark",
-        "darkest",
-        "medium",
-        "lightest",
-        "light",
-        "all"
-      ],
-      "species": [
-        "pluginList"
-      ]
+      "scale": [1, 2],
+      "theme": ["dark", "darkest", "medium", "lightest", "light", "all"],
+      "species": ["pluginList"]
     }
   ]
 }
