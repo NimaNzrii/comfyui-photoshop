@@ -78,7 +78,7 @@ class PhotoshopToComfyUI:
 
     def loadConfig(self, retry_count=0):
         try:
-            with open(self.configJson, "r") as file:
+            with open(self.configJson, "r", encoding="utf-8") as file:
                 self.ConfigData = json.load(file)
         except:
             time.sleep(0.5)
