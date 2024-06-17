@@ -254,17 +254,7 @@ const saveMask = async () => {
       let { newWidth, newHeight } = calculateNewDimensions(docWidth, docHeight);
 
       await core.executeAsModal(async () => {
-        await batchPlay(
-          [
-            { _obj: "flattenImage", _options: { dialogOptions: "dontDisplay" } },
-            { _obj: "make", _target: [{ _ref: "layer", layerID: 85 }], _options: { dialogOptions: "dontDisplay" } },
-            { _obj: "make", _target: [{ _ref: "contentLayer" }], using: { _obj: "contentLayer", type: { _obj: "solidColorLayer", color: { _obj: "RGBColor", red: 255, green: 255, blue: 255 } } }, _options: { dialogOptions: "dontDisplay" } },
-            { _obj: "set", _target: [{ _ref: "channel", _property: "selection" }], to: { _enum: "ordinal", _value: "none" }, _options: { dialogOptions: "dontDisplay" } },
-            { _obj: "make", _target: [{ _ref: "contentLayer" }], using: { _obj: "contentLayer", type: { _obj: "solidColorLayer", color: { _obj: "RGBColor", red: 0, green: 0, blue: 0 } } } },
-            { _obj: "move", _target: [{ _ref: "layer", _enum: "ordinal", _value: "targetEnum" }], to: { _ref: "layer", _index: 1 }, adjustment: false, version: 5, layerID: [85], _options: { dialogOptions: "dontDisplay" } },
-          ],
-          {}
-        );
+        await batchPlay([{ _obj: "flattenImage", _options: { dialogOptions: "dontDisplay" } }, { _obj: "flattenImage" }, { _obj: "make", _target: [{ _ref: "contentLayer" }], using: { _obj: "contentLayer", type: { _obj: "solidColorLayer", color: { _obj: "RGBColor", blue: 255.0, grain: 255.0, red: 255.0 } } } }, { _obj: "make", _target: [{ _ref: "contentLayer" }], using: { _obj: "contentLayer", type: { _obj: "solidColorLayer", color: { _obj: "RGBColor", blue: 0.0, grain: 0.0, red: 0.0 } } } }, { _obj: "move", _target: [{ _enum: "ordinal", _ref: "layer", _value: "targetEnum" }], adjustment: false, layerID: [175], to: { _index: 1, _ref: "layer" }, version: 5 }], {});
       });
 
       let options = {

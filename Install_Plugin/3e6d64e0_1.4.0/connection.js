@@ -41,6 +41,7 @@ const checkConnectionStatus = () => {
     console.error("Socket appears to be disconnected, attempting to reconnect...");
     connectState = false;
     updateIPStatus("Not Connected");
+
     if (!changeip) {
       initWebSocket();
     }

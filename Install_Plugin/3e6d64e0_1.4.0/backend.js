@@ -9,7 +9,6 @@ const verifyValues = () => {
   if (!minResField.value || isNaN(minResField.value)) minResField.value = "320";
 };
 
-// فراخوانی فانکشن verifyValues در جای مناسب
 (async () => {
   dataFolder = await localFileSystem.getDataFolder();
   await loadConfigFile();
@@ -101,20 +100,27 @@ const saveConfigFile = async () => {
     console.error("Error while saving data:", err);
   }
 };
-
-// // loading Config // //
-
-// BackGround Image Loader //
-let i = 0;
-const loadBackgroundImage = async () => {
+const openPanelById = async (panelId) => {
   try {
-    i++;
-    imgFile = await dataFolder.getEntry("render.png");
-    body.style.backgroundImage = "url('" + imgFile.url + "?v=" + i + "')";
-  } catch (err) {
-    body.style.backgroundImage = "url('./icons/defaultImg.jpg')";
+    const uxp = require("uxp");
+    const plugins = Array.from(uxp.pluginManager.plugins);
+
+    const currentPlugin = plugins.find((plugin) => plugin.id === uxp.entrypoints._pluginInfo.id);
+    console.log("currentPlugin: ", currentPlugin);
+
+    if (currentPlugin) {
+      await currentPlugin.showPanel(panelId);
+    } else {
+      console.error("No plugin found");
+    }
+  } catch (error) {
+    console.error("Error opening panel:", error);
   }
 };
+
+////////////////////////////////////
+////////////////////////////////////
+////////////////////////////////////
 
 function base64ToArrayBuffer(base64) {
   var binaryString = window.atob(base64);
@@ -163,8 +169,6 @@ const checkHistoryState = () => {
     if (currentHistoryState !== previousHistoryState) {
       selectionArea = app.activeDocument.selection.bounds;
 
-      // MaskButton.classList.toggle("hidden", !selectionArea);
-      // Masktxtcontainer.classList.toggle("hidden", !selectionArea);
       const historyStates = app.activeDocument.historyStates;
       const currentHistoryName = app.activeDocument.activeHistoryState.name;
       const activeIndex = historyStates.findIndex((state) => state.id === currentHistoryState);
@@ -182,3 +186,13 @@ const checkHistoryState = () => {
 async function smtchanged() {
   if (realtimeMode) await renderbutton.click();
 }
+let i = 0;
+const loadBackgroundImage = async () => {
+  try {
+    i++;
+    imgFile = await dataFolder.getEntry("render.png");
+    body.style.backgroundImage = "url('" + imgFile.url + "?v=" + i + "')";
+  } catch (err) {
+    body.style.backgroundImage = "url('./icons/defaultImg.jpg')";
+  }
+};
