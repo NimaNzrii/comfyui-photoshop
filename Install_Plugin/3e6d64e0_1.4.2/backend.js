@@ -151,6 +151,7 @@ async function saveBase64AsPngFile(base64, fileName) {
 //////////////////////////////////
 
 const canvasChanged = async () => {
+  console.log("canvasChanged: ");
   canvasunsavedchanges = true;
   await smtchanged();
 };
@@ -161,22 +162,25 @@ const maskchnaged = async () => {
 };
 
 let previousHistoryState = null;
+let previousSelectionBounds = null;
+
 const checkHistoryState = () => {
   if (app.documents?.length) {
-    const ignoreList = ["New Layer", "Enter Quick Mask", "Object Selection", "Lasso", "Polygonal Lasso", "Elliptical Marquee", "Rectangular Marquee", "Quick Selection", "Exit Quick Mask", "Select Inverse", "Select Canvas", "Load Selection", "Border", "Smooth", "Expand", "Contract", "Feather", "Grow", "Similar", "Free Transform Selection", "Select Sky", "Select Subject", "Focus Area", "Color Range", "Path Tool", "Selection Change", "Deselect", "Move Selection", "Mask Sent to AI"];
-
-    const currentHistoryState = app.activeDocument.activeHistoryState.id;
-    if (currentHistoryState !== previousHistoryState) {
-      selectionArea = app.activeDocument.selection.bounds;
-
+    const currentHistoryState = app.activeDocument.activeHistoryState;
+    if (currentHistoryState.id !== previousHistoryState?.id) {
       const historyStates = app.activeDocument.historyStates;
-      const currentHistoryName = app.activeDocument.activeHistoryState.name;
       const activeIndex = historyStates.findIndex((state) => state.id === currentHistoryState);
 
-      if (!ignoreList.includes(currentHistoryName) || (activeIndex < historyStates.length - 1 && !ignoreList.includes(historyStates[activeIndex + 1].name))) {
-        canvasChanged();
-      } else if (ignoreList.includes(currentHistoryName) && !(currentHistoryName == "Enter Quick Mask") && !(currentHistoryName == "Mask Sent to AI")) {
+      const currentSelectionBounds = app.activeDocument.selection.bounds;
+      if (!!currentSelectionBounds !== !!previousSelectionBounds) {
         maskchnaged();
+        previousSelectionBounds = currentSelectionBounds;
+      }
+
+      if (currentHistoryState.name != "Mask Sent to AI") {
+        if (app.activeDocument.selection.bounds) maskchnaged();
+
+        canvasChanged();
       }
       previousHistoryState = currentHistoryState;
     }
