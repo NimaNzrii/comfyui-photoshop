@@ -15,10 +15,10 @@ clients = {}
 mask_save_semaphore = asyncio.Semaphore(0)
 
 # Set up paths
-current_path = os.path.dirname(os.path.abspath(__file__))
-comfui_path = os.path.abspath(os.path.join(current_path, '..', '..'))
-# input_path = os.path.join(comfui_path, "input")
-os.chdir(current_path)
+plugin_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
+comfui_path = os.path.abspath(os.path.join(plugin_path, '..', '..'))
+input_path = os.path.join(comfui_path, "input")
+os.chdir(plugin_path)
 
 def forcePull():
     fetch_result = subprocess.run(['git', 'fetch'], capture_output=True, text=True)
@@ -272,11 +272,11 @@ class WebSocketServer:
 
     async def save_file(self, data, filename):
         data = base64.b64decode(data)
-        with open(os.path.join(input_path, filename), "wb") as file:
+        with open(os.path.join(plugin_path, "data", 'ps_inputs', filename), "wb") as file:
             file.write(data)
 
     async def save_config(self, config_data):
-        with open(os.path.join(current_path, "data","ps_inputs" ,'config.json'), "w", encoding='utf-8') as file:
+        with open(os.path.join(plugin_path, "data", 'ps_inputs','config.json'), "w", encoding='utf-8') as file:
             json.dump(config_data, file, ensure_ascii=False)
 
     async def send_to_comfyUi(self, name, message, recipient=None):
@@ -304,7 +304,7 @@ class WebSocketServer:
 
     async def send_file_to_photoshop(self, filename, name):
         try:
-            with open(os.path.join(current_path, "data", filename), 'rb') as image_file:
+            with open(os.path.join(plugin_path, "data", filename), 'rb') as image_file:
                 encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
             await self.send_to_photoshop(name, encoded_string)
         except Exception as e:

@@ -1,14 +1,18 @@
 from server import PromptServer
 from aiohttp import web
 import os
-import inspect
 import json
 import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+import folder_paths
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)),".."))
 
 # Set the directory for workflows
-root_directory = os.path.dirname(inspect.getfile(PromptServer))
-workflows_directory = os.path.join(root_directory, "custom_nodes", "comfyui-photoshop", "data", "workflows")
+nodepath = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop", "data", "workflows")
+workflows_directory = os.path.join(nodepath, '..', "custom_nodes", "comfyui-photoshop", "data", "workflows")
+
+# Define the directory for PS inputs
+ps_inputs_directory = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop", "data", "ps_inputs")
 
 @PromptServer.instance.routes.get("/PSworkflows")
 async def get_workflows(request):
@@ -45,3 +49,20 @@ async def save_workflow(request):
         f.write(json.dumps(json_data["workflow"]))
 
     return web.Response(status=201)
+
+# Add routes for PS inputs
+@PromptServer.instance.routes.get("/PSinputs/PS_canvas.png")
+async def get_ps_canvas(request):
+    file = os.path.abspath(os.path.join(ps_inputs_directory, "PS_canvas.png"))
+    if os.path.commonpath([file, ps_inputs_directory]) != ps_inputs_directory:
+        return web.Response(status=403)
+
+    return web.FileResponse(file)
+
+@PromptServer.instance.routes.get("/PSinputs/PS_mask.png")
+async def get_ps_mask(request):
+    file = os.path.abspath(os.path.join(ps_inputs_directory, "PS_mask.png"))
+    if os.path.commonpath([file, ps_inputs_directory]) != ps_inputs_directory:
+        return web.Response(status=403)
+
+    return web.FileResponse(file)

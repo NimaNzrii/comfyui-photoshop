@@ -7,6 +7,8 @@ let photoshopNode = [];
 let disabledrow = false;
 let firstload = true;
 let pluginver = null;
+const image = await api.fetchApi(`/PSinputs/PS_canvas.png`);
+const imageUrl = image.url;
 
 // تابع برای تنظیم پس‌زمینه نود
 function setBackgroundImageContain(node, url) {
@@ -66,8 +68,7 @@ function setBackgroundImageContain(node, url) {
 }
 
 // افزودن listener برای دریافت داده و تنظیم پس‌زمینه نود
-function previewonthenode() {
-  const imageUrl = `/view?filename=PS_canvas.png&subfolder=&type=input&no-cache=${Date.now()}`;
+async function previewonthenode() {
   photoshopNode.forEach((node) => {
     setBackgroundImageContain(node, imageUrl);
   });
@@ -109,7 +110,7 @@ function createWatchedObject(obj, onChange) {
   });
 }
 
-function addBooleanProperty(node) {
+async function addBooleanProperty(node) {
   if (!node.properties) {
     node.properties = {};
   }
@@ -119,9 +120,9 @@ function addBooleanProperty(node) {
     "Dont Hide Buttons": false,
   };
 
-  node.properties = createWatchedObject(properties, (property, newValue) => {
+  node.properties = createWatchedObject(properties, async (property, newValue) => {
     if (property === "Disable Preview") {
-      setBackgroundImageContain(node, `/view?filename=PS_canvas.png&subfolder=&type=input&no-cache=${Date.now()}`);
+      setBackgroundImageContain(node, imageUrl);
     }
   });
 }
@@ -189,6 +190,7 @@ const checkForNewVersion = async (pluginVersion) => {
     }
     const data = await response.json();
     const latestVersion = data.version;
+    console.log("🔹 latestVersion: ", latestVersion);
     const forceUpdate = data.force_update;
 
     if (latestVersion > pluginVersion) {
@@ -237,5 +239,6 @@ function addButton(node, btntxt, class__name, func) {
 
 addListener("pluginver", (data) => {
   pluginver = data;
+  console.log("pluginver: ", pluginver);
   checkForNewVersion(pluginver);
 });

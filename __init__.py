@@ -4,16 +4,19 @@ import os
 import folder_paths
 import sys
 import platform
+import shutil
 
 python_executable = sys.executable
 node_path = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
-backend_path = os.path.join(node_path, 'Backend.py')
+
+py_path = os.path.join(node_path, "py")
+backend_path = os.path.join(py_path, 'Backend.py')
+
 requirements_path = os.path.join(node_path, 'requirements.txt')
 
-venv_path = os.path.join(node_path, "venv")
+venv_path = os.path.join(py_path, "venv")
 if os.path.exists(venv_path):
     print("_PS_ removing venv method")
-    import shutil
     shutil.rmtree(venv_path)
 
 def verifyReq():
@@ -54,9 +57,8 @@ if not os.path.exists(backend_path):
 print("_PS_ backend_path", backend_path)
 
 default_directory = os.getcwd()
-node_path = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
+os.chdir(py_path)
 
-os.chdir(node_path)
 if platform.system() == "Linux" or platform.system() == "Darwin":  # Added macOS support
     process = subprocess.Popen([python_executable, backend_path])
 elif platform.system() == "Windows":
@@ -74,15 +76,18 @@ node_list = ["node-Photoshop", "node-Photoshop-noplugin"]
 NODE_CLASS_MAPPINGS = {}
 NODE_DISPLAY_NAME_MAPPINGS = {}
 
+# اضافه کردن مسیر پوشه py به مسیر جستجوی ماژول‌ها
+sys.path.append(py_path)
+
 for module_name in node_list:
-    imported_module = importlib.import_module(".{}".format(module_name), __name__)
+    imported_module = importlib.import_module(module_name)
     NODE_CLASS_MAPPINGS = {**NODE_CLASS_MAPPINGS, **imported_module.NODE_CLASS_MAPPINGS}
     NODE_DISPLAY_NAME_MAPPINGS = {
         **NODE_DISPLAY_NAME_MAPPINGS,
         **imported_module.NODE_DISPLAY_NAME_MAPPINGS,
     }
 
-workflow_module = importlib.import_module(".workflow", __name__)
+workflow_module = importlib.import_module("http_server")
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
-WEB_DIRECTORY = "data/js"
+WEB_DIRECTORY = "js"

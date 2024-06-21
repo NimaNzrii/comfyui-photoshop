@@ -14,9 +14,8 @@ import sys
 import torchvision.transforms.functional as tf
 
 sys.stdout.reconfigure(encoding='utf-8')
-current_path = os.path.dirname(os.path.abspath(__file__))
-comfui_path = os.path.abspath(os.path.join(current_path, '..', '..'))
-input_path = os.path.join(comfui_path, "input")
+nodepath = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
+
 
 def is_changed_file(filepath):
     try:
@@ -63,12 +62,9 @@ class PhotoshopToComfyUI:
 
     def LoadDir(self, retry_count=0):
         try:
-            nodepath = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
-            print("nodepath", nodepath)
-
-            self.canvasDir = os.path.join(input_path, "PS_canvas.png")
-            self.maskImgDir = os.path.join(input_path, "PS_mask.png")
-            self.configJson = os.path.join(nodepath, "data", "config.json")
+            self.canvasDir = os.path.join(nodepath, "data", "ps_inputs", "PS_canvas.png")
+            self.maskImgDir = os.path.join(nodepath, "data", "ps_inputs", "PS_mask.png")
+            self.configJson = os.path.join(nodepath, "data", "ps_inputs", "config.json")
         except:
             time.sleep(0.5)
             if retry_count < 4:
@@ -119,10 +115,9 @@ class PhotoshopToComfyUI:
     @classmethod
     def IS_CHANGED(cls):
         try:
-            nodepath = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
-            configJson = os.path.join(nodepath, "data", "config.json")
-            canvasDir = os.path.join(input_path, "PS_canvas.png")
-            maskImgDir = os.path.join(input_path, "PS_mask.png")
+            configJson = os.path.join(nodepath, "data", "ps_inputs","config.json")
+            canvasDir = os.path.join(nodepath, "data", "ps_inputs", "PS_canvas.png")
+            maskImgDir = os.path.join(nodepath, "data", "ps_inputs", "PS_mask.png")
 
             config_changed = is_changed_file(configJson)
             canvas_changed = is_changed_file(canvasDir)
@@ -151,7 +146,6 @@ class ComfyUIToPhotoshop:
 
     def svimg(self, img: torch.Tensor):
         try:
-            nodepath = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
             renderDir = os.path.join(nodepath, "data", "render.png")
             
             if len(img.shape) == 4 and img.shape[0] == 1:
