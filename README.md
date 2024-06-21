@@ -1,36 +1,16 @@
-![SocialLink](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbXPjItVdjxYc1RyplIF7m266zw6ONiirEMWus-RmRhzLtXsFujKeJWeMNzJzluGtLKJyIXh_TTbKilzaXWYPUdDL2L9ncohcA=w1910-h982) [![SocialLink](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihb7DP1vt3i2M2gwNgkF93Dg_WZtectAA0-pgUMh4XCMdiRyJqJpkiDQ1bID09HHpMytVV35cPNkNp7TScVf5XBwsCeOudkQoPQ=w1910-h982)](https://www.linkedin.com/in/nima-nazari-2904a2211/) [![SocialLink](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihaVpic9ctYWsfJVJrNaN7y9rBw0kmaElKqmQE3DTT1I0u9FVx0vIi_qNgZTF6LlbNoAc7kcQM1AJ5vnwHOAgf6La-qViy1JHg=w1910-h983)](mailto:nimanzriart@gmail.com) [![SocialLink](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpihbKM1qV9olASZ5AIxi9exb0ntRPiv6o883Bdx4jDUGLiecwR32jjx_oSO3ryWvVLsGeVH_Er42KkrOz5vo9mTTLYZzej3MADF4=w1910-h982)](https://studio.buymeacoffee.com/dashboard)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue)](https://www.linkedin.com/in/nima-nazari-2904a2211/)
+[![Email](https://img.shields.io/badge/Email-nimanzriart@gmail.com-red)](mailto:nimanzriart@gmail.com)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support%20Me-yellow)](https://studio.buymeacoffee.com/dashboard)
+[![GitHub](https://img.shields.io/github/stars/NimaNzrii/comfyui-photoshop?style=social)](https://github.com/NimaNzrii/comfyui-photoshop)
+
 
 ![prvimg](https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/data/PreviewFiles/pr1.jpg)
+### Patch notes
 
-## What's New in V1.4.3 🚀
+| 1.4.3                                                                                           | 1.4.0                                                                                           | 1.0.0                             |
+|-------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|-----------------------------------|
+| - Non-English ps fixed <br> Russian & Chinese language fix <br> - Added UTF-8 support <br> - Support for all macOS versions <br> - Node freeze issue fixed <br> - Access issues resolved | - macOS Support <br> - Embedded ComfyUI <br> - Remote Rendering <br> - Settings Page <br> - Preview Mode Options <br> - Photopea Integration <br> - Dynamic Previews <br> - Load Workflow Button <br> - Simplified Operations <br> - Boosted Performance | Initial release <br> with basic features |
 
-### General Project 🌐
-
-- **macOS Support**: Seamless use on Apple devices is now possible.
-
-### Photoshop Plugin 🎨
-
-- **Embedded ComfyUI**: No more browser hassle! ComfyUI is now fully integrated into Photoshop.
-- **Remote Rendering**: Use Photoshop on your iPad or any device while rendering with your main system in real-time.
-- **Settings Page**: New options include:
-  - Resolution limits for faster rendering
-  - UI tweaks like moving the negative prompt, disabling slider animations, and turning off all animations
-  - IP address configuration for the device running ComfyUI
-  - Manual slider value input
-- **Preview Mode Options**: Choose between "Cover" or "Contain" for your previews.
-
-### ComfyUI Upgrades 🛠️
-
-- **Photopea Integration**: Edit images directly without Photoshop. Mask, or combine with ease.
-- **Dynamic Previews**: Enhanced for a more interactive experience.
-- **Load Workflow Button**: Easily switch between SDXL and SD1.5.
-
-### Backend Improvements 💡
-
-- **Simplified Operations**: 80% of backend tasks are now handled by our official node, eliminating over 15 redundant nodes for a quicker and more reliable backend.
-- **Boosted Performance**: Faster, especially at higher resolutions.
-
----
 
 ## 🌟 Features
 
