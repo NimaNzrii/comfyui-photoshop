@@ -1,0 +1,15 @@
+[project]
+name = "comfyui-photoshop"
+description = "🔹 Powerfull bridge to Photoshop by NimaNzrii"
+version = "1.4.3"
+license = "LICENSE"
+dependencies = ["websockets"]
+
+[project.urls]
+Repository = "https://github.com/NimaNzrii/comfyui-photoshop"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = "NimaNzrii"
+DisplayName = "comfyui-photoshop"
+Icon = ""
