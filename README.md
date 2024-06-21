@@ -9,7 +9,7 @@
 
 | 1.4.3                                                                                           | 1.4.0                                                                                           | 1.0.0                             |
 |-------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|-----------------------------------|
-| - Mask bug fixed <br> - Non-English ps fixed <br> - Added UTF-8 support <br> - Support for all macOS versions <br> - Node freeze issue fixed <br> - Access issues resolved | - macOS Support <br> - Embedded ComfyUI <br> - Remote Rendering <br> - Settings Page <br> - Preview Mode Options <br> - Photopea Integration <br> - Dynamic Previews <br> - Load Workflow Button <br> - Simplified Operations <br> - Boosted Performance | Initial release <br> with basic features |
+| - Non-English ps fixed <br> - Added UTF-8 support <br> - Support for all macOS versions <br> - Node freeze issue fixed <br> - Access issues resolved | - macOS Support <br> - Embedded ComfyUI <br> - Remote Rendering <br> - Settings Page <br> - Preview Mode Options <br> - Photopea Integration <br> - Dynamic Previews <br> - Load Workflow Button <br> - Simplified Operations <br> - Boosted Performance | Initial release <br> with basic features |
 
 
 ## 🌟 Features
@@ -28,18 +28,15 @@
 
 1. **Install Photoshop Plugin:**
 
-   - Install the plugin from [🔗THIS LINK](https://adobe.com/go/cc_plugins_discover_plugin?pluginId=3e6d64e0&workflow=share).
-   - Alternatively, install it locally using [📄This .CCX](https://drive.google.com/file/d/146BBISEb2Nae_PIxCMchSipxA4ggrb7x/view?usp=sharing) file, then set it up with [ZXP UXP Installer](https://aescripts.com/learn/zxp-installer/).
+   - install it using [📄This .CCX](https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/Install_Plugin/3e6d64e0_PS.ccx) file, then set it up with [ZXP UXP Installer](https://aescripts.com/learn/zxp-installer/).
 
 2. **Set Up ComfyUI Workflow:**
    - Grab [📄THIS Workflow](https://openart.ai/workflows/lreWarJbqiYPcDXnD8hh) and drop it onto your ComfyUI.
    - Install any missing nodes using "ComfyUI Manager."
 
-Don't have ComfyUI & ComfyUI Manager? No worries! Follow THIS (tutorial)[yt_link] for a step-by-step guide on installation.
+Don't have ComfyUI & ComfyUI Manager? No worries! Follow [THIS](https://www.youtube.com/watch?v=YD09xpQrNZ4&t=4s) tutorial for a step-by-step guide on installation.
 
 ---
-
-[⬇️ Download The Workflow](https://openart.ai/workflows/lreWarJbqiYPcDXnD8hh) ![alt text](https://lh3.googleusercontent.com/u/0/drive-viewer/AKGpiha-JQSvBtjWVm2B1Dhki05hQOS6A_fB4sjzU95PXtilYByyNA7XzIvjdiKP-HZe473Ageu5kLcfmF4npOnS5NuOYkAFSI9EWX8=w1920-h990-rw-v1)
 
 ## 🗃️ Required Files
 
