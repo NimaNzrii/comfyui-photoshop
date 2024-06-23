@@ -9,7 +9,7 @@ let rndrModeSwitcher = "";
 addListener("photoshopConnected", () => {
   console.log("photoshopConnected");
   try {
-    if (rndrModeSwitcher) sendMsg("Send_workflow", SwitcherWidgetNames(workflowSwitcher));
+    if (workflowSwitcher) sendMsg("Send_workflow", SwitcherWidgetNames(workflowSwitcher));
     if (rndrModeSwitcher) sendMsg("Send_rndrMode", SwitcherWidgetNames(rndrModeSwitcher));
   } catch (error) {
     console.error("🔹 Error in photoshopConnected listener:", error);
@@ -88,6 +88,13 @@ const search4type = (type) => {
     console.error("🔹 Error in search4type:", error);
   }
 };
+const search4typeMulti = (type) => {
+  try {
+    return app.graph._nodes.filter((node) => node.type === type);
+  } catch (error) {
+    console.error("🔹 Error in search4type:", error);
+  }
+};
 
 const search4title = (title) => {
   try {
@@ -142,13 +149,30 @@ app.registerExtension({
     }
   },
   async nodeCreated(node) {
+    // console.log("node: ", node);
     try {
       if (!workflowSwitcher) {
-        workflowSwitcher = search4title("📁 WorkFlows");
+        const nodes = search4typeMulti("Fast Groups Muter (rgthree)");
+        nodes.forEach((node) => {
+          if (node.color === "#2b4557" || node.bgcolor === "#2b4557" || node.title === "📁 WorkFlows") {
+            workflowSwitcher = node;
+            console.log("workflowSwitcher: ", workflowSwitcher);
+            return;
+          }
+        });
       }
+
       if (!rndrModeSwitcher) {
-        rndrModeSwitcher = search4title("⚙️ Render Setting");
+        const nodes = search4typeMulti("Fast Groups Muter (rgthree)");
+        nodes.forEach((node) => {
+          if (node.color === "#4E5E4E" || node.bgcolor === "#4E5E4E" || node.title === "⚙️ Render Setting") {
+            rndrModeSwitcher = node;
+            console.log("rndrModeSwitcher: ", rndrModeSwitcher);
+            return;
+          }
+        });
       }
+
       if (node?.comfyClass === "🔹Photoshop ComfyUI Plugin") {
         connect();
       }
