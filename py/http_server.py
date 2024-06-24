@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)),"..")
 
 # Set the directory for workflows
 nodepath = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop", "data", "workflows")
-workflows_directory = os.path.join(nodepath, '..', "custom_nodes", "comfyui-photoshop", "data", "workflows")
+workflows_directory = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop", "data", "workflows")
 
 # Define the directory for PS inputs
 ps_inputs_directory = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop", "data", "ps_inputs")
