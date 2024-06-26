@@ -165,7 +165,7 @@ app.registerExtension({
       if (!rndrModeSwitcher) {
         const nodes = search4typeMulti("Fast Groups Muter (rgthree)");
         nodes.forEach((node) => {
-          if (node.color === "#4E5E4E" || node.bgcolor === "#4E5E4E" || node.title === "⚙️ Render Setting") {
+          if (node.color === "#4e5e4e" || node.bgcolor === "#4e5e4e" || node.title === "⚙️ Render Setting") {
             rndrModeSwitcher = node;
             console.log("rndrModeSwitcher: ", rndrModeSwitcher);
             return;
