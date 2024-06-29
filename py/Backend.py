@@ -1,5 +1,4 @@
 import asyncio
-import websockets
 import json
 import base64
 import os
@@ -7,7 +6,15 @@ import shutil
 from contextlib import asynccontextmanager
 import platform as platform
 import subprocess
+import sys
 
+try:
+    import websockets
+except ImportError:
+    subprocess.run([sys.executable, "-m", "pip", "install", "websockets"], check=True)
+    import websockets
+    
+    
 # Global Variables
 local_plugin_folder = None
 pluginver = None
