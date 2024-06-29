@@ -8,7 +8,6 @@ let disabledrow = false;
 let firstload = true;
 let pluginver = null;
 const image = await api.fetchApi(`/PSinputs/PS_canvas.png`);
-const imageUrl = image.url;
 
 // تابع برای تنظیم پس‌زمینه نود
 function setBackgroundImageContain(node, url) {
@@ -67,10 +66,12 @@ function setBackgroundImageContain(node, url) {
     });
 }
 
-// افزودن listener برای دریافت داده و تنظیم پس‌زمینه نود
 async function previewonthenode() {
   photoshopNode.forEach((node) => {
+    const timestamp = new Date().getTime();
+    const imageUrl = `${image.url}?v=${timestamp}`;
     setBackgroundImageContain(node, imageUrl);
+    console.log("imageUrl: ", imageUrl);
   });
 }
 
@@ -122,7 +123,10 @@ async function addBooleanProperty(node) {
 
   node.properties = createWatchedObject(properties, async (property, newValue) => {
     if (property === "Disable Preview") {
+      const timestamp = new Date().getTime();
+      const imageUrl = `${image.url}?v=${timestamp}`;
       setBackgroundImageContain(node, imageUrl);
+      console.log("imageUrl: ", imageUrl);
     }
   });
 }
