@@ -4,90 +4,32 @@ import os
 import folder_paths
 import sys
 import platform
-import shutil
 
-python_executable = sys.executable
-node_path = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
+pythonExe = sys.executable #default python file dir
+pyDir = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop", "py")
+backDir = os.path.join(pyDir, 'Backend.py')
 
-py_path = os.path.join(node_path, "py")
-backend_path = os.path.join(py_path, 'Backend.py')
+sys.path.append(pyDir) #import http_server.py to comfyui system path
 
-requirements_path = os.path.join(node_path, 'requirements.txt')
-
-venv_path = os.path.join(py_path, "venv")
-if os.path.exists(venv_path):
-    print("_PS_ removing venv method")
-    shutil.rmtree(venv_path)
-
-def verifyReq():
-    with open(requirements_path, 'r') as file:
-        requirements = file.readlines()
-        requirements = [line.strip() for line in requirements]
-
-    try:
-        installed_packages_list = subprocess.check_output([python_executable, '-m', 'pip', 'list']).decode()
-    except:
-        subprocess.run([python_executable, '-m', 'pip', 'install', '--upgrade', 'pip'], check=True)
-        subprocess.run([python_executable, '-m', 'pip', 'install', '--upgrade', 'pip', 'setuptools'], check=True)
-        installed_packages_list = subprocess.check_output([python_executable, '-m', 'pip', 'list']).decode()
-
-    installed_packages = {line.split()[0].lower() for line in installed_packages_list.split('\n')[2:] if line}
-    missing_packages = [pkg for pkg in requirements if pkg.lower() not in installed_packages]
-
-    if missing_packages:
-        print("_PS_ The following packages are missing:")
-        print("\n".join(missing_packages))
-        installReq()
-    else:
-        print("_PS_ All packages are installed.")
-
-def installReq():
-    subprocess.run([python_executable, '-m', 'pip', 'cache', 'purge'], check=True)
-    subprocess.run([python_executable, '-m', 'pip', 'install', '--upgrade', 'pip'], check=True)
-    subprocess.run([python_executable, '-m', 'pip', 'install', '--upgrade', 'pip', 'setuptools'], check=True)
-    subprocess.run([python_executable, '-m', 'pip', 'install', '-r', requirements_path], check=True)
-
-verifyReq()
-
-# Check if backend_path exists before trying to run it
-if not os.path.exists(backend_path):
-    print(f"_PS_ Error: The backend file '{backend_path}' does not exist.")
-    sys.exit(1)
-
-print("_PS_ backend_path", backend_path)
-
-default_directory = os.getcwd()
-os.chdir(py_path)
-
-if platform.system() == "Linux" or platform.system() == "Darwin":  # Added macOS support
-    process = subprocess.Popen([python_executable, backend_path])
+if platform.system() in ["Linux", "Darwin"]:
+    process = subprocess.Popen([pythonExe, backDir], cwd=pyDir)
 elif platform.system() == "Windows":
-    process = subprocess.Popen([python_executable, backend_path], shell=True)
-
-if process.poll() is None:
-    print("_PS_ Backend is running successfully.")
-else:
-    print("_PS_ Backend failed to start.")
-    sys.exit(1)
-
-os.chdir(default_directory)
+    process = subprocess.Popen([pythonExe, backDir], shell=True, cwd=pyDir)
 
 node_list = ["node-Photoshop", "node-Photoshop-noplugin"]
 NODE_CLASS_MAPPINGS = {}
 NODE_DISPLAY_NAME_MAPPINGS = {}
 
-# اضافه کردن مسیر پوشه py به مسیر جستجوی ماژول‌ها
-sys.path.append(py_path)
+__all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS']
 
 for module_name in node_list:
-    imported_module = importlib.import_module(module_name)
-    NODE_CLASS_MAPPINGS = {**NODE_CLASS_MAPPINGS, **imported_module.NODE_CLASS_MAPPINGS}
-    NODE_DISPLAY_NAME_MAPPINGS = {
-        **NODE_DISPLAY_NAME_MAPPINGS,
-        **imported_module.NODE_DISPLAY_NAME_MAPPINGS,
-    }
+    try:
+        imported_module = importlib.import_module(module_name)
+        NODE_CLASS_MAPPINGS.update(imported_module.NODE_CLASS_MAPPINGS)
+        NODE_DISPLAY_NAME_MAPPINGS.update(imported_module.NODE_DISPLAY_NAME_MAPPINGS)
+    except ImportError as e:
+        print(f"_PS_ Error importing {module_name}: {e}")
 
-workflow_module = importlib.import_module("http_server")
-
+importlib.import_module("http_server")
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
 WEB_DIRECTORY = "js"
