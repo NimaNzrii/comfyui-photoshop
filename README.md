@@ -3,11 +3,15 @@
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support%20Me-yellow)](https://studio.buymeacoffee.com/dashboard)
 [![GitHub](https://img.shields.io/github/stars/NimaNzrii/comfyui-photoshop?style=social)](https://github.com/NimaNzrii/comfyui-photoshop)
 
+[![youtubelink](https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/data/PreviewFiles/pr3.webp)](https://www.youtube.com/watch?v=dChOlGzeiMs)
+
+
+---
 
 ![prvimg](https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/data/PreviewFiles/pr1.jpg)
 ### Patch notes
 
-| 1.4.3                                                                                           | 1.4.0                                                                                           | 1.0.0                             |
+| 1.4.3                                                                                          | 1.4.0                                                                                           | 1.0.0                             |
 |-------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|-----------------------------------|
 | - Non-English ps fixed <br> - Added UTF-8 support <br> - Support for all macOS versions <br> - Node freeze issue fixed <br> - Access issues resolved | - macOS Support <br> - Embedded ComfyUI <br> - Remote Rendering <br> - Settings Page <br> - Preview Mode Options <br> - Photopea Integration <br> - Dynamic Previews <br> - Load Workflow Button <br> - Simplified Operations <br> - Boosted Performance | Initial release <br> with basic features |
 
