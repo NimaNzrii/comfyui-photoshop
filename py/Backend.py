@@ -320,7 +320,7 @@ class WebSocketServer:
     async def restart_websocket_server(self):
         while self.restart_attempts < self.max_restarts:
             try:
-                async with websockets.serve(self.handle_connection, "0.0.0.0", 8765):
+                async with websockets.serve(self.handle_connection, "0.0.0.0", 8765, max_size=1024**3) as server:
                     if self.first_start:
                         print("_PS_ Starting server...")
                         self.first_start = False
