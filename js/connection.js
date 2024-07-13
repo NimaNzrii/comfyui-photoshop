@@ -1,15 +1,13 @@
 let socket = null;
-let photoshopConnected = false;
 let listeners = {};
 
 // Function to establish WebSocket connection
 function connect() {
   try {
-    socket = new WebSocket("ws://127.0.0.1:8765");
+    socket = new WebSocket("ws://127.0.0.1:8188/ps/ws?platform=cm&clientId=" + generateClientId());
 
     socket.addEventListener("open", () => {
       console.log("🔹 Connected to the server.");
-      socket.send("imComfyui");
     });
 
     socket.addEventListener("message", (event) => {
@@ -34,6 +32,11 @@ function connect() {
     console.error("🔹 Error establishing WebSocket connection:", error);
     setTimeout(connect, 5000);
   }
+}
+
+// Function to generate a unique client ID
+function generateClientId() {
+  return "cm-" + Math.random().toString(36).substr(2, 9);
 }
 
 function handleMessage(message) {
@@ -65,4 +68,5 @@ function addListener(type, callback) {
   listeners[type] = callback;
 }
 
-export { connect, sendMsg, addListener, photoshopConnected };
+// Export functions for external use
+export { connect, sendMsg, addListener };

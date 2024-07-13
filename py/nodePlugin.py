@@ -1,6 +1,5 @@
 import hashlib
 import asyncio
-import websockets
 import json
 import base64
 import os
@@ -12,9 +11,13 @@ from io import BytesIO
 import folder_paths
 import sys
 import torchvision.transforms.functional as tf
+import aiohttp
 
-sys.stdout.reconfigure(encoding='utf-8')
-nodepath = os.path.join(folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop")
+
+sys.stdout.reconfigure(encoding="utf-8")
+nodepath = os.path.join(
+    folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop"
+)
 
 
 def is_changed_file(filepath):
@@ -31,6 +34,7 @@ def is_changed_file(filepath):
     except Exception as e:
         print(f"Error in is_changed_file for {filepath}: {e}")
         return False
+
 
 class PhotoshopToComfyUI:
     @classmethod
@@ -62,7 +66,9 @@ class PhotoshopToComfyUI:
 
     def LoadDir(self, retry_count=0):
         try:
-            self.canvasDir = os.path.join(nodepath, "data", "ps_inputs", "PS_canvas.png")
+            self.canvasDir = os.path.join(
+                nodepath, "data", "ps_inputs", "PS_canvas.png"
+            )
             self.maskImgDir = os.path.join(nodepath, "data", "ps_inputs", "PS_mask.png")
             self.configJson = os.path.join(nodepath, "data", "ps_inputs", "config.json")
         except:
@@ -70,7 +76,9 @@ class PhotoshopToComfyUI:
             if retry_count < 4:
                 self.LoadDir(retry_count + 1)
             else:
-                raise Exception("Failed to load directory after 5 attempts. \n 🔴 Make sure you have installed and started the Photoshop Plugin Successfully. \n 🔴 otherwise you can restart your Photoshop and your plugin to fix this problem.")
+                raise Exception(
+                    "Failed to load directory after 5 attempts. \n 🔴 Make sure you have installed and started the Photoshop Plugin Successfully. \n 🔴 otherwise you can restart your Photoshop and your plugin to fix this problem."
+                )
 
     def loadConfig(self, retry_count=0):
         try:
@@ -81,8 +89,10 @@ class PhotoshopToComfyUI:
             if retry_count < 4:
                 self.loadConfig(retry_count + 1)
             else:
-                raise Exception("Failed to load config after 5 attempts. \n 🔴 Make sure you have installed and started the Photoshop Plugin Successfully. \n 🔴 otherwise you can restart your Photoshop and your plugin to fix this problem.")
-            
+                raise Exception(
+                    "Failed to load config after 5 attempts. \n 🔴 Make sure you have installed and started the Photoshop Plugin Successfully. \n 🔴 otherwise you can restart your Photoshop and your plugin to fix this problem."
+                )
+
         self.psPrompt = self.ConfigData["positive"]
         self.ngPrompt = self.ConfigData["negative"]
         self.seed = self.ConfigData["seed"]
@@ -93,11 +103,17 @@ class PhotoshopToComfyUI:
         self.canvas = self.i.convert("RGB")
         self.canvas = np.array(self.canvas).astype(np.float32) / 255.0
         self.canvas = torch.from_numpy(self.canvas)[None,]
-        self.width, self.height = self.i.size 
+        self.width, self.height = self.i.size
 
         self.loadImg(self.maskImgDir)
         self.i = ImageOps.exif_transpose(self.i)
         self.mask = np.array(self.i.getchannel("B")).astype(np.float32) / 255.0
+        self.mask = torch.from_numpy(self.mask)
+
+        # Convert #010101 to #000000
+        self.mask = self.mask.numpy()  # Convert to numpy array for easier manipulation
+        target_color = 1 / 255.0  # The float representation of #010101
+        self.mask[self.mask == target_color] = 0.0  # Change target_color to 0.0
         self.mask = torch.from_numpy(self.mask)
 
     def loadImg(self, path):
@@ -115,7 +131,7 @@ class PhotoshopToComfyUI:
     @classmethod
     def IS_CHANGED(cls):
         try:
-            configJson = os.path.join(nodepath, "data", "ps_inputs","config.json")
+            configJson = os.path.join(nodepath, "data", "ps_inputs", "config.json")
             canvasDir = os.path.join(nodepath, "data", "ps_inputs", "PS_canvas.png")
             maskImgDir = os.path.join(nodepath, "data", "ps_inputs", "PS_mask.png")
 
@@ -128,26 +144,24 @@ class PhotoshopToComfyUI:
             print("Error in IS_CHANGED:", e)
             return 0
 
+
 class ComfyUIToPhotoshop:
-    INPUT_TYPES = lambda: {
-        "required": {
-            "output": ("IMAGE", )
-        }
-    }
+    INPUT_TYPES = lambda: {"required": {"output": ("IMAGE",)}}
     RETURN_TYPES = ()
     OUTPUT_NODE = True
     FUNCTION = "execute"
     CATEGORY = "Photoshop"
 
-    async def send2backend(self, message):
-        async with websockets.connect("ws://127.0.0.1:8765") as websocket:
-            await websocket.send(message)
-            await websocket.close()
+    async def connect_to_backend(self):
+        url = "http://127.0.0.1:8188/ps/renderdone"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                return await response.text()
 
     def svimg(self, img: torch.Tensor):
         try:
             renderDir = os.path.join(nodepath, "data", "render.png")
-            
+
             if len(img.shape) == 4 and img.shape[0] == 1:
                 img = img.squeeze(0)
             if len(img.shape) != 3 or img.shape[2] != 3:
@@ -157,7 +171,7 @@ class ComfyUIToPhotoshop:
 
             img = img.permute(2, 0, 1)
             img = img.clamp(0, 1).numpy() * 255
-            img = img.astype('uint8')
+            img = img.astype("uint8")
             img = Image.fromarray(img.transpose(1, 2, 0))
 
             with BytesIO() as output:
@@ -175,11 +189,13 @@ class ComfyUIToPhotoshop:
         try:
             assert isinstance(output, torch.Tensor)
             self.image = output
-            self.svimg(self.image)
-            asyncio.run(self.send2backend("render"))
+            result = self.svimg(self.image)
+            if result == "render":
+                asyncio.run(self.connect_to_backend())
         except Exception as e:
             print(f"_PS_ error on send2Ps: {e}")
         return ()
+
 
 NODE_CLASS_MAPPINGS = {
     "🔹Photoshop ComfyUI Plugin": PhotoshopToComfyUI,

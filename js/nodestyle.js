@@ -7,57 +7,60 @@ let photoshopNode = [];
 let disabledrow = false;
 let firstload = true;
 let pluginver = null;
-const image = await api.fetchApi(`/PSinputs/PS_canvas.png`);
+const canvasImage = await api.fetchApi(`/ps/inputs/PS_canvas.png`);
+const maskImage = await api.fetchApi(`/ps/inputs/PS_mask.png`);
 
 // تابع برای تنظیم پس‌زمینه نود
-function setBackgroundImageContain(node, url) {
-  fetch(url, { method: "HEAD" })
-    .then((response) => {
-      if (response.ok) {
-        const img = new Image();
-        img.src = url;
+function setBackgroundImageContain(node, canvasUrl, maskUrl) {
+  const fetchImage = (url) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = url;
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(`Failed to load image: ${url}`);
+    });
+  };
 
-        const drawImage = () => {
-          if (!disabledrow) {
-            // چک کردن پراپرتی "Disable Preview"
-            if (node.properties && node.properties["Disable Preview"]) {
-              node.onDrawBackground = null; // غیر فعال کردن رسم تصویر
-              node.setDirtyCanvas(true, true); // به روزرسانی بوم
-              return;
-            }
-
-            const aspectRatio = img.width / img.height;
-            const nodeAspectRatio = node.size[0] / node.size[1];
-
-            let drawWidth, drawHeight, drawX, drawY;
-            if (aspectRatio > nodeAspectRatio) {
-              drawWidth = node.size[0];
-              drawHeight = drawWidth / aspectRatio;
-              drawX = 0;
-              drawY = node.size[1] - drawHeight;
-            } else {
-              drawHeight = node.size[1];
-              drawWidth = drawHeight * aspectRatio;
-              drawX = (node.size[0] - drawWidth) / 2;
-              drawY = 0;
-            }
-
-            node.onDrawBackground = function (ctx) {
-              ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
-            };
-            node.setDirtyCanvas(true, true);
+  Promise.all([fetchImage(canvasUrl), fetchImage(maskUrl)])
+    .then(([canvasImg, maskImg]) => {
+      const drawImage = () => {
+        if (!disabledrow) {
+          // چک کردن پراپرتی "Disable Preview"
+          if (node.properties && node.properties["Disable Preview"]) {
+            node.onDrawBackground = null; // غیر فعال کردن رسم تصویر
+            node.setDirtyCanvas(true, true); // به روزرسانی بوم
+            return;
           }
-        };
 
-        img.onload = drawImage;
-        img.onerror = () => {
-          console.error("Failed to load image:", url);
-        };
-        node.onResize = drawImage;
-      } else {
-        node.onDrawBackground = null;
-        node.setDirtyCanvas(true, true);
-      }
+          const aspectRatio = canvasImg.width / canvasImg.height;
+          const nodeAspectRatio = node.size[0] / node.size[1];
+
+          let drawWidth, drawHeight, drawX, drawY;
+          if (aspectRatio > nodeAspectRatio) {
+            drawWidth = node.size[0];
+            drawHeight = drawWidth / aspectRatio;
+            drawX = 0;
+            drawY = node.size[1] - drawHeight;
+          } else {
+            drawHeight = node.size[1];
+            drawWidth = drawHeight * aspectRatio;
+            drawX = (node.size[0] - drawWidth) / 2;
+            drawY = 0;
+          }
+
+          node.onDrawBackground = function (ctx) {
+            ctx.drawImage(canvasImg, drawX, drawY, drawWidth, drawHeight);
+            ctx.globalAlpha = 0.7;
+            ctx.globalCompositeOperation = "darken";
+            ctx.drawImage(maskImg, drawX, drawY, drawWidth, drawHeight);
+            ctx.globalCompositeOperation = "source-over";
+          };
+          node.setDirtyCanvas(true, true);
+        }
+      };
+
+      drawImage();
+      node.onResize = drawImage;
     })
     .catch((error) => {
       console.error("🔹 Error:", error);
@@ -69,9 +72,9 @@ function setBackgroundImageContain(node, url) {
 async function previewonthenode() {
   photoshopNode.forEach((node) => {
     const timestamp = new Date().getTime();
-    const imageUrl = `${image.url}?v=${timestamp}`;
-    setBackgroundImageContain(node, imageUrl);
-    console.log("imageUrl: ", imageUrl);
+    const canvasImageUrl = `${canvasImage.url}?v=${timestamp}`;
+    const maskImageUrl = `${maskImage.url}?v=${timestamp}`;
+    setBackgroundImageContain(node, canvasImageUrl, maskImageUrl);
   });
 }
 
@@ -124,9 +127,11 @@ async function addBooleanProperty(node) {
   node.properties = createWatchedObject(properties, async (property, newValue) => {
     if (property === "Disable Preview") {
       const timestamp = new Date().getTime();
-      const imageUrl = `${image.url}?v=${timestamp}`;
-      setBackgroundImageContain(node, imageUrl);
-      console.log("imageUrl: ", imageUrl);
+      const canvasImageUrl = `${canvasImage.url}?v=${timestamp}`;
+      const maskImageUrl = `${maskImage.url}?v=${timestamp}`;
+      setBackgroundImageContain(node, canvasImageUrl, maskImageUrl);
+      console.log("canvasImageUrl: ", canvasImageUrl);
+      console.log("maskImageUrl: ", maskImageUrl);
     }
   });
 }
@@ -135,7 +140,7 @@ function addRemoveButtons(node, add) {
   try {
     if (add) {
       addButton(node, "Load SD 1.5", "temp-button", () => loadWorkflow("sd15_workflow"));
-      addButton(node, "Load sdxl (coming Soon...)", "temp-button", () => alert("We will dop it this week!"));
+      addButton(node, "Load sdxl (coming Soon...)", "temp-button", () => alert("We will drop it this week!"));
     } else {
       node.widgets = node.widgets.filter((widget) => widget.className !== "temp-button");
       node.setDirtyCanvas(true, true);

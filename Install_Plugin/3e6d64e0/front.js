@@ -184,16 +184,19 @@ seedRandomBtn.addEventListener("click", () => {
 // });
 
 workFlowDropDown.addEventListener("change", async (evt) => {
-  console.log(`Selected item: ${evt.target.selectedIndex}`);
-  sendMessage("workflow", String(evt.target.selectedIndex));
-
-  await smtchanged();
+  if (evt.target.selectedIndex >= 0) {
+    console.log(`Selected item: ${evt.target.selectedIndex}`);
+    sendMessage("workflow", String(evt.target.selectedIndex));
+    await smtchanged();
+  }
 });
 rndrModeDropDown.addEventListener("change", async (evt) => {
-  console.log(`Selected item: ${evt.target.selectedIndex}`);
-  sendMessage("rndrMode", String(evt.target.selectedIndex));
-  anim = true;
-  await smtchanged();
+  if (evt.target.selectedIndex >= 0) {
+    console.log(`Selected item: ${evt.target.selectedIndex}`);
+    sendMessage("rndrMode", String(evt.target.selectedIndex));
+    anim = true;
+    await smtchanged();
+  }
 });
 
 reloadButton.addEventListener("click", () => {

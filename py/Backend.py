@@ -1,337 +1,204 @@
-import asyncio
-import json
-import base64
 import os
-import shutil
-from contextlib import asynccontextmanager
-import platform as platform
+import platform
 import subprocess
 import sys
-
-try:
-    import websockets
-except ImportError:
-    subprocess.run([sys.executable, "-m", "pip", "install", "websockets"], check=True)
-    import websockets
-    
-    
-# Global Variables
-local_plugin_folder = None
-pluginver = None
-clients = {}
-mask_save_semaphore = asyncio.Semaphore(0)
+import uuid
+import json
+import base64
+from aiohttp import web, WSMsgType
+import folder_paths
+from server import PromptServer
 
 # Set up paths
-plugin_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
-comfui_path = os.path.abspath(os.path.join(plugin_path, '..', '..'))
-input_path = os.path.join(comfui_path, "input")
+plugin_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+comfui_path = os.path.abspath(os.path.join(plugin_path, "..", ".."))
 os.chdir(plugin_path)
+nodepath = os.path.join(
+    folder_paths.get_folder_paths("custom_nodes")[0],
+    "comfyui-photoshop",
+    "data",
+    "workflows",
+)
+workflows_directory = nodepath
+ps_inputs_directory = os.path.join(
+    folder_paths.get_folder_paths("custom_nodes")[0],
+    "comfyui-photoshop",
+    "data",
+    "ps_inputs",
+)
 
-def forcePull():
-    fetch_result = subprocess.run(['git', 'fetch'], capture_output=True, text=True)
+clients = {}
+photoshop_users = []
+comfyui_users = []
+
+
+# Utility functions
+def force_pull():
+    fetch_result = subprocess.run(["git", "fetch"], capture_output=True, text=True)
     print(fetch_result.stdout)
     if fetch_result.returncode != 0:
-        print(f"_PS_ Fetch error: {fetch_result.stderr}")
+        print(f"# PS: Fetch error: {fetch_result.stderr}")
         return
-    
-    reset_result = subprocess.run(['git', 'reset', '--hard', 'origin/main'], capture_output=True, text=True)
+
+    reset_result = subprocess.run(
+        ["git", "reset", "--hard", "origin/main"], capture_output=True, text=True
+    )
     print(reset_result.stdout)
     if reset_result.returncode != 0:
-        print(f"_PS_ Reset error: {reset_result.stderr}")
+        print(f"# PS: Reset error: {reset_result.stderr}")
         return
 
-# Find the plugin version
-for folder_name in os.listdir("Install_Plugin"):
-    if folder_name.startswith('3e6d64e0_') and not folder_name.startswith('3e6d64e0_PS') and not folder_name.endswith('.ccx'):
-        local_plugin_folder = folder_name 
-
-if local_plugin_folder:
-    pluginver = local_plugin_folder.replace('3e6d64e0_', '')
-
-# Helper Functions
-def check_path_exists(path):
-    if not os.path.exists(path):
-        raise Exception(f"_PS_ The path does not exist: {path}")
 
 def install_plugin():
+    installer_path = os.path.join("Install_Plugin", "installer.py")
+    if os.path.exists(installer_path):
+        if platform.system() == "Windows":
+            subprocess.run(
+                ["start", "cmd", "/k", sys.executable, installer_path], shell=True
+            )
+        elif platform.system() == "Darwin":
+            subprocess.run(["open", "-a", "Terminal", sys.executable, installer_path])
+    else:
+        return "Installer not found"
+
+
+async def save_file(data, filename):
+    data = base64.b64decode(data)
+    with open(os.path.join(plugin_path, "data", "ps_inputs", filename), "wb") as file:
+        file.write(data)
+
+
+async def save_config(data):
+    with open(
+        os.path.join(plugin_path, "data", "ps_inputs", "config.json"),
+        "w",
+        encoding="utf-8",
+    ) as file:
+        json.dump(data, file, ensure_ascii=False)
+
+
+async def send_message(users, type, message=True):
     try:
-        if os.name == 'nt':
-            adobe_plugins_storage = os.path.expanduser(r'~\AppData\Roaming\Adobe\UXP\Plugins\External')
-            plugins_info_path = os.path.expanduser(r'~\AppData\Roaming\Adobe\UXP\PluginsInfo\v1')
-        elif os.name == 'posix' and platform.system() == 'Darwin':
-            adobe_plugins_storage = os.path.expanduser('~/Library/Application Support/Adobe/UXP/Plugins/External')
-            plugins_info_path = os.path.expanduser('~/Library/Application Support/Adobe/UXP/PluginsInfo/v1')
-        elif os.name == 'posix':
-            return "This script does not support Linux."
+        if not users:
+            print("# PS: PS not connected")
+            return "PS not connected"
+
+        latest_user = users[-1]
+        if latest_user in clients:
+            ws = clients[latest_user]["ws"]
+            data = json.dumps({type: message}) if type else message
+            await ws.send_str(data)
         else:
-            return "Unsupported operating system."
-        
-        # Ensure the directories exist
-        os.makedirs(adobe_plugins_storage, exist_ok=True)
-        os.makedirs(plugins_info_path, exist_ok=True)
-
-        # Remove any existing plugin directories
-        for folder_name in os.listdir(adobe_plugins_storage):
-            if folder_name.startswith('3e6d64e0'):
-                shutil.rmtree(os.path.join(adobe_plugins_storage, folder_name))
-
-        # Copy the plugin to the storage path
-        if local_plugin_folder:
-            shutil.copytree(os.path.join("Install_Plugin", local_plugin_folder), os.path.join(adobe_plugins_storage, local_plugin_folder))
-        else:
-            print("_PS_ No plugin folder found to install.")
-            return
-        
-        ps_json_path = os.path.join(plugins_info_path, 'PS.json')
-
-        new_plugin_entry = {
-            "hostMinVersion": "22.5.0",
-            "name": "ComfyUI for adobe Photoshop",
-            "path": f"$localPlugins\\External\\{local_plugin_folder}",
-            "pluginId": "3e6d64e0",
-            "status": "enabled",
-            "type": "uxp",
-            "versionString": pluginver
-        }
-
-        # Check if PS.json exists
-        if os.path.exists(ps_json_path):
-            with open(ps_json_path, 'r') as f:
-                data = json.load(f)
-            
-            # Remove existing entries with the same pluginId
-            data['plugins'] = [plugin for plugin in data['plugins'] if plugin['pluginId'] != "3e6d64e0"]
-            
-            data['plugins'].append(new_plugin_entry)
-        else:
-            # If PS.json does not exist, create it with the new plugin entry
-            data = {"plugins": [new_plugin_entry]}
-        
-        # Write the (updated or newly created) data back to PS.json
-        with open(ps_json_path, 'w') as f:
-            json.dump(data, f, indent=2)
-        
-        print(f"_PS_ Installed plugin in {adobe_plugins_storage} and updated PS.json")
-        print("_PS_ RESTART YOUR PHOTOSHOP AND LAUNCH THE PLUGIN")
-        
+            print(f"# PS: User {latest_user} not connected")
     except Exception as e:
-        print(f"_PS_ Got Error: {e}")
+        print(f"# PS: error send_message: {e}")
 
-def ispluginUpdate():
-    version_file_path = './data/ps_inputs/config.json'
-    check_path_exists(version_file_path)
-    with open(version_file_path, 'r') as version_file:
-        file_version = json.load(version_file).get('pluginVer')
-        
-    if file_version < pluginver:
-        print("_PS_ Plugin is not updated, installing. . .")
-        install_plugin()
-    else: 
-        print("_PS_ Plugin is update")
 
-if local_plugin_folder and pluginver:
-    ispluginUpdate()
-else:
-    print("_PS_ No local plugin folder found, skipping update check.")
+# Websocket handler
+@PromptServer.instance.routes.get("/ps/ws")
+async def websocket_handler(request):
+    ws = web.WebSocketResponse()
+    await ws.prepare(request)
 
-class WebSocketServer:
-    def __init__(self):
-        self.mainDir = os.path.dirname(os.path.dirname(os.getcwd()))
-        self.tempDir = os.path.join(self.mainDir, "temp")
-        self.inputDir = os.path.join(self.mainDir, "input")
-        
-        self.comfyUi_clients = []  
-        self.photoshop = "photoshop"
-        self.rendernode = None 
-        self.first_start = True
-        self.restart_attempts = 0
-        self.max_restarts = 5
+    client_id = request.query.get("clientId", str(uuid.uuid4()))
+    platform = request.query.get("platform", "unknown")
+    clients[client_id] = {"ws": ws, "platform": platform}
 
-    @asynccontextmanager
-    async def manage_connection(self, websocket):
-        clients[websocket.remote_address] = {'websocket': websocket}
+    if platform == "ps":
+        photoshop_users.append(client_id)
+        print(f"# PS: {client_id} Photoshop Connected")
+        await send_message(comfyui_users, "photoshopConnected")
+
+    elif platform == "cm":
+        comfyui_users.append(client_id)
+
+    async for msg in ws:
+        if msg.type == WSMsgType.TEXT:
+            await handle_message(client_id, platform, msg.data)
+        elif msg.type == WSMsgType.ERROR:
+            print(f"# PS: Connection error from client {client_id}: {ws.exception()}")
+
+    await handle_disconnect(client_id, platform)
+    return ws
+
+
+async def handle_message(client_id, platform, data):
+    msg = json.loads(data)
+
+    if platform == "cm":
         try:
-            yield
-        finally:
-            await self.remove_connection(websocket)
-
-    async def handle_connection(self, websocket, path):
-        async with self.manage_connection(websocket):
-            try:
-                while True:
-                    message = await websocket.recv()
-                    await self.route_message(websocket, message)
-            except Exception as e:
-                client_address = websocket.remote_address
-                if client_address not in self.comfyUi_clients and client_address != self.photoshop:
-                    print("Render Finished")
-                    # print(f"_PS_ Error handling connection from {client_address}: {e}")
-
-    async def route_message(self, websocket, message):
-        if message == "render":
-            await self.handle_render_done(websocket)
-        elif message == "imComfyui":
-            await self.handle_imComfyui(websocket)
-        elif message == "imPhotoshop":
-            await self.handle_imPhotoshop(websocket)
-        elif websocket.remote_address in self.comfyUi_clients:
-            await self.from_comfyUi(message)
-        elif websocket.remote_address == self.photoshop:
-            await self.from_photoshop(message)
-
-    async def handle_render_done(self, websocket):
-        self.rendernode = websocket.remote_address
-        await self.send_file_to_photoshop("render.png", "render")
-        await websocket.close()
-        self.rendernode = None
-
-    async def handle_imComfyui(self, websocket):
-        self.comfyUi_clients.append(websocket.remote_address)  # Append to the end of the list
-        print(f"_PS_ Node found in workflow: {websocket.remote_address}")
-        await self.send_to_photoshop("comfyuiConnected", True)
-        await self.send_to_comfyUi("photoshopConnected", True, websocket.remote_address)
-        await self.send_to_comfyUi("pluginver", pluginver)
-
-    async def handle_imPhotoshop(self, websocket):
-        self.photoshop = websocket.remote_address
-        print(f"_PS_ Photoshop Connected: {self.photoshop}")
-        await self.send_to_comfyUi("photoshopConnected", True)
-        await self.send_to_photoshop("comfyuiConnected", True)
-
-    async def remove_connection(self, websocket):
-        del clients[websocket.remote_address]
-        if websocket.remote_address in self.comfyUi_clients:
-            print(f"_PS_ ComfyUi Tab closed")
-            self.comfyUi_clients.remove(websocket.remote_address)  # Remove the closed connection from the list
-        elif websocket.remote_address == self.photoshop:
-            print(f"_PS_ Photoshop closed")
-            self.photoshop = "photoshop"
-        elif websocket.remote_address == self.rendernode:
-            print(f"_PS_ render done")
-            self.rendernode = None
-        await websocket.close()
-
-    async def from_photoshop(self, message):
-        try:
-            data = json.loads(message)
-            await self.handle_photoshop_data(data)
-        except Exception as e:
-            print(f"_PS_ error fromPhotoshop: {e}")
-            await self.restart_websocket_server()
-
-    async def handle_photoshop_data(self, data):
-        try:
-            if "canvasBase64" in data:
-                print(f"_PS_ Received canvasBase64 data, length: {len(data['canvasBase64'])}")
-                await self.save_file(data["canvasBase64"], 'PS_canvas.png')
-                print("_PS_ Saved canvasBase64 data to PS_canvas.png")
-
-            if "maskBase64" in data:
-                print(f"_PS_ Received maskBase64 data, length: {len(data['maskBase64'])}")
-                await self.save_file(data["maskBase64"], 'PS_mask.png')
-                print("_PS_ Saved maskBase64 data to PS_mask.png")
-                mask_save_semaphore.release()
-
-            if "configdata" in data:
-                print(f"_PS_ Received configdata: {data['configdata']}")
-                await self.save_config(data["configdata"])
-                print("_PS_ Saved configdata")
-
-            if "quickSave" in data:
-                await self.send_to_comfyUi("quickSave", True)
-
-            if "workspace" in data:
-                await self.send_to_comfyUi("workspace", data["workspace"])
-
-            if not any(key in data for key in ["configdata", "maskBase64", "canvasBase64", "workspace", "quickSave"]):
-                await self.send_to_comfyUi("", json.dumps(data))
-
-        except Exception as e:
-            print(f"_PS_ error handle_photoshop_data: {e}")
-            await self.restart_websocket_server()
-
-
-    async def from_comfyUi(self, message):
-        try:
-            data = json.loads(message)
-            await self.handle_comfyUi_data(data)
-        except Exception as e:
-            print(f"_PS_ error fromComfyui: {e}")
-            await self.restart_websocket_server()
-
-    async def handle_comfyUi_data(self, data):
-        if "PreviewImage" in data:
-            await self.handle_preview_image(data["PreviewImage"])
-            
-        elif "pullupdate" in data:
-            await self.send_to_comfyUi("alert", "Updating, please Restart comfyui after update")
-            forcePull()
-            
-        else:
-            await self.send_to_photoshop("", json.dumps(data))
-
-    async def handle_preview_image(self, image_name):
-        file_path = os.path.join(self.tempDir, image_name)
-        destination_path = os.path.join(self.inputDir, image_name)
-        if check_path_exists(file_path):
-            shutil.copyfile(file_path, destination_path)
-            await self.send_to_comfyUi("tempToInput", image_name)
-
-    async def save_file(self, data, filename):
-        data = base64.b64decode(data)
-        with open(os.path.join(plugin_path, "data", 'ps_inputs', filename), "wb") as file:
-            file.write(data)
-
-    async def save_config(self, config_data):
-        with open(os.path.join(plugin_path, "data", 'ps_inputs','config.json'), "w", encoding='utf-8') as file:
-            json.dump(config_data, file, ensure_ascii=False)
-
-    async def send_to_comfyUi(self, name, message, recipient=None):
-        if not message:
-            message = True
-        recipient = recipient or self.comfyUi_clients[-1] if self.comfyUi_clients else None
-        if recipient:
-            await self.send_message(recipient, name, message)
-
-    async def send_to_photoshop(self, name, message):
-        if not message:
-            message = True
-        await self.send_message(self.photoshop, name, message)
-
-    async def send_message(self, recipient, name, message):
-        try:
-            if recipient in clients:
-                data = json.dumps({name: message}) if name else message
-                await clients[recipient]['websocket'].send(data)
+            if "pullupdate" in msg:
+                await send_message(
+                    comfyui_users,
+                    "alert",
+                    "Updating, please Restart comfyui after update",
+                )
+                force_pull()
+            elif "install_plugin" in msg:
+                result = install_plugin()
+                if result:
+                    await send_message(comfyui_users, "alert", result)
             else:
-                if name not in ["comfyuiConnected", "photoshopConnected"]:
-                    print(f"_PS_ {recipient} Not Connected")
+                await send_message(photoshop_users, "", json.dumps(msg))
         except Exception as e:
-            print(f"_PS_ error send_message: {e}")
+            print(f"# PS: error fromComfyui: {e}")
 
-    async def send_file_to_photoshop(self, filename, name):
+    elif platform == "ps":
         try:
-            with open(os.path.join(plugin_path, "data", filename), 'rb') as image_file:
-                encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
-            await self.send_to_photoshop(name, encoded_string)
+            if "canvasBase64" in msg:
+                await save_file(msg["canvasBase64"], "PS_canvas.png")
+            if "maskBase64" in msg:
+                await save_file(msg["maskBase64"], "PS_mask.png")
+            if "configdata" in msg:
+                await save_config(msg["configdata"])
+            if "workspace" in msg:
+                await send_message(comfyui_users, "workspace", msg["workspace"])
+            if not any(
+                key in msg
+                for key in ["configdata", "maskBase64", "canvasBase64", "workspace"]
+            ):
+                await send_message(comfyui_users, "", json.dumps(msg))
         except Exception as e:
-            print(f"_PS_ Error reading or sending {filename}: {e}")
+            print(f"# PS: error fromComfyui: {e}")
 
-    async def restart_websocket_server(self):
-        while self.restart_attempts < self.max_restarts:
-            try:
-                async with websockets.serve(self.handle_connection, "0.0.0.0", 8765):
-                    if self.first_start:
-                        print("_PS_ Starting server...")
-                        self.first_start = False
-                    else:
-                        print("_PS_ Restarting server...")
-                    await asyncio.Future()  # run forever
-            except Exception as e:
-                self.restart_attempts += 1
-                print(f"_PS_ Retrying to start the server... ({self.restart_attempts}/{self.max_restarts})")
-                await asyncio.sleep(5)
-        print("_PS_ Server failed to start after several attempts.")
-        
-server = WebSocketServer()
-asyncio.run(server.restart_websocket_server())
+
+async def handle_disconnect(client_id, platform):
+    del clients[client_id]
+    if platform == "ps":
+        photoshop_users.remove(client_id)
+        print(f"# PS: User {client_id} disconnected from Photoshop (ps)")
+    elif platform == "cm":
+        comfyui_users.remove(client_id)
+        print(f"# PS: User {client_id} disconnected from ComfyUI (cm)")
+
+
+@PromptServer.instance.routes.get("/ps/workflows/{name:.+}")
+async def get_workflow(request):
+    file = os.path.abspath(
+        os.path.join(workflows_directory, request.match_info["name"] + ".json")
+    )
+    if os.path.commonpath([file, workflows_directory]) != workflows_directory:
+        return web.Response(status=403)
+    return web.FileResponse(file)
+
+
+@PromptServer.instance.routes.get("/ps/inputs/{filename}")
+async def get_workflow(request):
+    file = os.path.abspath(
+        os.path.join(ps_inputs_directory, request.match_info["filename"])
+    )
+    if os.path.commonpath([file, ps_inputs_directory]) != ps_inputs_directory:
+        return web.Response(status=403)
+    return web.FileResponse(file)
+
+
+@PromptServer.instance.routes.get("/ps/renderdone")
+async def handle_render_done(request):
+    print("# PS: render done")
+    try:
+        with open(os.path.join(plugin_path, "data", "render.png"), "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
+        await send_message(photoshop_users, "render", encoded_string)
+    except Exception as e:
+        print(f"# PS: Error reading or sending render.png: {e}")
+    return web.Response(text="Render sent to ps")

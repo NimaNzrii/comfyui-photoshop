@@ -95,6 +95,9 @@ const search4typeMulti = (type) => {
     console.error("🔹 Error in search4type:", error);
   }
 };
+const search4class = (type) => {
+  return app.graph._nodes.find((node) => node.class === type);
+};
 
 const search4title = (title) => {
   try {
@@ -132,6 +135,17 @@ const SwitcherWidgetNames = (switcher) => {
 // Register extension with ComfyUI
 app.registerExtension({
   name: "PhotoshopToComfyUINode",
+  async beforeRegisterNodeDef(nodeType, nodeInfo, appInstance) {
+    if (nodeInfo.category === "Photoshop") {
+      appendMenuOption(nodeType, (_, menuOptions) => {
+        menuOptions.unshift({
+          content: "🔹 Install PS Plugin V1.5.0 (auto)🔮",
+          callback: () => sendMsg("install_plugin"),
+        });
+      });
+    }
+  },
+
   onProgressUpdate(event) {
     try {
       if (!this.connected) return;
@@ -185,7 +199,7 @@ app.registerExtension({
 async function getWorkflow(name) {
   try {
     console.log("name: ", name);
-    const response = await api.fetchApi(`/PSworkflows/${encodeURIComponent(name)}`, { cache: "no-store" });
+    const response = await api.fetchApi(`/ps/workflows/${encodeURIComponent(name)}`, { cache: "no-store" });
     console.log("response: ", response);
     return await response.json();
   } catch (error) {
@@ -243,3 +257,12 @@ api.addEventListener("progress", ({ detail: { value, max } }) => {
     console.error("🔹 Error in progress listener:", error);
   }
 });
+
+export function appendMenuOption(nodeType, callbackFn) {
+  const originalMenuOptions = nodeType.prototype.getExtraMenuOptions;
+  nodeType.prototype.getExtraMenuOptions = function () {
+    const options = originalMenuOptions.apply(this, arguments);
+    callbackFn.apply(this, arguments);
+    return options;
+  };
+}
