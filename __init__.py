@@ -18,6 +18,6 @@ for module_name in node_list:
     NODE_DISPLAY_NAME_MAPPINGS.update(imported_module.NODE_DISPLAY_NAME_MAPPINGS)
 
 
-importlib.import_module("PsBackEnd")
+importlib.import_module("Backend")
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
 WEB_DIRECTORY = "js"
