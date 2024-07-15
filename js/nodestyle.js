@@ -5,12 +5,10 @@ import { api as api } from "../../../scripts/api.js";
 
 let photoshopNode = [];
 let disabledrow = false;
-let firstload = true;
-let pluginver = null;
+let nodever = "1.5.0";
 const canvasImage = await api.fetchApi(`/ps/inputs/PS_canvas.png`);
 const maskImage = await api.fetchApi(`/ps/inputs/PS_mask.png`);
 
-// تابع برای تنظیم پس‌زمینه نود
 function setBackgroundImageContain(node, canvasUrl, maskUrl) {
   const fetchImage = (url) => {
     return new Promise((resolve, reject) => {
@@ -25,10 +23,9 @@ function setBackgroundImageContain(node, canvasUrl, maskUrl) {
     .then(([canvasImg, maskImg]) => {
       const drawImage = () => {
         if (!disabledrow) {
-          // چک کردن پراپرتی "Disable Preview"
           if (node.properties && node.properties["Disable Preview"]) {
-            node.onDrawBackground = null; // غیر فعال کردن رسم تصویر
-            node.setDirtyCanvas(true, true); // به روزرسانی بوم
+            node.onDrawBackground = null;
+            node.setDirtyCanvas(true, true);
             return;
           }
 
@@ -175,6 +172,7 @@ app.registerExtension({
         previewonthenode();
         addBooleanProperty(node);
         handleMouseEvents(node);
+        checkForNewVersion(nodever);
 
         if (node.properties && node.properties["Dont Hide Buttons"]) {
           addRemoveButtons(node, true);
@@ -189,7 +187,7 @@ api.addEventListener("execution_start", () => previewonthenode());
 
 let versionUrl = "https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/data/PreviewFiles/version.json";
 
-const checkForNewVersion = async (pluginVersion) => {
+const checkForNewVersion = async (nodever) => {
   try {
     const response = await fetch(versionUrl);
     if (!response.ok) {
@@ -200,7 +198,7 @@ const checkForNewVersion = async (pluginVersion) => {
     console.log("🔹 latestVersion: ", latestVersion);
     const forceUpdate = data.force_update;
 
-    if (latestVersion > pluginVersion) {
+    if (latestVersion > nodever) {
       console.log(`🔹 New version available: ${latestVersion}`);
 
       if (forceUpdate) {
@@ -243,9 +241,3 @@ function addButton(node, btntxt, class__name, func) {
     console.error("🔹 Error in addButton:", error);
   }
 }
-
-addListener("pluginver", (data) => {
-  pluginver = data;
-  console.log("pluginver: ", pluginver);
-  checkForNewVersion(pluginver);
-});
