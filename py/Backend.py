@@ -12,7 +12,6 @@ from server import PromptServer
 # Set up paths
 plugin_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 comfui_path = os.path.abspath(os.path.join(plugin_path, "..", ".."))
-os.chdir(plugin_path)
 nodepath = os.path.join(
     folder_paths.get_folder_paths("custom_nodes")[0],
     "comfyui-photoshop",
@@ -34,14 +33,19 @@ comfyui_users = []
 
 # Utility functions
 def force_pull():
-    fetch_result = subprocess.run(["git", "fetch"], capture_output=True, text=True)
+    fetch_result = subprocess.run(
+        ["git", "fetch"], capture_output=True, text=True, cwd=plugin_path
+    )
     print(fetch_result.stdout)
     if fetch_result.returncode != 0:
         print(f"# PS: Fetch error: {fetch_result.stderr}")
         return
 
     reset_result = subprocess.run(
-        ["git", "reset", "--hard", "origin/main"], capture_output=True, text=True
+        ["git", "reset", "--hard", "origin/main"],
+        capture_output=True,
+        text=True,
+        cwd=plugin_path,
     )
     print(reset_result.stdout)
     if reset_result.returncode != 0:
@@ -50,7 +54,7 @@ def force_pull():
 
 
 def install_plugin():
-    installer_path = os.path.join("Install_Plugin", "installer.py")
+    installer_path = os.path.join(plugin_path, "Install_Plugin", "installer.py")
     if os.path.exists(installer_path):
         if platform.system() == "Windows":
             subprocess.run(
@@ -64,13 +68,13 @@ def install_plugin():
 
 async def save_file(data, filename):
     data = base64.b64decode(data)
-    with open(os.path.join(plugin_path, "data", "ps_inputs", filename), "wb") as file:
+    with open(os.path.join(ps_inputs_directory, filename), "wb") as file:
         file.write(data)
 
 
 async def save_config(data):
     with open(
-        os.path.join(plugin_path, "data", "ps_inputs", "config.json"),
+        os.path.join(ps_inputs_directory, "config.json"),
         "w",
         encoding="utf-8",
     ) as file:

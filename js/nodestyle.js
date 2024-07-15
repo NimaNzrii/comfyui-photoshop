@@ -179,8 +179,6 @@ app.registerExtension({
         if (node.properties && node.properties["Dont Hide Buttons"]) {
           addRemoveButtons(node, true);
         }
-        document.getElementsByClassName("comfy-close-menu-btn")[0].click();
-        document.getElementById("comfy-view-queue-button").click();
       }
     } catch (error) {
       console.error("🔹 Error in nodeCreated:", error);
