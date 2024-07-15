@@ -5,10 +5,12 @@ import { api as api } from "../../../scripts/api.js";
 
 let photoshopNode = [];
 let disabledrow = false;
+let firstload = true;
 let nodever = "1.5.0";
 const canvasImage = await api.fetchApi(`/ps/inputs/PS_canvas.png`);
 const maskImage = await api.fetchApi(`/ps/inputs/PS_mask.png`);
 
+// تابع برای تنظیم پس‌زمینه نود
 function setBackgroundImageContain(node, canvasUrl, maskUrl) {
   const fetchImage = (url) => {
     return new Promise((resolve, reject) => {
@@ -23,9 +25,10 @@ function setBackgroundImageContain(node, canvasUrl, maskUrl) {
     .then(([canvasImg, maskImg]) => {
       const drawImage = () => {
         if (!disabledrow) {
+          // چک کردن پراپرتی "Disable Preview"
           if (node.properties && node.properties["Disable Preview"]) {
-            node.onDrawBackground = null;
-            node.setDirtyCanvas(true, true);
+            node.onDrawBackground = null; // غیر فعال کردن رسم تصویر
+            node.setDirtyCanvas(true, true); // به روزرسانی بوم
             return;
           }
 
