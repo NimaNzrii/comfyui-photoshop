@@ -51,18 +51,7 @@ def force_pull():
 
 def install_plugin():
     installer_path = os.path.join(nodepath, "Install_Plugin", "installer.py")
-    if os.path.exists(installer_path):
-        if platform.system() == "Windows":
-            subprocess.run(
-                ["start", "cmd", "/k", sys.executable, f'"{installer_path}"'],
-                shell=True,
-            )
-        elif platform.system() == "Darwin":
-            subprocess.run(
-                ["open", "-a", "Terminal", sys.executable, f'"{installer_path}"']
-            )
-    else:
-        return "Installer not found"
+    subprocess.run([sys.executable, installer_path])
 
 
 async def save_file(data, filename):
