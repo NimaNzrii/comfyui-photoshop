@@ -10,15 +10,11 @@ import folder_paths
 from server import PromptServer
 
 # Set up paths
-plugin_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
-comfui_path = os.path.abspath(os.path.join(plugin_path, "..", ".."))
 nodepath = os.path.join(
     folder_paths.get_folder_paths("custom_nodes")[0],
     "comfyui-photoshop",
-    "data",
-    "workflows",
 )
-workflows_directory = nodepath
+workflows_directory = os.path.join(nodepath, "data", "workflows")
 ps_inputs_directory = os.path.join(
     folder_paths.get_folder_paths("custom_nodes")[0],
     "comfyui-photoshop",
@@ -34,7 +30,7 @@ comfyui_users = []
 # Utility functions
 def force_pull():
     fetch_result = subprocess.run(
-        ["git", "fetch"], capture_output=True, text=True, cwd=plugin_path
+        ["git", "fetch"], capture_output=True, text=True, cwd=nodepath
     )
     print(fetch_result.stdout)
     if fetch_result.returncode != 0:
@@ -45,7 +41,7 @@ def force_pull():
         ["git", "reset", "--hard", "origin/main"],
         capture_output=True,
         text=True,
-        cwd=plugin_path,
+        cwd=nodepath,
     )
     print(reset_result.stdout)
     if reset_result.returncode != 0:
@@ -54,7 +50,7 @@ def force_pull():
 
 
 def install_plugin():
-    installer_path = os.path.join(plugin_path, "Install_Plugin", "installer.py")
+    installer_path = os.path.join(nodepath, "Install_Plugin", "installer.py")
     if os.path.exists(installer_path):
         if platform.system() == "Windows":
             subprocess.run(
