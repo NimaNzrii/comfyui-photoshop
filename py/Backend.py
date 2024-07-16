@@ -54,10 +54,13 @@ def install_plugin():
     if os.path.exists(installer_path):
         if platform.system() == "Windows":
             subprocess.run(
-                ["start", "cmd", "/k", sys.executable, installer_path], shell=True
+                ["start", "cmd", "/k", sys.executable, f'"{installer_path}"'],
+                shell=True,
             )
         elif platform.system() == "Darwin":
-            subprocess.run(["open", "-a", "Terminal", sys.executable, installer_path])
+            subprocess.run(
+                ["open", "-a", "Terminal", sys.executable, f'"{installer_path}"']
+            )
     else:
         return "Installer not found"
 
