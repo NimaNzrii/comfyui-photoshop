@@ -1,26 +1,18 @@
 import { app as app } from "../../../scripts/app.js";
 import { api as api } from "../../../scripts/api.js";
-import { connect, sendMsg, addListener } from "./connection.js";
+import { sendMsg, addListener } from "./connection.js";
 
 let QuickEdit_LoadImage = "";
 let workflowSwitcher = "";
 let rndrModeSwitcher = "";
 
 addListener("photoshopConnected", () => {
-  console.log("photoshopConnected");
+  console.log("🔹photoshopConnected");
   try {
     if (workflowSwitcher) sendMsg("Send_workflow", SwitcherWidgetNames(workflowSwitcher));
     if (rndrModeSwitcher) sendMsg("Send_rndrMode", SwitcherWidgetNames(rndrModeSwitcher));
   } catch (error) {
     console.error("🔹 Error in photoshopConnected listener:", error);
-  }
-});
-
-addListener("quickSave", () => {
-  try {
-    RefreshPreviews();
-  } catch (error) {
-    console.error("🔹 Error in quickSave listener:", error);
   }
 });
 
@@ -69,17 +61,6 @@ addListener("rndrMode", (data) => {
     console.error("🔹 Error in rndrMode listener:", error);
   }
 });
-
-function RefreshPreviews() {
-  try {
-    let nodes = app.graph._nodes.filter((node) => node.imgs !== undefined);
-    for (let node of nodes) {
-      node.imgs[0].src = node.imgs[0].src + "1";
-    }
-  } catch (error) {
-    console.error("🔹 Error in RefreshPreviews:", error);
-  }
-}
 
 const search4type = (type) => {
   try {
@@ -139,7 +120,7 @@ app.registerExtension({
     if (nodeInfo.category === "Photoshop") {
       appendMenuOption(nodeType, (_, menuOptions) => {
         menuOptions.unshift({
-          content: "🔹 Install PS Plugin V1.5.0 (auto)🔮",
+          content: "🔹 Install PS Plugin V1.6.0 (auto)🔮",
           callback: () => sendMsg("install_plugin"),
         });
       });
@@ -162,8 +143,8 @@ app.registerExtension({
       console.error("🔹 Error in onProgressUpdate:", error);
     }
   },
+
   async nodeCreated(node) {
-    // console.log("node: ", node);
     try {
       if (!workflowSwitcher) {
         const nodes = search4typeMulti("Fast Groups Muter (rgthree)");
@@ -185,10 +166,6 @@ app.registerExtension({
             return;
           }
         });
-      }
-
-      if (node?.comfyClass === "🔹Photoshop ComfyUI Plugin") {
-        connect();
       }
     } catch (error) {
       console.error("🔹 Error in nodeCreated:", error);

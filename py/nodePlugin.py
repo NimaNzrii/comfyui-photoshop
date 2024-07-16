@@ -1,3 +1,4 @@
+from nodes import SaveImage
 import hashlib
 import asyncio
 import json
@@ -145,64 +146,84 @@ class PhotoshopToComfyUI:
             return 0
 
 
-class ComfyUIToPhotoshop:
-    INPUT_TYPES = lambda: {"required": {"output": ("IMAGE",)}}
-    RETURN_TYPES = ()
-    OUTPUT_NODE = True
+class ComfyUIToPhotoshop(SaveImage):
+    def __init__(self):
+        self.output_dir = folder_paths.get_temp_directory()
+        self.type = "temp"
+        self.prefix_append = "_temp_"
+        self.compress_level = 4
+
+    @staticmethod
+    def INPUT_TYPES():
+        return {
+            "required": {
+                "output": ("IMAGE",),
+            },
+            "hidden": {"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"},
+        }
+
     FUNCTION = "execute"
     CATEGORY = "Photoshop"
 
-    async def connect_to_backend(self):
-        url = "http://127.0.0.1:8188/ps/renderdone"
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                return await response.text()
-
-    def svimg(self, img: torch.Tensor):
+    async def connect_to_backend(self, filename):
         try:
-            renderDir = os.path.join(nodepath, "data", "render.png")
-
-            if len(img.shape) == 4 and img.shape[0] == 1:
-                img = img.squeeze(0)
-            if len(img.shape) != 3 or img.shape[2] != 3:
-                raise ValueError(
-                    f"Input image must have 3 channels and a 3-dimensional shape, but got {img.shape}"
-                )
-
-            img = img.permute(2, 0, 1)
-            img = img.clamp(0, 1).numpy() * 255
-            img = img.astype("uint8")
-            img = Image.fromarray(img.transpose(1, 2, 0))
-
-            with BytesIO() as output:
-                img.save(output, format="PNG")
-                output.seek(0)
-                img_no_metadata = Image.open(output)
-                img_no_metadata.save(renderDir, format="PNG")
-
-            return "render"
-        except Exception as e:
-            print(f"_PS_ An error occurred: {e}")
-            return "error"
-
-    def execute(self, output: torch.Tensor):
-        try:
-            assert isinstance(output, torch.Tensor)
-            self.image = output
-            result = self.svimg(self.image)
-            if result == "render":
-                asyncio.run(self.connect_to_backend())
+            url = f"http://127.0.0.1:8188/ps/renderdone?filename={filename}"
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as response:
+                    return await response.text()
         except Exception as e:
             print(f"_PS_ error on send2Ps: {e}")
-        return ()
+
+    def execute(
+        self,
+        output: torch.Tensor,
+        filename_prefix="PS_OUTPUTS",
+        prompt=None,
+        extra_pnginfo=None,
+    ):
+        x = self.save_images(output, filename_prefix, prompt, extra_pnginfo)
+        asyncio.run(self.connect_to_backend(x["ui"]["images"][0]["filename"]))
+        return x
+
+
+class ClipPass:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {"required": {"clip": ("CLIP",)}}
+
+    RETURN_TYPES = ("CLIP",)
+    RETURN_NAMES = ("clip",)
+    FUNCTION = "exe"
+    CATEGORY = "utils"
+
+    def exe(self, clip):
+        return (clip,)
+
+
+class modelPass:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {"required": {"model": ("MODEL",)}}
+
+    RETURN_TYPES = ("MODEL",)
+    RETURN_NAMES = ("model",)
+    FUNCTION = "exe"
+    CATEGORY = "utils"
+
+    def exe(self, model):
+        return (model,)
 
 
 NODE_CLASS_MAPPINGS = {
     "🔹Photoshop ComfyUI Plugin": PhotoshopToComfyUI,
     "🔹SendTo Photoshop Plugin": ComfyUIToPhotoshop,
+    "🔹ClipPass": ClipPass,
+    "🔹modelPass": modelPass,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "PhotoshopToComfyUI": "🔹Photoshop ComfyUI Plugin",
     "SendToPhotoshop": "🔹Send To Photoshop",
+    "ClipPass": "🔹ClipPass",
+    "modelPass": "🔹modelPass",
 }

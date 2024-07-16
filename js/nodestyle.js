@@ -1,17 +1,19 @@
-import { addListener, sendMsg } from "./connection.js";
+import { connect, sendMsg } from "./connection.js";
 import { loadWorkflow } from "./manager.js";
 import { app as app } from "../../../scripts/app.js";
 import { api as api } from "../../../scripts/api.js";
 
 let photoshopNode = [];
 let disabledrow = false;
-let firstload = true;
-let nodever = "1.5.0";
+let nodever = "1.6.0";
 const canvasImage = await api.fetchApi(`/ps/inputs/PS_canvas.png`);
 const maskImage = await api.fetchApi(`/ps/inputs/PS_mask.png`);
 
-// تابع برای تنظیم پس‌زمینه نود
 function setBackgroundImageContain(node, canvasUrl, maskUrl) {
+  if (node.mode === 2) {
+    return;
+  }
+
   const fetchImage = (url) => {
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -25,10 +27,9 @@ function setBackgroundImageContain(node, canvasUrl, maskUrl) {
     .then(([canvasImg, maskImg]) => {
       const drawImage = () => {
         if (!disabledrow) {
-          // چک کردن پراپرتی "Disable Preview"
           if (node.properties && node.properties["Disable Preview"]) {
-            node.onDrawBackground = null; // غیر فعال کردن رسم تصویر
-            node.setDirtyCanvas(true, true); // به روزرسانی بوم
+            node.onDrawBackground = null;
+            node.setDirtyCanvas(true, true);
             return;
           }
 
@@ -69,13 +70,11 @@ function setBackgroundImageContain(node, canvasUrl, maskUrl) {
     });
 }
 
-async function previewonthenode() {
-  photoshopNode.forEach((node) => {
-    const timestamp = new Date().getTime();
-    const canvasImageUrl = `${canvasImage.url}?v=${timestamp}`;
-    const maskImageUrl = `${maskImage.url}?v=${timestamp}`;
-    setBackgroundImageContain(node, canvasImageUrl, maskImageUrl);
-  });
+async function previewonthenode(node) {
+  const timestamp = new Date().getTime();
+  const canvasImageUrl = `${canvasImage.url}?v=${timestamp}`;
+  const maskImageUrl = `${maskImage.url}?v=${timestamp}`;
+  setBackgroundImageContain(node, canvasImageUrl, maskImageUrl);
 }
 
 function drawUpdateTextAndRoundedStroke(ctx, node) {
@@ -151,42 +150,55 @@ function addRemoveButtons(node, add) {
 }
 
 function handleMouseEvents(node) {
+  const originalOnDrawForeground = node.onDrawForeground;
+
   node.onMouseEnter = () => {
+    node.onDrawForeground = function (ctx) {
+      if (originalOnDrawForeground) originalOnDrawForeground.call(this, ctx);
+      ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
+      ctx.fillRect(0, 0, node.size[0], node.size[1]);
+    };
     const tempButtonExists = node.widgets && node.widgets.some((widget) => widget.className === "temp-button");
     if (!tempButtonExists) {
       addRemoveButtons(node, true);
     }
+    node.setDirtyCanvas(true, true);
   };
+
   node.onMouseLeave = () => {
+    node.onDrawForeground = originalOnDrawForeground;
     if (!node.properties || !node.properties["Dont Hide Buttons"]) {
       addRemoveButtons(node, false);
     }
+    node.setDirtyCanvas(true, true);
   };
 }
 
 // Register extension with ComfyUI
 app.registerExtension({
   name: "PhotoshopToComfyUINode2",
+  setup() {
+    if (photoshopNode) {
+      connect();
+      checkForNewVersion(nodever);
+
+      photoshopNode.forEach((node) => previewonthenode(node));
+    }
+  },
   async nodeCreated(node) {
     try {
       if (node?.comfyClass === "🔹Photoshop ComfyUI Plugin") {
-        firstload = true;
         photoshopNode.push(node);
-        previewonthenode();
         addBooleanProperty(node);
         handleMouseEvents(node);
-        checkForNewVersion(nodever);
-
-        if (node.properties && node.properties["Dont Hide Buttons"]) {
-          addRemoveButtons(node, true);
-        }
+        if (node.properties && node.properties["Dont Hide Buttons"]) addRemoveButtons(node, true);
       }
     } catch (error) {
       console.error("🔹 Error in nodeCreated:", error);
     }
   },
 });
-api.addEventListener("execution_start", () => previewonthenode());
+api.addEventListener("execution_start", () => photoshopNode.forEach((node) => previewonthenode(node)));
 
 let versionUrl = "https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/data/PreviewFiles/version.json";
 

@@ -115,6 +115,8 @@ async def websocket_handler(request):
 
     elif platform == "cm":
         comfyui_users.append(client_id)
+        if len(photoshop_users) > 0:
+            await send_message(comfyui_users, "photoshopConnected")
 
     async for msg in ws:
         if msg.type == WSMsgType.TEXT:
@@ -200,7 +202,10 @@ async def get_workflow(request):
 async def handle_render_done(request):
     print("# PS: render done")
     try:
-        with open(os.path.join(plugin_path, "data", "render.png"), "rb") as image_file:
+        filename = request.rel_url.query.get("filename")
+        patch = os.path.join(folder_paths.get_temp_directory(), filename)
+
+        with open(patch, "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
         await send_message(photoshop_users, "render", encoded_string)
     except Exception as e:
