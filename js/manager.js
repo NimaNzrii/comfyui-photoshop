@@ -147,25 +147,19 @@ app.registerExtension({
   async nodeCreated(node) {
     try {
       if (!workflowSwitcher) {
-        const nodes = search4typeMulti("Fast Groups Muter (rgthree)");
-        nodes.forEach((node) => {
-          if (node.color === "#2b4557" || node.bgcolor === "#2b4557" || node.title === "📁 WorkFlows") {
-            workflowSwitcher = node;
-            console.log("workflowSwitcher: ", workflowSwitcher);
-            return;
-          }
-        });
+        if (node.type == "Fast Groups Muter (rgthree)" || node.color === "#2b4557" || node.bgcolor === "#2b4557" || node.title === "📁 WorkFlows") {
+          workflowSwitcher = node;
+          console.log("workflowSwitcher: ", workflowSwitcher);
+          return;
+        }
       }
 
       if (!rndrModeSwitcher) {
-        const nodes = search4typeMulti("Fast Groups Muter (rgthree)");
-        nodes.forEach((node) => {
-          if (node.color === "#4e5e4e" || node.bgcolor === "#4e5e4e" || node.title === "⚙️ Render Setting") {
-            rndrModeSwitcher = node;
-            console.log("rndrModeSwitcher: ", rndrModeSwitcher);
-            return;
-          }
-        });
+        if (node.type == "Fast Groups Muter (rgthree)" || node.color === "#4e5e4e" || node.bgcolor === "#4e5e4e" || node.title === "⚙️ Render Setting") {
+          rndrModeSwitcher = node;
+          console.log("rndrModeSwitcher: ", rndrModeSwitcher);
+          return;
+        }
       }
     } catch (error) {
       console.error("🔹 Error in nodeCreated:", error);
