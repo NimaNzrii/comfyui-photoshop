@@ -83,11 +83,11 @@ const handleSocketMessage = async (event) => {
   }
 
   if (msg.Send_workflow) {
-    updateDropdown(workFlowOptions, msg.Send_workflow, "Preset: ", workFlowDropDown);
+    updateDropdown(workFlowOptions, msg.Send_workflow, "📁: ", workFlowDropDown);
   }
 
   if (msg.Send_rndrMode) {
-    updateDropdown(rndrModeOptions, msg.Send_rndrMode, "Render: ", rndrModeDropDown);
+    updateDropdown(rndrModeOptions, msg.Send_rndrMode, "⚙️: ", rndrModeDropDown);
   }
 };
 
