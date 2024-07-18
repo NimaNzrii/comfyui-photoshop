@@ -3,11 +3,9 @@ import { loadWorkflow } from "./manager.js";
 import { app as app } from "../../../scripts/app.js";
 import { api as api } from "../../../scripts/api.js";
 
-export let photoshopNode = [];
-let setupdone = false;
-let connectdone = false;
+let photoshopNode = [];
 let disabledrow = false;
-let nodever = "1.6.5";
+let nodever = "1.6.0";
 const canvasImage = await api.fetchApi(`/ps/inputs/PS_canvas.png`);
 const maskImage = await api.fetchApi(`/ps/inputs/PS_mask.png`);
 
@@ -176,25 +174,17 @@ function handleMouseEvents(node) {
   };
 }
 
-// Define the setup function
-function setup() {
-  if (photoshopNode.length > 0 && !setupdone) {
-    if (!connectdone) {
-      connect();
-      checkForNewVersion(nodever);
-      connectdone = true;
-    }
-    setTimeout(() => {
-      photoshopNode.forEach((node) => previewonthenode(node));
-      setupdone = true;
-    }, 6000);
-  }
-}
-
 // Register extension with ComfyUI
 app.registerExtension({
   name: "PhotoshopToComfyUINode2",
-  setup: setup, // Reference the setup function here
+  setup() {
+    if (photoshopNode) {
+      connect();
+      checkForNewVersion(nodever);
+
+      photoshopNode.forEach((node) => previewonthenode(node));
+    }
+  },
   async nodeCreated(node) {
     try {
       if (node?.comfyClass === "🔹Photoshop ComfyUI Plugin") {
@@ -202,15 +192,12 @@ app.registerExtension({
         addBooleanProperty(node);
         handleMouseEvents(node);
         if (node.properties && node.properties["Dont Hide Buttons"]) addRemoveButtons(node, true);
-        setupdone = false;
-        setup();
       }
     } catch (error) {
       console.error("🔹 Error in nodeCreated:", error);
     }
   },
 });
-
 api.addEventListener("execution_start", () => photoshopNode.forEach((node) => previewonthenode(node)));
 
 let versionUrl = "https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/data/PreviewFiles/version.json";

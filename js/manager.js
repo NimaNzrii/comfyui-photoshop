@@ -1,7 +1,6 @@
 import { app as app } from "../../../scripts/app.js";
 import { api as api } from "../../../scripts/api.js";
 import { sendMsg, addListener } from "./connection.js";
-import { photoshopNode } from "./nodestyle.js";
 
 let QuickEdit_LoadImage = "";
 let workflowSwitcher = "";
@@ -36,7 +35,7 @@ addListener("alert", (data) => {
 addListener("queue", (data) => {
   try {
     if (!isProcessing) {
-      if (photoshopNode.length > 0) {
+      if (search4title("🔹Photoshop ComfyUI Plugin")) {
         isProcessing = true;
         (function processQueue() {
           if (genrateStatus == "genrated") {
@@ -63,6 +62,40 @@ addListener("rndrMode", (data) => {
   }
 });
 
+const search4type = (type) => {
+  try {
+    return app.graph._nodes.find((node) => node.type === type);
+  } catch (error) {
+    console.error("🔹 Error in search4type:", error);
+  }
+};
+const search4typeMulti = (type) => {
+  try {
+    return app.graph._nodes.filter((node) => node.type === type);
+  } catch (error) {
+    console.error("🔹 Error in search4type:", error);
+  }
+};
+const search4class = (type) => {
+  return app.graph._nodes.find((node) => node.class === type);
+};
+
+const search4title = (title) => {
+  try {
+    return app.graph._nodes.find((node) => node.title === title);
+  } catch (error) {
+    console.error("🔹 Error in search4title:", error);
+  }
+};
+
+const search4titlestartwith = (title) => {
+  try {
+    return app.graph._nodes.find((node) => node.title.startsWith(title));
+  } catch (error) {
+    console.error("🔹 Error in search4titlestartwith:", error);
+  }
+};
+
 const SwitcherWidgetNames = (switcher) => {
   try {
     let widgetNames = [];
@@ -87,7 +120,7 @@ app.registerExtension({
     if (nodeInfo.category === "Photoshop") {
       appendMenuOption(nodeType, (_, menuOptions) => {
         menuOptions.unshift({
-          content: "🔹 Install PS Plugin V1.6.5 (auto)🔮",
+          content: "🔹 Install PS Plugin V1.6.0 (auto)🔮",
           callback: () => sendMsg("install_plugin"),
         });
       });
@@ -114,19 +147,17 @@ app.registerExtension({
   async nodeCreated(node) {
     try {
       if (!workflowSwitcher) {
-        if (node.comfyClass == "Fast Groups Muter (rgthree)" && (node.color === "#2b4557" || node.bgcolor === "#2b4557" || node?.title?.startsWith("📁"))) {
+        if (node.type == "Fast Groups Muter (rgthree)" || node.color === "#2b4557" || node.bgcolor === "#2b4557" || node.title === "📁 WorkFlows") {
           workflowSwitcher = node;
           console.log("workflowSwitcher: ", workflowSwitcher);
-          workflowswitcherchecker();
           return;
         }
       }
 
       if (!rndrModeSwitcher) {
-        if (node.comfyClass == "Fast Groups Muter (rgthree)" && (node.color === "#4e5e4e" || node.bgcolor === "#4e5e4e" || node?.title?.startsWith("⚙️"))) {
+        if (node.type == "Fast Groups Muter (rgthree)" || node.color === "#4e5e4e" || node.bgcolor === "#4e5e4e" || node.title === "⚙️ Render Setting") {
           rndrModeSwitcher = node;
           console.log("rndrModeSwitcher: ", rndrModeSwitcher);
-          rndrswitcherchecker();
           return;
         }
       }
@@ -205,38 +236,4 @@ export function appendMenuOption(nodeType, callbackFn) {
     callbackFn.apply(this, arguments);
     return options;
   };
-}
-
-function workflowswitcherchecker() {
-  let previousWorkflowWidgets = JSON.stringify(workflowSwitcher?.widgets);
-
-  setInterval(() => {
-    try {
-      const currentWorkflowWidgets = JSON.stringify(workflowSwitcher?.widgets);
-      if (currentWorkflowWidgets !== previousWorkflowWidgets) {
-        console.log("Workflow switcher widgets have changed");
-        sendMsg("Send_workflow", SwitcherWidgetNames(workflowSwitcher));
-        previousWorkflowWidgets = currentWorkflowWidgets;
-      }
-    } catch (error) {
-      console.error("🔹 Error in workflow switcher widget change detection:", error);
-    }
-  }, 3000);
-}
-
-function rndrswitcherchecker() {
-  let previousRndrModeWidgets = JSON.stringify(rndrModeSwitcher?.widgets);
-
-  setInterval(() => {
-    try {
-      const currentRndrModeWidgets = JSON.stringify(rndrModeSwitcher?.widgets);
-      if (currentRndrModeWidgets !== previousRndrModeWidgets) {
-        console.log("Render mode switcher widgets have changed");
-        sendMsg("Send_rndrMode", SwitcherWidgetNames(rndrModeSwitcher));
-        previousRndrModeWidgets = currentRndrModeWidgets;
-      }
-    } catch (error) {
-      console.error("🔹 Error in render mode switcher widget change detection:", error);
-    }
-  }, 3000);
 }
