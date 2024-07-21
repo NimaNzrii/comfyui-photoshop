@@ -56,7 +56,7 @@ class PhotoshopToComfyUI:
 
         return (
             self.canvas,
-            self.mask,
+            self.mask.unsqueeze(0),
             sliderValue,
             int(self.seed),
             self.psPrompt,
