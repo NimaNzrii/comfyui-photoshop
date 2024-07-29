@@ -1,10 +1,10 @@
 let socket = null;
 let listeners = {};
 
-// Function to establish WebSocket connection
 function connect() {
   try {
-    socket = new WebSocket("ws://127.0.0.1:8188/ps/ws?platform=cm&clientId=" + generateClientId());
+    let socket = new WebSocket("ws://" + window.location.hostname + ":8188/ps/ws?platform=cm&clientId=" + generateClientId());
+    console.log("🔹window.location.hostname: ", window.location.hostname);
 
     socket.addEventListener("open", () => {
       console.log("🔹 Connected to the server.");
