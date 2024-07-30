@@ -3,8 +3,7 @@ let listeners = {};
 
 function connect() {
   try {
-    let socket = new WebSocket("ws://" + window.location.hostname + ":8188/ps/ws?platform=cm&clientId=" + generateClientId());
-    console.log("🔹window.location.hostname: ", window.location.hostname);
+    socket = new WebSocket("ws://" + window.location.hostname + ":8188/ps/ws?platform=cm&clientId=" + generateClientId());
 
     socket.addEventListener("open", () => {
       console.log("🔹 Connected to the server.");
