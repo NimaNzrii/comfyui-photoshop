@@ -1,9 +1,9 @@
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue)](https://www.linkedin.com/in/nima-nazari-2904a2211/)
+[![Discord](https://img.shields.io/badge/Discord-Join%20Server-blue)](https://discord.com/invite/3eHAMWnx7Y)
 [![Email](https://img.shields.io/badge/Email-nimanzriart@gmail.com-red)](mailto:nimanzriart@gmail.com)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support%20Me-yellow)](https://studio.buymeacoffee.com/dashboard)
 [![GitHub](https://img.shields.io/github/stars/NimaNzrii/comfyui-photoshop?style=social)](https://github.com/NimaNzrii/comfyui-photoshop)
 
-[![youtubelink](https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/data/PreviewFiles/pr3.webp)](https://www.youtube.com/watch?v=dChOlGzeiMs)
+[![youtubelink](https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/data/PreviewFiles/pr3.webp)](https://www.youtube.com/watch?v=i__ciRbs3VA&t=40s)
 
 
 ---
