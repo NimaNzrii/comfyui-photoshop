@@ -35,11 +35,13 @@ class MethodOne:
         self.system = platform.system()
 
     def is_admin(self):
-        try:
-            return ctypes.windll.shell32.IsUserAnAdmin()
-        except Exception as e:
-            print(f"Error checking admin status: {e}")
-            return False
+        if self.system == "Windows":
+            try:
+                return ctypes.windll.shell32.IsUserAnAdmin()
+            except Exception as e:
+                print(f"Error checking admin status: {e}")
+                return False
+        return True
 
     def request_admin_privileges(self):
         if not self.is_admin():
@@ -134,17 +136,17 @@ class MethodTwo:
         self.plugin_folder = plugin_folder
         self.system = platform.system()
 
-    # تابع برای بررسی وضعیت ادمین بودن کاربر
     def is_admin(self):
-        try:
-            return ctypes.windll.shell32.IsUserAnAdmin()
-        except Exception as e:
-            print(f"Error checking admin status: {e}")
-            return False
+        if self.system == "Windows":
+            try:
+                return ctypes.windll.shell32.IsUserAnAdmin()
+            except Exception as e:
+                print(f"Error checking admin status: {e}")
+                return False
+        return True  # Default to True for non-Windows systems
 
-    # درخواست دسترسی ادمین در صورت عدم دسترسی
     def request_admin_privileges(self):
-        if not self.is_admin():
+        if self.system == "Windows" and not self.is_admin():
             try:
                 print("Requesting admin privileges...")
                 params = " ".join([f'"{arg}"' for arg in sys.argv])
@@ -156,7 +158,6 @@ class MethodTwo:
                 print(f"Failed to request admin privileges: {e}")
                 sys.exit(1)
 
-    # نصب پلاگین
     def install_plugin(self):
         try:
             if self.system == "Windows":
