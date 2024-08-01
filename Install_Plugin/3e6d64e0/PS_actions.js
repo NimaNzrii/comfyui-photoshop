@@ -100,23 +100,25 @@ const addToLayer = function () {
           const placedLayerHeight = placedLayer.bounds.height;
 
           // Check if the placed image is smaller than the document
-          if (placedLayerWidth < docWidth || placedLayerHeight < docHeight) {
-            const scaleX = (docWidth / placedLayerWidth) * 100;
-            const scaleY = (docHeight / placedLayerHeight) * 100;
+          const scale = Math.min((docWidth / placedLayerWidth), (docHeight / placedLayerHeight));
 
-            await batchPlay(
+          // if (placedLayerWidth < docWidth || placedLayerHeight < docHeight) {
+          //   const scaleX = (docWidth / placedLayerWidth) * 100;
+          //   const scaleY = (docHeight / placedLayerHeight) * 100;
+
+          await batchPlay(
               [
                 {
                   _obj: "transform",
                   freeTransformCenterState: { _enum: "quadCenterState", _value: "QCSAverage" },
-                  width: { _unit: "percentUnit", _value: scaleX },
-                  height: { _unit: "percentUnit", _value: scaleY },
+                  width: { _unit: "percentUnit", _value: scale * 100 },
+                  height: { _unit: "percentUnit", _value: scale * 100 },
                   _options: { dialogOptions: "dontDisplay" },
                 },
               ],
               {}
-            );
-          }
+          );
+          // }
 
           if (bounds) {
             setTimeout(() => {}, 100);
