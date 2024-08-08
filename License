@@ -1,0 +1,28 @@
+License for ComfyUI-Photoshop plugin and Custom-node
+
+This software is licensed under the MIT License with the following additional terms:
+
+1. Grant of Rights
+- Custom Nodes and ComfyUI Modifications:
+  Users are granted the right to use and modify custom nodes within ComfyUI for personal or commercial purposes. However, any changes or improvements made to the custom nodes must be shared with the community and be open for integration into the main project.
+  
+- Plugin Modifications and Distribution:
+  Users are allowed to fork and modify this plugin, but any changes or updates must be submitted as merge requests to the original repository for review and potential inclusion in future versions. Users are not permitted to sell or distribute modified versions of this plugin without explicit written consent from Nima Nazari. Any collaboration or partnership for commercial use must be negotiated separately.
+
+2. Use of Generated Images
+- Commercial Use:
+  The usage of images generated using this plugin is governed by the models and checkpoints used within ComfyUI and Stable Diffusion. Users are responsible for ensuring they comply with the licenses and terms associated with those models. Nima Nazari holds no liability regarding the commercial use of generated images, provided that the usage is consistent with the terms of the model providers.
+
+3. Ownership and Contributions
+- Ownership:
+  The original author retains ownership of the plugin code and all associated intellectual property. Contributions to the project, including submitted pull requests, are granted under the same license as the original project.
+
+4. Disclaimer
+This software is provided "as-is," without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. In no event shall the authors be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the software.
+
+5. Additional Terms
+Any additional terms that are not covered by this license must be negotiated separately with Nima Nazari.
+
+Nima Nazari
+
+Date: 2024-08-08
