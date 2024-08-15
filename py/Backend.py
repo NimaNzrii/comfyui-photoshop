@@ -139,6 +139,7 @@ async def handle_message(client_id, platform, data):
 
     elif platform == "ps":
         try:
+            # ابتدا پردازش کلیدهای دیگر
             if "canvasBase64" in msg:
                 await save_file(msg["canvasBase64"], "PS_canvas.png")
             if "maskBase64" in msg:
@@ -147,9 +148,22 @@ async def handle_message(client_id, platform, data):
                 await save_config(msg["configdata"])
             if "workspace" in msg:
                 await send_message(comfyui_users, "workspace", msg["workspace"])
+
+            # بررسی وجود کلید queue
+            if "queue" in msg and msg["queue"]:
+                # در نهایت ارسال پیام queue به سمت comfyui
+                await send_message(comfyui_users, "queue", msg["queue"])
+
+            # سایر پیام‌های معمولی که کلید خاصی ندارند
             if not any(
                 key in msg
-                for key in ["configdata", "maskBase64", "canvasBase64", "workspace"]
+                for key in [
+                    "configdata",
+                    "maskBase64",
+                    "canvasBase64",
+                    "workspace",
+                    "queue",
+                ]
             ):
                 await send_message(comfyui_users, "", json.dumps(msg))
         except Exception as e:
