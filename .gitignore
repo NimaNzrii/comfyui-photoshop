@@ -1,0 +1,8 @@
+py/__pycache__
+__pycache__
+Install_Plugin/__pycache__
+Install_Plugin/plugincode
+data/ps_inputs
+data/ps_inputs/config.json
+data/ps_inputs/PS_canvas.png
+data/ps_inputs/PS_mask.png

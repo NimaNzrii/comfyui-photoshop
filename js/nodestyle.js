@@ -7,7 +7,7 @@ export let photoshopNode = [];
 let setupdone = false;
 let connectdone = false;
 let disabledrow = false;
-let nodever = "1.6.5";
+let nodever = "1.8.2";
 const canvasImage = await api.fetchApi(`/ps/inputs/PS_canvas.png`);
 const maskImage = await api.fetchApi(`/ps/inputs/PS_mask.png`);
 

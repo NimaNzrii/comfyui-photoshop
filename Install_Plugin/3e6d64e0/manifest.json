@@ -1,157 +1,197 @@
 {
-  "id": "3e6d64e0",
-  "name": "ComfyUI for adobe Photoshop",
-  "version": "1.6.5",
-  "main": "index.html",
-  "host": {
-    "app": "PS",
-    "minVersion": "22.5.0"
-  },
-  "manifestVersion": 5,
-  "requiredPermissions": {
-    "ipc": {
-      "enablePluginCommunication": true
-    },
-    "webview": {
-      "allow": "yes",
-      "domains": "all",
-      "enableMessageBridge": "localAndRemote"
-    },
-    "network": {
-      "domains": "all"
-    },
-    "launchProcess": {
-      "schemes": ["https"]
-    },
-    "localFileSystem": "fullAccess"
-  },
-  "entrypoints": [
-    {
-      "type": "panel",
-      "id": "mainpanel",
-      "label": "AI Panel",
-      "minimumSize": {
-        "width": 250,
-        "height": 250
-      },
-      "maximumSize": {
-        "width": 2000,
-        "height": 2000
-      },
-      "preferredDockedSize": {
-        "width": 300,
-        "height": 350
-      },
-      "preferredFloatingSize": {
-        "width": 300,
-        "height": 350
-      },
-      "icons": [
-        {
-          "width": 23,
-          "height": 23,
-          "path": "icons/plugin.png",
-          "scale": [1, 2],
-          "theme": ["darkest", "dark", "medium"],
-          "species": ["chrome"]
-        },
-        {
-          "width": 23,
-          "height": 23,
-          "path": "icons/plugin.png",
-          "scale": [1, 2],
-          "theme": ["lightest", "light"],
-          "species": ["chrome"]
-        }
-      ]
-    },
-    {
-      "type": "panel",
-      "id": "settingpanel",
-      "label": "Settings",
-      "minimumSize": {
-        "width": 250,
-        "height": 250
-      },
-      "maximumSize": {
-        "width": 2000,
-        "height": 2000
-      },
-      "preferredDockedSize": {
-        "width": 635,
-        "height": 350
-      },
-      "preferredFloatingSize": {
-        "width": 635,
-        "height": 350
-      },
-      "icons": [
-        {
-          "width": 23,
-          "height": 23,
-          "path": "icons/plugin.png",
-          "scale": [1, 2],
-          "theme": ["darkest", "dark", "medium"],
-          "species": ["chrome"]
-        },
-        {
-          "width": 23,
-          "height": 23,
-          "path": "icons/plugin.png",
-          "scale": [1, 2],
-          "theme": ["lightest", "light"],
-          "species": ["chrome"]
-        }
-      ]
-    },
-    {
-      "type": "panel",
-      "id": "comfypanel",
-      "label": "ComfyUI WebApp",
-      "minimumSize": {
-        "width": 250,
-        "height": 250
-      },
-      "maximumSize": {
-        "width": 2000,
-        "height": 2000
-      },
-      "preferredDockedSize": {
-        "width": 600,
-        "height": 450
-      },
-      "preferredFloatingSize": {
-        "width": 600,
-        "height": 400
-      },
-      "icons": [
-        {
-          "width": 23,
-          "height": 23,
-          "path": "icons/plugin.png",
-          "scale": [1, 2],
-          "theme": ["darkest", "dark", "medium"],
-          "species": ["chrome"]
-        },
-        {
-          "width": 23,
-          "height": 23,
-          "path": "icons/plugin.png",
-          "scale": [1, 2],
-          "theme": ["lightest", "light"],
-          "species": ["chrome"]
-        }
-      ]
-    }
-  ],
-  "icons": [
-    {
-      "width": 48,
-      "height": 48,
-      "path": "icons/plugin.png",
-      "scale": [1, 2],
-      "theme": ["dark", "darkest", "medium", "lightest", "light", "all"],
-      "species": ["pluginList"]
-    }
-  ]
+	"id": "3e6d64e0",
+	"name": "Comfyui Photoshop",
+	"version": "1.8.2",
+	"main": "index.html",
+	"manifestVersion": 6,
+	"host": {
+		"app": "PS",
+		"minVersion": "22.5.0"
+	},
+	"entrypoints": [
+		{
+			"type": "panel",
+			"id": "comfyui.photoshop.plugin.panel",
+			"label": {
+				"default": "Ai Panel"
+			},
+			"minimumSize": {
+				"width": 250,
+				"height": 250
+			},
+			"maximumSize": {
+				"width": 2000,
+				"height": 2000
+			},
+			"preferredDockedSize": {
+				"width": 300,
+				"height": 320
+			},
+			"preferredFloatingSize": {
+				"width": 300,
+				"height": 320
+			},
+			"icons": [
+				{
+					"width": 23,
+					"height": 23,
+					"path": "icons/dark.png",
+					"scale": [
+						1,
+						2
+					],
+					"theme": [
+						"darkest",
+						"dark",
+						"medium",
+						"lightest",
+						"light",
+						"all"
+					]
+				}
+			]
+		},
+		{
+			"type": "panel",
+			"id": "comfyui.photoshop.plugin.settings",
+			"label": {
+				"default": "Settings"
+			},
+			"minimumSize": {
+				"width": 250,
+				"height": 250
+			},
+			"maximumSize": {
+				"width": 2000,
+				"height": 2000
+			},
+			"preferredDockedSize": {
+				"width": 635,
+				"height": 350
+			},
+			"preferredFloatingSize": {
+				"width": 635,
+				"height": 350
+			},
+			"icons": [
+				{
+					"width": 23,
+					"height": 23,
+					"path": "icons/settings.png",
+					"scale": [
+						1,
+						2
+					],
+					"theme": [
+						"darkest",
+						"dark",
+						"medium",
+						"lightest",
+						"light",
+						"all"
+					],
+					"species": [
+						"chrome"
+					]
+				}
+			]
+		},
+		{
+			"type": "panel",
+			"id": "comfyui.photoshop.plugin.web",
+			"label": {
+				"default": "ComfyUI Web"
+			},
+			"minimumSize": {
+				"width": 250,
+				"height": 250
+			},
+			"maximumSize": {
+				"width": 2000,
+				"height": 2000
+			},
+			"preferredDockedSize": {
+				"width": 635,
+				"height": 350
+			},
+			"preferredFloatingSize": {
+				"width": 635,
+				"height": 350
+			},
+			"icons": [
+				{
+					"width": 23,
+					"height": 23,
+					"path": "icons/comfy.png",
+					"scale": [
+						1,
+						2
+					],
+					"theme": [
+						"darkest",
+						"dark",
+						"medium",
+						"lightest",
+						"light",
+						"all"
+					],
+					"species": [
+						"chrome"
+					]
+				}
+			]
+		}
+	],
+	"requiredPermissions": {
+		"localFileSystem": "fullAccess",
+		"launchProcess": {
+			"schemes": [
+				"https",
+				"slack",
+				"file",
+				"ws"
+			],
+			"extensions": [
+				".xd",
+				".psd",
+				".bat",
+				".cmd"
+			]
+		},
+		"network": {
+			"domains": "all"
+		},
+		"clipboard": "readAndWrite",
+		"webview": {
+			"allow": "yes",
+			"domains": "all",
+			"enableMessageBridge": "localAndRemote"
+		},
+		"ipc": {
+			"enablePluginCommunication": true
+		},
+		"allowCodeGenerationFromStrings": true
+	},
+	"icons": [
+		{
+			"width": 48,
+			"height": 48,
+			"path": "icons/dark.png",
+			"scale": [
+				1,
+				2
+			],
+			"theme": [
+				"darkest",
+				"dark",
+				"medium",
+				"lightest",
+				"light",
+				"all"
+			],
+			"species": [
+				"pluginList"
+			]
+		}
+	]
 }
