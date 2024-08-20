@@ -10,12 +10,11 @@ import numpy as np
 from PIL import Image, ImageOps
 from io import BytesIO
 import folder_paths
-import sys
 import torchvision.transforms.functional as tf
 import aiohttp
 
 
-sys.stdout.reconfigure(encoding="utf-8")
+
 nodepath = os.path.join(
     folder_paths.get_folder_paths("custom_nodes")[0], "comfyui-photoshop"
 )
