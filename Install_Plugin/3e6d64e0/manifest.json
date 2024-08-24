@@ -1,12 +1,12 @@
 {
 	"id": "3e6d64e0",
 	"name": "Comfyui Photoshop",
-	"version": "1.8.1",
+	"version": "1.9.0",
 	"main": "index.html",
 	"manifestVersion": 6,
 	"host": {
 		"app": "PS",
-		"minVersion": "22.5.0"
+		"minVersion": "23.0.0"
 	},
 	"entrypoints": [
 		{
@@ -28,8 +28,8 @@
 				"height": 320
 			},
 			"preferredFloatingSize": {
-				"width": 300,
-				"height": 320
+				"width": 400,
+				"height": 420
 			},
 			"icons": [
 				{
@@ -66,12 +66,12 @@
 				"height": 2000
 			},
 			"preferredDockedSize": {
-				"width": 635,
-				"height": 350
+				"width": 595,
+				"height": 400
 			},
 			"preferredFloatingSize": {
-				"width": 635,
-				"height": 350
+				"width": 595,
+				"height": 400
 			},
 			"icons": [
 				{
@@ -111,12 +111,12 @@
 				"height": 2000
 			},
 			"preferredDockedSize": {
-				"width": 635,
-				"height": 350
+				"width": 595,
+				"height": 400
 			},
 			"preferredFloatingSize": {
-				"width": 635,
-				"height": 350
+				"width": 595,
+				"height": 400
 			},
 			"icons": [
 				{
@@ -149,13 +149,15 @@
 				"https",
 				"slack",
 				"file",
-				"ws"
+				"ws",
+				"mailto"
 			],
 			"extensions": [
 				".xd",
 				".psd",
 				".bat",
-				".cmd"
+				".cmd",
+				".sh"
 			]
 		},
 		"network": {
