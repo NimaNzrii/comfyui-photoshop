@@ -1,5 +1,6 @@
-py/__pycache__/
-__pycache__/
-Install_Plugin/__pycache__/
-Install_Plugin/plugincode/
-data/ps_inputs/
+py/__pycache__
+__pycache__
+Install_Plugin/__pycache__
+Install_Plugin/plugincode
+data/ps_inputs
+
