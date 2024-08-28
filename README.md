@@ -1,5 +1,3 @@
-Here's the updated README with the system requirements included as a note within the installation section:
-
 <div align="center">
 
 # ✨ ComfyUI Photoshop Plugin    [![GitHub Stars](https://img.shields.io/github/stars/NimaNzrii/comfyui-photoshop?style=social)](https://github.com/NimaNzrii/comfyui-photoshop)
