@@ -3,7 +3,6 @@ import { api as api } from "../../../scripts/api.js";
 import { sendMsg, addListener } from "./connection.js";
 import { photoshopNode } from "./nodestyle.js";
 
-let QuickEdit_LoadImage = "";
 let workflowSwitcher = "";
 let rndrModeSwitcher = "";
 
@@ -100,7 +99,9 @@ app.registerExtension({
       let prompt = event.detail.prompt;
       this.currentPromptExecution = prompt;
       if (prompt?.errorDetails) {
-        let errorText = `${prompt.errorDetails?.exception_type} ${prompt.errorDetails?.node_id || ""} ${prompt.errorDetails?.node_type || ""}`;
+        let errorText = `${prompt.errorDetails?.exception_type} ${prompt.errorDetails?.node_id || ""} ${
+          prompt.errorDetails?.node_type || ""
+        }`;
         this.progressTextEl.innerText = errorText;
         this.progressNodesEl.classList.add("-error");
         this.progressStepsEl.classList.add("-error");
@@ -114,7 +115,10 @@ app.registerExtension({
   async nodeCreated(node) {
     try {
       if (!workflowSwitcher) {
-        if (node.comfyClass == "Fast Groups Muter (rgthree)" && (node.color === "#2b4557" || node.bgcolor === "#2b4557" || node?.title?.startsWith("📁"))) {
+        if (
+          node.comfyClass == "Fast Groups Muter (rgthree)" &&
+          (node.color === "#2b4557" || node.bgcolor === "#2b4557" || node?.title?.startsWith("📁"))
+        ) {
           workflowSwitcher = node;
           console.log("workflowSwitcher: ", workflowSwitcher);
           workflowswitcherchecker();
@@ -123,7 +127,10 @@ app.registerExtension({
       }
 
       if (!rndrModeSwitcher) {
-        if (node.comfyClass == "Fast Groups Muter (rgthree)" && (node.color === "#4e5e4e" || node.bgcolor === "#4e5e4e" || node?.title?.startsWith("⚙️"))) {
+        if (
+          node.comfyClass == "Fast Groups Muter (rgthree)" &&
+          (node.color === "#4e5e4e" || node.bgcolor === "#4e5e4e" || node?.title?.startsWith("⚙️"))
+        ) {
           rndrModeSwitcher = node;
           console.log("rndrModeSwitcher: ", rndrModeSwitcher);
           rndrswitcherchecker();
@@ -148,6 +155,15 @@ async function getWorkflow(name) {
 }
 
 export async function loadWorkflow(workflowName) {
+  const supportedLocales = ["ja-JP", "ko-KR", "zh-TW", "zh-CN"];
+  let currentLocale = localStorage.getItem("AGL.Locale");
+
+  if (!supportedLocales.includes(currentLocale)) {
+    currentLocale = "en-US";
+  }
+
+  console.log("🔹 Load workflow for this language:", currentLocale);
+  workflowName = workflowName + "_" + currentLocale;
   try {
     const workflowData = await getWorkflow(workflowName);
     app.loadGraphData(workflowData);

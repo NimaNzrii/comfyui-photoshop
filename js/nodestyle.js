@@ -7,7 +7,7 @@ export let photoshopNode = [];
 let setupdone = false;
 let connectdone = false;
 let disabledrow = false;
-let nodever = "1.9.0";
+let nodever = "1.9.01";
 const canvasImage = await api.fetchApi(`/ps/inputs/PS_canvas.png`);
 const maskImage = await api.fetchApi(`/ps/inputs/PS_mask.png`);
 
@@ -140,7 +140,7 @@ async function addBooleanProperty(node) {
 function addRemoveButtons(node, add) {
   try {
     if (add) {
-      addButton(node, "Load SD 1.5", "temp-button", () => loadWorkflow("sd15_workflow"));
+      addButton(node, "Load SD 1.5", "temp-button", () => loadWorkflow("sd15"));
       addButton(node, "Load sdxl (coming Soon...)", "temp-button", () => alert("We will drop it this week!"));
     } else {
       node.widgets = node.widgets.filter((widget) => widget.className !== "temp-button");
