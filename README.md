@@ -1,3 +1,5 @@
+Here's the updated README with the system requirements included as a note within the installation section:
+
 <div align="center">
 
 # ✨ ComfyUI Photoshop Plugin    [![GitHub Stars](https://img.shields.io/github/stars/NimaNzrii/comfyui-photoshop?style=social)](https://github.com/NimaNzrii/comfyui-photoshop)
@@ -17,25 +19,23 @@ Seamlessly integrate ComfyUI's powerful AI capabilities into your Photoshop work
 [![youtubelink](https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/data/PreviewFiles/pr3.webp)](https://www.youtube.com/watch?v=i__ciRbs3VA&t=40s)
 
 
-## 🌟 Features
+> [!NOTE]  
+> <span style="color:blue">**Chinese (ZH & TW), Japanese, and Korean** languages have been added!</span>  
+> _Simply click the Load SD1.5 button, and the workflow will automatically load in your ComfyUI language._  
+> _Compatible with [AIGODLIKE-ComfyUI-Translation](https://github.com/AIGODLIKE/AIGODLIKE-ComfyUI-Translation) node._
 
-- **AI-Powered Editing**: Leverage ComfyUI's AI capabilities directly in Photoshop
-- **Seamless Integration**: Work with your familiar Photoshop interface
-- **Real-Time Syncing**: Changes reflect instantly between ComfyUI and Photoshop
-- **Multi-Language Support**: Chinese (ZH & TW), Japanese, and Korean now available!
 
-## 🆕 What's New in v1.9
+## 🔥 What's New in v1.9
 
-🔥 **Major Enhancements:**
 - Crop Over Selection with Padding
 - Port Change Support
 - Tiny Shortcuts for efficiency
 - Preserve Selection feature
 - Improved "Play on Channels" functionality
-- onvenient In-Plugin Updates
+- Convenient In-Plugin Updates
 
 <details>
-<summary><b>📜 View Full Patch Notes</b></summary>
+<summary><b>📜 Full Patch Notes</b></summary>
 
 | Version | Key Updates |
 |---------|-------------|
@@ -46,13 +46,9 @@ Seamlessly integrate ComfyUI's powerful AI capabilities into your Photoshop work
 
 </details>
 
-## 🖥️ System Requirements
-
-- **Graphics Memory:** Minimum 6GB
-- **RAM:** Minimum 12GB
-- **Photoshop:** Version 2022 or newer
-
 ## 🛠️ Installation
+
+> **Minimum:** 6GB Vram - 12GB RAM - Photoshop 2022 or newer
 
 1. **Photoshop Plugin:**
    - Download and install using [This .CCX file](https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/Install_Plugin/3e6d64e0_PS.ccx)
