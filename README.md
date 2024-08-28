@@ -1,38 +1,47 @@
 <div align="center">
 
-# ComfyUI Photoshop Plugin 🎨✨
+# ✨ ComfyUI Photoshop Plugin    [![GitHub Stars](https://img.shields.io/github/stars/NimaNzrii/comfyui-photoshop?style=social)](https://github.com/NimaNzrii/comfyui-photoshop)
 
-[![Discord](https://img.shields.io/badge/Discord-Join%20Server-blue)](https://discord.com/invite/3eHAMWnx7Y)
-[![Email](https://img.shields.io/badge/Email-nimanzriart%40gmail.com-red)](mailto:nimanzriart@gmail.com)
-[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support%20Me-yellow)](https://studio.buymeacoffee.com/dashboard)
-[![GitHub Stars](https://img.shields.io/github/stars/NimaNzrii/comfyui-photoshop?style=social)](https://github.com/NimaNzrii/comfyui-photoshop)
+
+[![Email](https://img.shields.io/badge/Gmail-nimanzriart%40gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:nimanzriart@gmail.com)
+[![Discord](https://img.shields.io/badge/Join%20Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/invite/3eHAMWnx7Y)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee%20Me-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://studio.buymeacoffee.com/dashboard)
+
 
 Seamlessly integrate ComfyUI's powerful AI capabilities into your Photoshop workflow! 🚀
 
 </div>
 
-
 ![Preview Image](https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/data/PreviewFiles/pr1.jpg)
 
 [![youtubelink](https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/data/PreviewFiles/pr3.webp)](https://www.youtube.com/watch?v=i__ciRbs3VA&t=40s)
 
+
+## 🌟 Features
+
+- **AI-Powered Editing**: Leverage ComfyUI's AI capabilities directly in Photoshop
+- **Seamless Integration**: Work with your familiar Photoshop interface
+- **Real-Time Syncing**: Changes reflect instantly between ComfyUI and Photoshop
+- **Multi-Language Support**: Chinese (ZH & TW), Japanese, and Korean now available!
+
 ## 🆕 What's New in v1.9
 
+🔥 **Major Enhancements:**
 - Crop Over Selection with Padding
 - Port Change Support
 - Tiny Shortcuts for efficiency
 - Preserve Selection feature
 - Improved "Play on Channels" functionality
-- Convenient In-Plugin Updates
+- onvenient In-Plugin Updates
 
 <details>
-<summary>📜 View Full Patch Notes</summary>
+<summary><b>📜 View Full Patch Notes</b></summary>
 
 | Version | Key Updates |
 |---------|-------------|
-| 1.9     | - Crop Over Selection<br>- Padding for Crop Selection<br>- Connect to ComfyUI Cloud<br>- Port Change Support<br>- Tiny Shortcuts<br>- Preserve Selection<br>- Smarter "Play on Channels"<br>- In-Plugin Updates |
-| 1.8     | - Optimized UI<br>- Randomization Feature<br>- New Functional Buttons<br>- Resizable Text Fields<br>- Improved Panel Animations |
-| 1.6 - 1.4 | - 2x Smoother Experience<br>- Real-Time Workflow Sync<br>- 3x Simpler Workflow<br>- Enhanced Image Saving<br>- Mask Preview<br>- Plugin Install Button<br>- 6x Faster Start-Up<br>- macOS Support<br>- Photopea Integration |
+| 1.9     | • Crop Over Selection<br>• Padding for Crop Selection<br>• Connect to ComfyUI Cloud<br>• Port Change Support<br>• Tiny Shortcuts<br>• Preserve Selection<br>• Smarter "Play on Channels"<br>• In-Plugin Updates |
+| 1.8     | • Optimized UI<br>• Randomization Feature<br>• New Functional Buttons<br>• Resizable Text Fields<br>• Improved Panel Animations |
+| 1.6 - 1.4 | • 2x Smoother Experience<br>• Real-Time Workflow Sync<br>• 3x Simpler Workflow<br>• Enhanced Image Saving<br>• Mask Preview<br>• Plugin Install Button<br>• 6x Faster Start-Up<br>• macOS Support<br>• Photopea Integration |
 | 1.0     | Initial Release |
 
 </details>
@@ -41,6 +50,7 @@ Seamlessly integrate ComfyUI's powerful AI capabilities into your Photoshop work
 
 - **Graphics Memory:** Minimum 6GB
 - **RAM:** Minimum 12GB
+- **Photoshop:** Version 2022 or newer
 
 ## 🛠️ Installation
 
@@ -53,12 +63,12 @@ Seamlessly integrate ComfyUI's powerful AI capabilities into your Photoshop work
    - Drop it onto your ComfyUI
    - Install missing nodes via "ComfyUI Manager"
 
-> 💡 New to ComfyUI? Follow our [step-by-step installation guide](https://www.youtube.com/watch?v=YD09xpQrNZ4&t=4s)!
+> 💡 **New to ComfyUI?** Follow our [step-by-step installation guide](https://www.youtube.com/watch?v=YD09xpQrNZ4&t=4s)!
 
 ## 📦 Required Files
 
 <details>
-<summary>Expand for file details</summary>
+<summary><b>Expand for file details</b></summary>
 
 1. **Checkpoints:** (Place in `ComfyUi/Models/Checkpoints/` folder)
    - Default: [EpicRealism Natural Sin RC1 VAE](https://civitai.com/api/download/models/143906?type=Model&format=SafeTensor&size=pruned&fp=fp16)
@@ -76,11 +86,20 @@ Seamlessly integrate ComfyUI's powerful AI capabilities into your Photoshop work
 
 </details>
 
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/NimaNzrii/comfyui-photoshop/issues).
+
 ## 📜 License
 
-see the [LICENSE](License) file for details.
+This project is [MIT](LICENSE) licensed.
 
+<div align="center">
 
-<p align="center">
-  Made with ❤️ by <a href="https://github.com/NimaNzrii">Nima Nazari</a>
-</p>
+---
+
+Made with ❤️ by [Nima Nazari](https://github.com/NimaNzrii)
+
+[⭐ Star this repo](https://github.com/NimaNzrii/comfyui-photoshop) if you find it helpful!
+
+</div>
