@@ -80,11 +80,8 @@ Seamlessly integrate ComfyUI's powerful AI capabilities into your Photoshop work
 
 </details>
 
-
-🤝 Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/NimaNzrii/comfyui-photoshop/issues).
-📜 This project is [licensed](Licence).
-
 <div align="center">
+📜 This project is [licensed](https://github.com/NimaNzrii/comfyui-photoshop/blob/main/License).
 
 ---
 
