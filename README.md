@@ -2,10 +2,9 @@
 
 # ✨ ComfyUI Photoshop Plugin    [![GitHub Stars](https://img.shields.io/github/stars/NimaNzrii/comfyui-photoshop?style=social)](https://github.com/NimaNzrii/comfyui-photoshop)
 
-
-[![Email](https://img.shields.io/badge/Gmail-nimanzriart%40gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:nimanzriart@gmail.com)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://studio.buymeacoffee.com/dashboard)
 [![Discord](https://img.shields.io/badge/Join%20Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/invite/3eHAMWnx7Y)
-[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee%20Me-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://studio.buymeacoffee.com/dashboard)
+[![Email](https://img.shields.io/badge/Gmail-nimanzriart%40gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:nimanzriart@gmail.com)
 
 
 Seamlessly integrate ComfyUI's powerful AI capabilities into your Photoshop workflow! 🚀
@@ -80,8 +79,9 @@ Seamlessly integrate ComfyUI's powerful AI capabilities into your Photoshop work
 
 </details>
 
-<div align="center">
 📜 This project is [licensed](https://github.com/NimaNzrii/comfyui-photoshop/blob/main/License).
+
+<div align="center">
 
 ---
 
