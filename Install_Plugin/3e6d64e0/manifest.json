@@ -1,7 +1,7 @@
 {
 	"id": "3e6d64e0",
 	"name": "Comfyui Photoshop",
-	"version": "1.9.01",
+	"version": "1.9.2",
 	"main": "index.html",
 	"manifestVersion": 6,
 	"host": {
