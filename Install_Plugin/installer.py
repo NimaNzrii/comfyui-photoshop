@@ -6,7 +6,7 @@ import platform
 import json
 
 print("")
-print("Photoshop Plugin V1.9.0 Installing. . .")
+print("Photoshop Plugin V1.9.2 Installing. . .")
 print("")
 
 

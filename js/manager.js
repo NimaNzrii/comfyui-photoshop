@@ -86,7 +86,7 @@ app.registerExtension({
     if (nodeInfo.category === "Photoshop") {
       appendMenuOption(nodeType, (_, menuOptions) => {
         menuOptions.unshift({
-          content: "🔹 Install PS Plugin V1.9.0 (auto)🔮",
+          content: "🔹 Install PS Plugin V1.9.2 (auto)🔮",
           callback: () => sendMsg("install_plugin"),
         });
       });
