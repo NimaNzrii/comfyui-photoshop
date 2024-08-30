@@ -117,10 +117,10 @@ app.registerExtension({
       if (!workflowSwitcher) {
         if (
           node.comfyClass == "Fast Groups Muter (rgthree)" &&
-          (node.color === "#2b4557" || node.bgcolor === "#2b4557" || node?.title?.startsWith("📁"))
+          (await node.color == "#2b4557" || await node.bgcolor == "#2b4557" || await node?.title?.startsWith("📁"))
         ) {
           workflowSwitcher = node;
-          console.log("workflowSwitcher: ", workflowSwitcher);
+          console.log("🔹 workflowSwitcher detected: ", workflowSwitcher);
           workflowswitcherchecker();
           return;
         }
@@ -129,10 +129,10 @@ app.registerExtension({
       if (!rndrModeSwitcher) {
         if (
           node.comfyClass == "Fast Groups Muter (rgthree)" &&
-          (node.color === "#4e5e4e" || node.bgcolor === "#4e5e4e" || node?.title?.startsWith("⚙️"))
+          (await node.color == "#4e5e4e" || await node.bgcolor == "#4e5e4e" || await node?.title?.startsWith("⚙️"))
         ) {
           rndrModeSwitcher = node;
-          console.log("rndrModeSwitcher: ", rndrModeSwitcher);
+          console.log("🔹 rndrModeSwitcher detected: ", rndrModeSwitcher);
           rndrswitcherchecker();
           return;
         }
