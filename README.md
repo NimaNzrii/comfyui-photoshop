@@ -11,8 +11,6 @@ Seamlessly integrate ComfyUI's powerful AI capabilities into your Photoshop work
 
 ![Preview Image](https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/data/PreviewFiles/pr1.jpg)
 
-[![youtubelink](https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/data/PreviewFiles/pr3.webp)](https://www.youtube.com/watch?v=i__ciRbs3VA&t=40s)
-
 
 > [!NOTE]  
 > <span style="color:blue">**Chinese (ZH & TW), Japanese, and Korean** languages have been added!</span>  
@@ -41,7 +39,11 @@ Seamlessly integrate ComfyUI's powerful AI capabilities into your Photoshop work
 
 </details>
 
-## 🛠️ Installation
+[![youtubelink](https://raw.githubusercontent.com/NimaNzrii/comfyui-photoshop/main/data/PreviewFiles/pr3.webp)](https://www.youtube.com/watch?v=i__ciRbs3VA&t=40s)
+
+<details>
+<summary><h1> 🛠️ Installation </h1> click to expand</summary>
+
 
 > **Minimum:** 6GB Vram - 12GB RAM - Photoshop 2022 or newer
 
@@ -55,11 +57,12 @@ Seamlessly integrate ComfyUI's powerful AI capabilities into your Photoshop work
    - Install missing nodes via "ComfyUI Manager"
 
 > 💡 **New to ComfyUI?** Follow our [step-by-step installation guide](https://www.youtube.com/watch?v=YD09xpQrNZ4&t=4s)!
+</details>
 
-## 📦 Required Files
 
 <details>
-<summary><b>Expand for file details</b></summary>
+
+<summary><h1> 📦 Required Files </h1> click to expand</summary>
 
 1. **Checkpoints:** (Place in `ComfyUi/Models/Checkpoints/` folder)
    - Default: [EpicRealism Natural Sin RC1 VAE](https://civitai.com/api/download/models/143906?type=Model&format=SafeTensor&size=pruned&fp=fp16)
