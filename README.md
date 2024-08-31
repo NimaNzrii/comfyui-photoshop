@@ -66,7 +66,7 @@ Seamlessly integrate ComfyUI's powerful AI capabilities into your Photoshop work
    - In-Painting: [EpicRealism pure Evolution V5-inpainting](https://civitai.com/api/download/models/134361?type=Model&format=SafeTensor&size=pruned&fp=fp16)
 
 2. **Loras:** (Place in `ComfyUi/Models/Loras/` folder)
-   - [Detailer Lora](https://civitai.com/api/download/models/62833?type=Model&format=SafeTensors)
+   - [Detailer Lora](https://civitai.com/api/download/models/62833?type=Model&format=SafeTensor)
 
 3. **Install via ComfyUI manager > install Models > search:**
    - LCM LoRA SD1.5
