@@ -3,6 +3,7 @@ import { api as api } from "../../../scripts/api.js";
 import { sendMsg, addListener } from "./connection.js";
 import { photoshopNode } from "./nodestyle.js";
 
+export const nodever = "1.9.3";
 let workflowSwitcher = "";
 let rndrModeSwitcher = "";
 
@@ -86,7 +87,7 @@ app.registerExtension({
     if (nodeInfo.category === "Photoshop") {
       appendMenuOption(nodeType, (_, menuOptions) => {
         menuOptions.unshift({
-          content: "🔹 Install PS Plugin V1.9.3 (auto)🔮",
+          content: "🔹 Install PS Plugin V" + nodever,
           callback: () => sendMsg("install_plugin"),
         });
       });
@@ -117,7 +118,9 @@ app.registerExtension({
       if (!workflowSwitcher) {
         if (
           node.comfyClass == "Fast Groups Muter (rgthree)" &&
-          (await node.color == "#2b4557" || await node.bgcolor == "#2b4557" || await node?.title?.startsWith("📁"))
+          ((await node.color) == "#2b4557" ||
+            (await node.bgcolor) == "#2b4557" ||
+            (await node?.title?.startsWith("📁")))
         ) {
           workflowSwitcher = node;
           console.log("🔹 workflowSwitcher detected: ", workflowSwitcher);
@@ -129,7 +132,9 @@ app.registerExtension({
       if (!rndrModeSwitcher) {
         if (
           node.comfyClass == "Fast Groups Muter (rgthree)" &&
-          (await node.color == "#4e5e4e" || await node.bgcolor == "#4e5e4e" || await node?.title?.startsWith("⚙️"))
+          ((await node.color) == "#4e5e4e" ||
+            (await node.bgcolor) == "#4e5e4e" ||
+            (await node?.title?.startsWith("⚙️")))
         ) {
           rndrModeSwitcher = node;
           console.log("🔹 rndrModeSwitcher detected: ", rndrModeSwitcher);

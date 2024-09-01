@@ -1,5 +1,5 @@
 import { connect, sendMsg } from "./connection.js";
-import { loadWorkflow } from "./manager.js";
+import { loadWorkflow, nodever } from "./manager.js";
 import { app as app } from "../../../scripts/app.js";
 import { api as api } from "../../../scripts/api.js";
 
@@ -7,7 +7,6 @@ export let photoshopNode = [];
 let setupdone = false;
 let connectdone = false;
 let disabledrow = false;
-let nodever = "1.9.3";
 const canvasImage = await api.fetchApi(`/ps/inputs/PS_canvas.png`);
 const maskImage = await api.fetchApi(`/ps/inputs/PS_mask.png`);
 
