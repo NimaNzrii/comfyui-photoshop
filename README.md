@@ -1,5 +1,5 @@
 <div align="center">
-# V2 IS COMING SOON...
+V2.0.0 BETA IS COMING SOON...
 
 # ✨ ComfyUI Photoshop Plugin    [![GitHub Stars](https://img.shields.io/github/stars/NimaNzrii/comfyui-photoshop?style=social)](https://github.com/NimaNzrii/comfyui-photoshop)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://studio.buymeacoffee.com/dashboard)
