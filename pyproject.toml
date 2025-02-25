@@ -7,7 +7,7 @@ dependencies = [""]
 
 [project.urls]
 Repository = "https://github.com/NimaNzrii/comfyui-photoshop"
-#  Used by Comfy Registry https://comfyregistry.org
+#  Used by Comfy Registry https://registry.comfy.org
 
 [tool.comfy]
 PublisherId = "NimaNzrii"
