@@ -2,7 +2,7 @@
 name = "comfyui-photoshop"
 description = "🔹 Powerfull bridge to Photoshop by NimaNzrii"
 version = "1.9.3"
-license = "LICENSE"
+license = { text = "Other" }
 dependencies = [""]
 
 [project.urls]
