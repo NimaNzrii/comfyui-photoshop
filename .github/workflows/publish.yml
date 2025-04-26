@@ -1,14 +1,15 @@
 name: Publish to Comfy registry
 on:
   workflow_dispatch:
-    inputs:
-      tag_name:
-        description: 'tag name'     
-        required: true
+  push:
+    branches:
+      - main
+    paths:
+      - "pyproject.toml"
 
 jobs:
-  publish:
-    name: Publish
+  publish-node:
+    name: Publish Custom Node to registry
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -16,15 +17,4 @@ jobs:
       - name: Publish Custom Node
         uses: Comfy-Org/publish-node-action@main
         with:
-          ## Add your own personal access token to your Github Repository secrets and reference it here.
-          personal_access_token: ${{ secrets.comfyOrg }}
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ github.event.inputs.tag_name }}
-          release_name: v${{ github.event.inputs.tag_name }}
-          draft: false
-          prerelease: false
+          personal_access_token: ${{ secrets.REGISTRY_ACCESS_TOKEN }} ## Add your own personal access token to your Github Repository secrets and reference it here.
