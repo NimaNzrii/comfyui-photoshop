@@ -8966,7 +8966,6 @@ const La = (i = { left: 0, top: 0, right: 0, bottom: 0 }) => {
         n = await vr.encodeImageData({
           imageData: t.imageData,
           format: e,
-          quality: e === "jpg" ? 1 : void 0,
           base64: !0,
         });
       return (t.imageData.dispose(), n);
@@ -9039,9 +9038,9 @@ const La = (i = { left: 0, top: 0, right: 0, bottom: 0 }) => {
             colorSpace: "RGB",
             ...(t && { sourceBounds: t }),
           };
-          ((i = await Ea(s, "jpg")),
+          ((i = await Ea(s, "png")),
             (he.activeDocument.activeHistoryState = e),
-            ne.info("📸 Mask saved as base64 JPG"));
+            ne.info("📸 Mask saved as base64 PNG"));
         }, "Mask Sent to AI"),
         is.set(!1),
         i
